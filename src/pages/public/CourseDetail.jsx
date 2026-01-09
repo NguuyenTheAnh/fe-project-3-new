@@ -189,7 +189,7 @@ export default function CourseDetail() {
 
         {course.instructors?.length ? (
           <p className="mt-3 text-sm text-slate-600">
-            Giảng viên: {" "}
+            Giảng viên:{" "}
             {course.instructors
               .map((ins) => ins.fullName || ins.name || ins)
               .join(", ")}

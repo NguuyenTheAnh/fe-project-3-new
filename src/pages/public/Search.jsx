@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+﻿import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import FilterSidebar from "@/components/catalog/FilterSidebar";
 import PaginationBar from "@/components/catalog/PaginationBar";
@@ -300,8 +300,7 @@ export default function Search() {
       <div className="space-y-4">
         <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
           <p className="text-sm text-slate-600">
-            Tất cả khóa học
-            {totalElements ? ` · ${totalElements} kết quả` : ""}
+            Tất cả khóa học{totalElements ? ` · ${totalElements} kết quả` : ""}
           </p>
         </div>
 
