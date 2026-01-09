@@ -1,10 +1,10 @@
-﻿import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import {
   Select,
   SelectContent,
@@ -12,7 +12,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Separator } from "@/components/ui/separator";
 
 const LEVEL_OPTIONS = [
   { value: "BEGINNER", label: "Cơ bản" },
@@ -30,110 +29,137 @@ export default function FilterSidebar({
   tags = [],
   values,
   onChange,
-  onClear,
+  className,
 }) {
   const handleChange = (key, value) => {
     onChange?.(key, value);
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Bộ lọc</CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="space-y-2">
-          <p className="text-sm font-medium text-slate-900">Danh mục</p>
-          <Select
-            value={values.categoryId || ""}
-            onValueChange={(val) => handleChange("categoryId", val || null)}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Chọn danh mục" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="">Tất cả</SelectItem>
-              {categories.map((cat) => (
-                <SelectItem
-                  key={cat.id || cat.code}
-                  value={String(cat.id || cat.code)}
-                >
-                  {cat.name || cat.title}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
+    <div className={cn("space-y-2", className)}>
+      <Accordion
+        type="multiple"
+        defaultValue={["category", "tag", "level", "language"]}
+        className="space-y-2"
+      >
+        <AccordionItem value="category">
+          <AccordionTrigger className="text-sm font-semibold text-slate-900 hover:no-underline">
+            Danh mục
+          </AccordionTrigger>
+          <AccordionContent className="pt-1">
+            <div className="space-y-2">
+              <Select
+                value={values.categoryId || "all"}
+                onValueChange={(val) =>
+                  handleChange("categoryId", val === "all" ? null : val)
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Chọn danh mục" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Tất cả</SelectItem>
+                  {categories.map((cat) => (
+                    <SelectItem
+                      key={cat.id || cat.code}
+                      value={String(cat.id || cat.code)}
+                    >
+                      {cat.name || cat.title}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </AccordionContent>
+        </AccordionItem>
 
-        <div className="space-y-2">
-          <p className="text-sm font-medium text-slate-900">Thẻ</p>
-          <Select
-            value={values.tagId || ""}
-            onValueChange={(val) => handleChange("tagId", val || null)}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Chọn thẻ" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="">Tất cả</SelectItem>
-              {tags.map((tag) => (
-                <SelectItem
-                  key={tag.id || tag.code}
-                  value={String(tag.id || tag.code)}
-                >
-                  {tag.name || tag.title}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
+        <AccordionItem value="tag">
+          <AccordionTrigger className="text-sm font-semibold text-slate-900 hover:no-underline">
+            Thẻ
+          </AccordionTrigger>
+          <AccordionContent className="pt-1">
+            <div className="space-y-2">
+              <Select
+                value={values.tagId || "all"}
+                onValueChange={(val) =>
+                  handleChange("tagId", val === "all" ? null : val)
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Chọn thẻ" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Tất cả</SelectItem>
+                  {tags.map((tag) => (
+                    <SelectItem
+                      key={tag.id || tag.code}
+                      value={String(tag.id || tag.code)}
+                    >
+                      {tag.name || tag.title}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </AccordionContent>
+        </AccordionItem>
 
-        <Separator />
+        <AccordionItem value="level">
+          <AccordionTrigger className="text-sm font-semibold text-slate-900 hover:no-underline">
+            Trình độ
+          </AccordionTrigger>
+          <AccordionContent className="pt-1">
+            <div className="space-y-2">
+              <Select
+                value={values.level || "all"}
+                onValueChange={(val) =>
+                  handleChange("level", val === "all" ? null : val)
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Tất cả" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Tất cả</SelectItem>
+                  {LEVEL_OPTIONS.map((opt) => (
+                    <SelectItem key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </AccordionContent>
+        </AccordionItem>
 
-        <div className="space-y-2">
-          <p className="text-sm font-medium text-slate-900">Trình độ</p>
-          <Select
-            value={values.level || ""}
-            onValueChange={(val) => handleChange("level", val || null)}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Tất cả" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="">Tất cả</SelectItem>
-              {LEVEL_OPTIONS.map((opt) => (
-                <SelectItem key={opt.value} value={opt.value}>
-                  {opt.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="space-y-2">
-          <p className="text-sm font-medium text-slate-900">Ngôn ngữ</p>
-          <Select
-            value={values.language || ""}
-            onValueChange={(val) => handleChange("language", val || null)}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Tất cả" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="">Tất cả</SelectItem>
-              {LANGUAGE_OPTIONS.map((opt) => (
-                <SelectItem key={opt.value} value={opt.value}>
-                  {opt.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-
-        <Button variant="outline" onClick={onClear} className="w-full">
-          Xóa bộ lọc
-        </Button>
-      </CardContent>
-    </Card>
+        <AccordionItem value="language">
+          <AccordionTrigger className="text-sm font-semibold text-slate-900 hover:no-underline">
+            Ngôn ngữ
+          </AccordionTrigger>
+          <AccordionContent className="pt-1">
+            <div className="space-y-2">
+              <Select
+                value={values.language || "all"}
+                onValueChange={(val) =>
+                  handleChange("language", val === "all" ? null : val)
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Tất cả" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Tất cả</SelectItem>
+                  {LANGUAGE_OPTIONS.map((opt) => (
+                    <SelectItem key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
+    </div>
   );
 }

@@ -74,7 +74,7 @@ export default function LoginPage() {
         <CardHeader>
           <CardTitle>Đăng nhập</CardTitle>
           <CardDescription>
-            Chào mừng bạn trở lại với UdemyClone.
+            Chào mừng bạn trở lại với HUSTemy.
           </CardDescription>
         </CardHeader>
         <CardContent>

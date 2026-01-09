@@ -82,14 +82,14 @@ E) Router check (only minimal changes if needed)
 F) Header & Footer Vietnamese text
 6) Update src/components/app/Header.jsx:
    - Visible strings in Vietnamese:
-     - Logo text: "UdemyClone" (can keep) OR "Udemy Clone"
+     - Logo text: "HUSTemy" (can keep) OR "Udemy Clone"
      - Search placeholder: "Tìm kiếm khóa học"
      - Login link label: "Đăng nhập"
    - Search behavior unchanged: submit -> /search?q=...
 
 7) Update src/components/app/Footer.jsx:
    - Vietnamese content:
-     - Example: "© {year} UdemyClone"
+     - Example: "© {year} HUSTemy"
 
 ========================================
 G) Placeholder pages Vietnamese titles

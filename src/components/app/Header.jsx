@@ -1,11 +1,8 @@
-﻿import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { Button } from "@/components/ui/button";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
@@ -25,8 +22,7 @@ export default function Header() {
     const params = new URLSearchParams();
     if (query) params.set("q", query);
     params.set("page", "0");
-    const next = `/search?${params.toString()}`;
-    navigate(next);
+    navigate(`/search?${params.toString()}`);
   };
 
   const handleLogout = async () => {
@@ -41,53 +37,71 @@ export default function Header() {
     : "/me/learning";
 
   const displayName =
-    authUser?.fullName || authUser?.email || authUser?.sub || "bạn";
+    authUser?.fullName || authUser?.email || authUser?.sub || "";
+  const displayLetter = displayName
+    ? displayName.trim().charAt(0).toUpperCase()
+    : "U";
 
   return (
     <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/80 backdrop-blur">
-      <div className="mx-auto max-w-7xl px-3 sm:px-4 lg:px-6 py-3 flex items-center gap-4 text-slate-900">
-        <Logo />
-        <form onSubmit={handleSubmit} className="flex-1 max-w-2xl">
-          <Input
-            name="q"
-            defaultValue={defaultQuery}
-            placeholder="Tìm kiếm khóa học"
-          />
-        </form>
-        {!isAuthenticated ? (
-          <div className="flex items-center gap-3">
-            <Link
-              to="/register"
-              className="border border-slate-200 bg-white text-slate-900 hover:bg-slate-50 rounded-lg px-4 py-2 text-sm font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E11D48]/20 focus-visible:ring-offset-2"
-            >
-              Đăng ký
-            </Link>
-            <Link
-              to="/login"
-              className="bg-[#E11D48] text-white hover:bg-[#BE123C] shadow-sm hover:shadow-md rounded-lg px-4 py-2 text-sm font-medium transition active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E11D48]/30 focus-visible:ring-offset-2"
-            >
-              Đăng nhập
-            </Link>
+      <div className="relative w-full px-4 sm:px-6 lg:px-10 py-3">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center">
+            <Logo />
           </div>
-        ) : (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="text-sm">
-                Xin chào, {displayName}
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Tài khoản</DropdownMenuLabel>
-              <DropdownMenuItem onClick={() => navigate(primaryDestination)}>
-                Hồ sơ
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={handleLogout}>
-                Đăng xuất
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        )}
+
+          <div className="flex items-center justify-end gap-2">
+            {!isAuthenticated ? (
+              <>
+                <Link
+                  to="/register"
+                  className="h-9 inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-4 text-sm font-medium text-slate-900 leading-none hover:bg-slate-50 transition"
+                >
+                  Đăng ký
+                </Link>
+                <Link
+                  to="/login"
+                  className="h-9 inline-flex items-center justify-center rounded-lg bg-[#E11D48] px-4 text-sm font-medium text-white leading-none hover:bg-[#BE123C] transition shadow-sm"
+                >
+                  Đăng nhập
+                </Link>
+              </>
+            ) : (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button
+                    type="button"
+                    title={displayName || "Tài khoản"}
+                    className="h-9 w-9 rounded-full bg-[#E11D48] text-white flex items-center justify-center text-sm font-semibold shadow-sm hover:bg-[#BE123C] transition"
+                  >
+                    {displayLetter}
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem
+                    onClick={() => navigate(primaryDestination)}
+                  >
+                    Hồ sơ
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={handleLogout}>
+                    Đăng xuất
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
+          </div>
+        </div>
+
+        <div className="absolute left-1/2 top-1/2 hidden w-[560px] max-w-[50vw] -translate-x-1/2 -translate-y-1/2 sm:block">
+          <form onSubmit={handleSubmit}>
+            <Input
+              name="q"
+              defaultValue={defaultQuery}
+              placeholder="Tìm kiếm khóa học"
+              className="h-10 w-full rounded-full border border-slate-200 bg-white px-4 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#E11D48]/25 focus:border-[#F43F5E]"
+            />
+          </form>
+        </div>
       </div>
     </header>
   );

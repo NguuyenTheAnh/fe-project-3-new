@@ -11,7 +11,7 @@ const PLACEHOLDER_URL =
       "</linearGradient></defs>" +
       '<rect width="100%" height="100%" fill="url(#g)"/>' +
       '<text x="50%" y="50%" fill="#6b7280" font-size="20" text-anchor="middle" dominant-baseline="middle">' +
-      "UdemyClone" +
+      "HUSTemy" +
       "</text>" +
       "</svg>"
   );

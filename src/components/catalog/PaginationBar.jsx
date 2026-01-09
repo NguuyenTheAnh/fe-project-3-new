@@ -13,7 +13,7 @@ export default function PaginationBar({ page = 0, totalPages = 1, onChange }) {
   };
 
   return (
-    <div className="mt-6 flex items-center justify-between text-sm">
+    <div className="mt-8 flex items-center justify-center gap-4 text-sm">
       <Button
         variant="outline"
         onClick={() => goTo(current - 1)}
