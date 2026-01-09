@@ -1,4 +1,4 @@
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+﻿import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -30,18 +30,21 @@ export default function Header() {
 
   const handleLogout = async () => {
     await logout();
-    navigate("/login");
+    navigate("/");
   };
 
   const primaryDestination = hasRole("ROLE_ADMIN")
-    ? { to: "/admin", label: "Bảng điều khiển" }
+    ? "/admin"
     : hasRole("ROLE_INSTRUCTOR")
-    ? { to: "/instructor", label: "Bảng điều khiển" }
-    : { to: "/me/learning", label: "Trang của tôi" };
+    ? "/instructor"
+    : "/me/learning";
+
+  const displayName =
+    authUser?.fullName || authUser?.email || authUser?.sub || "bạn";
 
   return (
-    <header className="sticky top-0 z-50 border-b bg-background">
-      <div className="mx-auto max-w-6xl px-4 py-3 flex items-center gap-4">
+    <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/80 backdrop-blur">
+      <div className="mx-auto max-w-6xl px-4 py-3 flex items-center gap-4 text-slate-900">
         <Link to="/" className="font-semibold text-lg">
           UdemyClone
         </Link>
@@ -54,10 +57,16 @@ export default function Header() {
         </form>
         {!isAuthenticated ? (
           <div className="flex items-center gap-3">
-            <Link to="/register" className="text-sm">
+            <Link
+              to="/register"
+              className="border border-slate-200 bg-white text-slate-900 hover:bg-slate-50 rounded-lg px-4 py-2 text-sm font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E11D48]/20 focus-visible:ring-offset-2"
+            >
               Đăng ký
             </Link>
-            <Link to="/login" className="text-sm">
+            <Link
+              to="/login"
+              className="bg-[#E11D48] text-white hover:bg-[#BE123C] shadow-sm hover:shadow-md rounded-lg px-4 py-2 text-sm font-medium transition active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E11D48]/30 focus-visible:ring-offset-2"
+            >
               Đăng nhập
             </Link>
           </div>
@@ -65,13 +74,13 @@ export default function Header() {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="text-sm">
-                Xin chào, {authUser?.email || authUser?.sub || "bạn"}
+                Xin chào, {displayName}
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Tài khoản</DropdownMenuLabel>
-              <DropdownMenuItem onClick={() => navigate(primaryDestination.to)}>
-                {primaryDestination.label}
+              <DropdownMenuItem onClick={() => navigate(primaryDestination)}>
+                Hồ sơ
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={handleLogout}>

@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+﻿import { Button } from "@/components/ui/button";
 
 export default function PaginationBar({ page = 0, totalPages = 1, onChange }) {
   const current = Number(page) || 0;
@@ -21,7 +21,7 @@ export default function PaginationBar({ page = 0, totalPages = 1, onChange }) {
       >
         Trang trước
       </Button>
-      <div className="text-muted-foreground">
+      <div className="text-slate-500">
         Trang {current + 1} / {total}
       </div>
       <Button

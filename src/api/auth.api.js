@@ -1,30 +1,14 @@
 import axiosInstance from "@/util/axios.customize";
-
-const unwrap = (response) => {
-  const body = response?.data;
-  if (body?.code === "00" && body?.data) {
-    return body.data;
-  }
-  const message = body?.message || "Có lỗi xảy ra, vui lòng thử lại.";
-  throw new Error(message);
-};
-
-const handleError = (error) => {
-  const message =
-    error?.response?.data?.message ||
-    error?.message ||
-    "Có lỗi xảy ra, vui lòng thử lại.";
-  throw new Error(message);
-};
+import { handleApiError, unwrapResponse } from "@/util/api.response";
 
 const register = async (payload) => {
   try {
     const response = await axiosInstance.post("/auth/register", payload, {
       _skipAuthRefresh: true,
     });
-    return unwrap(response);
+    return unwrapResponse(response);
   } catch (error) {
-    handleError(error);
+    handleApiError(error);
   }
 };
 
@@ -33,9 +17,9 @@ const login = async (payload) => {
     const response = await axiosInstance.post("/auth/login", payload, {
       _skipAuthRefresh: true,
     });
-    return unwrap(response);
+    return unwrapResponse(response);
   } catch (error) {
-    handleError(error);
+    handleApiError(error);
   }
 };
 
@@ -44,9 +28,9 @@ const refresh = async (payload) => {
     const response = await axiosInstance.post("/auth/refresh", payload, {
       _skipAuthRefresh: true,
     });
-    return unwrap(response);
+    return unwrapResponse(response);
   } catch (error) {
-    handleError(error);
+    handleApiError(error);
   }
 };
 
@@ -55,9 +39,9 @@ const logout = async (payload) => {
     const response = await axiosInstance.post("/auth/logout", payload, {
       _skipAuthRefresh: true,
     });
-    return unwrap(response);
+    return unwrapResponse(response);
   } catch (error) {
-    handleError(error);
+    handleApiError(error);
   }
 };
 

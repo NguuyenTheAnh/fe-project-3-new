@@ -1,4 +1,4 @@
-import { Navigate, useLocation } from "react-router-dom";
+﻿import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 
 export default function RequireAuth({ children }) {
@@ -7,7 +7,7 @@ export default function RequireAuth({ children }) {
 
   if (initializing) {
     return (
-      <div className="p-6 text-sm text-muted-foreground">
+      <div className="p-6 text-sm text-slate-500">
         Đang tải phiên đăng nhập...
       </div>
     );

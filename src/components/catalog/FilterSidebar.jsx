@@ -1,4 +1,4 @@
-import {
+﻿import {
   Card,
   CardContent,
   CardHeader,
@@ -43,7 +43,7 @@ export default function FilterSidebar({
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="space-y-2">
-          <p className="text-sm font-medium">Danh mục</p>
+          <p className="text-sm font-medium text-slate-900">Danh mục</p>
           <Select
             value={values.categoryId || ""}
             onValueChange={(val) => handleChange("categoryId", val || null)}
@@ -54,7 +54,10 @@ export default function FilterSidebar({
             <SelectContent>
               <SelectItem value="">Tất cả</SelectItem>
               {categories.map((cat) => (
-                <SelectItem key={cat.id || cat.code} value={cat.id || cat.code}>
+                <SelectItem
+                  key={cat.id || cat.code}
+                  value={String(cat.id || cat.code)}
+                >
                   {cat.name || cat.title}
                 </SelectItem>
               ))}
@@ -63,7 +66,7 @@ export default function FilterSidebar({
         </div>
 
         <div className="space-y-2">
-          <p className="text-sm font-medium">Thẻ</p>
+          <p className="text-sm font-medium text-slate-900">Thẻ</p>
           <Select
             value={values.tagId || ""}
             onValueChange={(val) => handleChange("tagId", val || null)}
@@ -74,7 +77,10 @@ export default function FilterSidebar({
             <SelectContent>
               <SelectItem value="">Tất cả</SelectItem>
               {tags.map((tag) => (
-                <SelectItem key={tag.id || tag.code} value={tag.id || tag.code}>
+                <SelectItem
+                  key={tag.id || tag.code}
+                  value={String(tag.id || tag.code)}
+                >
                   {tag.name || tag.title}
                 </SelectItem>
               ))}
@@ -85,7 +91,7 @@ export default function FilterSidebar({
         <Separator />
 
         <div className="space-y-2">
-          <p className="text-sm font-medium">Trình độ</p>
+          <p className="text-sm font-medium text-slate-900">Trình độ</p>
           <Select
             value={values.level || ""}
             onValueChange={(val) => handleChange("level", val || null)}
@@ -105,7 +111,7 @@ export default function FilterSidebar({
         </div>
 
         <div className="space-y-2">
-          <p className="text-sm font-medium">Ngôn ngữ</p>
+          <p className="text-sm font-medium text-slate-900">Ngôn ngữ</p>
           <Select
             value={values.language || ""}
             onValueChange={(val) => handleChange("language", val || null)}

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import CourseCard from "@/components/catalog/CourseCard";
@@ -16,10 +16,18 @@ export default function Home() {
     const loadData = async () => {
       setLoading(true);
       try {
-        const [cats, latestCourses] = await Promise.all([
-          fetchCategories(),
-          searchCourses({ page: 0, size: COURSE_LIMIT, sort: "newest" }),
-        ]);
+        const catsPromise = fetchCategories();
+        let latestCourses;
+        try {
+          latestCourses = await searchCourses({
+            page: 0,
+            size: COURSE_LIMIT,
+            sort: "newest",
+          });
+        } catch (error) {
+          latestCourses = await searchCourses({ page: 0, size: COURSE_LIMIT });
+        }
+        const cats = await catsPromise;
         setCategories((cats || []).slice(0, 8));
         const list = Array.isArray(latestCourses)
           ? latestCourses
@@ -41,8 +49,10 @@ export default function Home() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-semibold">Danh mục nổi bật</h1>
-        <p className="mt-2 text-sm text-muted-foreground">
+        <h1 className="text-2xl font-semibold tracking-tight">
+          Danh mục nổi bật
+        </h1>
+        <p className="mt-2 text-sm text-slate-600">
           Khám phá các chủ đề phổ biến.
         </p>
         <div className="mt-4 flex flex-wrap gap-2">
@@ -59,7 +69,7 @@ export default function Home() {
             </Button>
           ))}
           {!categories.length && !loading ? (
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-slate-500">
               Chưa có danh mục để hiển thị.
             </p>
           ) : null}
@@ -70,9 +80,7 @@ export default function Home() {
         <div className="flex items-center justify-between gap-2">
           <div>
             <h2 className="text-xl font-semibold">Khóa học mới</h2>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Gợi ý dành cho bạn.
-            </p>
+            <p className="mt-1 text-sm text-slate-600">Gợi ý dành cho bạn.</p>
           </div>
           <Button variant="ghost" asChild>
             <Link to="/search">Xem tất cả</Link>
@@ -82,7 +90,10 @@ export default function Home() {
         {loading ? (
           <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {Array.from({ length: COURSE_LIMIT }).map((_, idx) => (
-              <Card key={idx} className="h-64 animate-pulse bg-muted/50" />
+              <Card
+                key={idx}
+                className="h-64 animate-pulse bg-slate-100 border border-slate-200"
+              />
             ))}
           </div>
         ) : (
@@ -100,7 +111,7 @@ export default function Home() {
               />
             ))}
             {!courses.length ? (
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-slate-500">
                 Chưa có khóa học để hiển thị.
               </p>
             ) : null}

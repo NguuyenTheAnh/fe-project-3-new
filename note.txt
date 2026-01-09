@@ -1,0 +1,467 @@
+CODEX CHECKLIST — Refactor Layouts: Student normal layout, Instructor/Admin dashboard layout (Sidebar + Main) + UI text in Vietnamese
+
+Goal:
+- Public/Student keep “normal Udemy-style” layout (top header, centered content)
+- Instructor + Admin use “dashboard-focused” layout: Sidebar (left) + MainContent (right)
+- ALL visible UI strings (menu labels, headings, placeholders, footers, NotFound) must be in Vietnamese
+- No business logic, no API calls
+
+========================================
+A) Create reusable DashboardLayout
+1) Create file: src/layouts/DashboardLayout.jsx
+   - Component signature: DashboardLayout({ sidebar })
+   - Layout rules:
+     - Page wrapper: "min-h-screen bg-muted/30"
+     - Container: "mx-auto max-w-7xl px-4 py-6"
+     - Two columns: "flex gap-6"
+     - Sidebar:
+       - width: "w-64 shrink-0"
+       - box: "rounded-xl border bg-background p-3 sticky top-24"
+       - render {sidebar}
+     - Main:
+       - "flex-1 min-w-0"
+       - box: "rounded-xl border bg-background p-6"
+       - render <Outlet /> inside main box
+
+========================================
+B) Keep Public/Student layouts as normal (Udemy-style)
+2) Confirm / update:
+   - src/layouts/PublicLayout.jsx
+     - Should remain:
+       Header + main container (max-w-6xl px-4 py-6) + Footer
+   - src/layouts/StudentLayout.jsx
+     - Should remain:
+       Header + container (max-w-6xl px-4 py-6)
+   - Do NOT convert these into sidebar dashboards
+
+========================================
+C) Update Instructor layout to use DashboardLayout + Vietnamese sidebar
+3) Update file: src/layouts/InstructorLayout.jsx
+   - Must render:
+     - <Header />
+     - <DashboardLayout sidebar={<InstructorSidebar />} />
+   - InstructorSidebar:
+     - Title label in Vietnamese, e.g. "Giảng viên"
+     - NavLink items (Vietnamese labels):
+       - "/instructor"         => "Tổng quan"
+       - "/instructor/courses" => "Khóa học"
+     - NavLink styling:
+       - base: "block rounded-lg px-3 py-2 text-sm"
+       - hover: "hover:bg-muted"
+       - active: "bg-muted font-medium"
+     - Use NavLink with "end" on "/instructor" to avoid partial matching
+
+========================================
+D) Update Admin layout to use DashboardLayout + Vietnamese sidebar
+4) Update file: src/layouts/AdminLayout.jsx
+   - Must render:
+     - <Header />
+     - <DashboardLayout sidebar={<AdminSidebar />} />
+   - AdminSidebar:
+     - Title label in Vietnamese, e.g. "Quản trị"
+     - NavLink items (Vietnamese labels):
+       - "/admin" => "Tổng quan"
+       (Optional placeholders for later; create routes/pages only if already exist)
+       - "/admin/users"  => "Người dùng"
+       - "/admin/courses"=> "Khóa học"
+     - Same NavLink styling as Instructor
+     - Use NavLink with "end" on "/admin"
+
+========================================
+E) Router check (only minimal changes if needed)
+5) In src/app/router.jsx:
+   - Confirm routes still point to:
+     - path "instructor" => element <InstructorLayout />
+     - path "admin"      => element <AdminLayout />
+   - Keep Public and Student routes unchanged
+   - NotFound content must be Vietnamese:
+     - Title: "Không tìm thấy trang (404)"
+     - Message: "Trang bạn yêu cầu không tồn tại."
+
+========================================
+F) Header & Footer Vietnamese text
+6) Update src/components/app/Header.jsx:
+   - Visible strings in Vietnamese:
+     - Logo text: "UdemyClone" (can keep) OR "Udemy Clone"
+     - Search placeholder: "Tìm kiếm khóa học"
+     - Login link label: "Đăng nhập"
+   - Search behavior unchanged: submit -> /search?q=...
+
+7) Update src/components/app/Footer.jsx:
+   - Vietnamese content:
+     - Example: "© {year} UdemyClone"
+
+========================================
+G) Placeholder pages Vietnamese titles
+8) Update placeholder page titles to Vietnamese:
+   - public/Home.jsx: "Trang chủ"
+   - public/Search.jsx: "Tìm kiếm"
+   - public/CourseDetail.jsx: "Chi tiết khóa học"
+   - public/Login.jsx: "Đăng nhập"
+   - public/Register.jsx: "Đăng ký"
+   - student/MyLearning.jsx: "Khóa học của tôi"
+   - student/Learn.jsx: "Học"
+   - instructor/InstructorHome.jsx: "Bảng điều khiển giảng viên"
+   - instructor/InstructorCourses.jsx: "Quản lý khóa học"
+   - admin/AdminHome.jsx: "Bảng điều khiển quản trị"
+
+(Optionally show params in Vietnamese, e.g. "Mã khóa học: {courseId}")
+
+========================================
+H) Manual verification
+9) Run: npm run dev
+10) Verify:
+   - Public pages normal layout: "/" , "/search?q=abc"
+   - Student pages normal layout: "/me/learning" , "/learn/1"
+   - Instructor pages show dashboard layout with sidebar: "/instructor" , "/instructor/courses"
+   - Admin pages show dashboard layout with sidebar: "/admin"
+   - All visible text is Vietnamese (header, sidebar, page titles, 404)
+
+Deliverable:
+- Commit-ready refactor with DashboardLayout + updated InstructorLayout/AdminLayout + Vietnamese UI strings.
+
+
+
+
+
+
+
+NEXT CHECKLIST (Task 2) — Frontend Auth Foundation + Role-based Routing (UI text in Vietnamese)
+
+Reference API collection: :contentReference[oaicite:0]{index=0}
+
+Goal:
+- Implement FE authentication flow with your BE:
+  - POST /auth/register
+  - POST /auth/login
+  - POST /auth/refresh
+  - POST /auth/logout
+- Store tokens, auto-attach Authorization header, auto-refresh on 401
+- Decode roles from JWT and redirect users to correct area:
+  - STUDENT -> / (student/public)
+  - INSTRUCTOR -> /instructor
+  - ADMIN -> /admin
+- UI strings must be Vietnamese (“Đăng nhập”, “Đăng ký”, “Đăng xuất”, errors, placeholders)
+
+Constraints:
+- No business features yet (no courses listing, no learning flow)
+- This task is ONLY auth + routing guards + minimal profile display in header
+- Keep existing layouts (Student normal, Instructor/Admin dashboard)
+
+========================================
+A) Environment & Axios client
+1) Ensure env:
+   - .env.development contains: VITE_BACKEND_URL=http://localhost:8080 (or your BE)
+2) Create/confirm axios instance:
+   - File: src/util/axios.customize.js
+   - Must set baseURL = import.meta.env.VITE_BACKEND_URL
+   - Must set timeout (e.g. 20000)
+   - Must export the instance as default
+
+========================================
+B) Token storage utilities
+3) Create file: src/util/token.storage.js
+   - Functions:
+     - getAccessToken(), setAccessToken(token), clearAccessToken()
+     - getRefreshToken(), setRefreshToken(token), clearRefreshToken()
+     - clearAllTokens()
+   - Use localStorage keys:
+     - "lms_access_token"
+     - "lms_refresh_token"
+
+========================================
+C) JWT decode utilities (roles + user info)
+4) Add dependency (choose 1):
+   OPTION 1 (recommended): npm i jwt-decode
+   OPTION 2: manual base64 decode
+5) Create file: src/util/jwt.js
+   - Function: parseJwt(accessToken) -> { sub, email, roles, exp }
+   - Roles in token payload are like:
+     - ["ROLE_STUDENT"] / ["ROLE_INSTRUCTOR"] / ["ROLE_ADMIN"]
+   - Provide helper:
+     - hasRole(user, roleName) (roleName is "ROLE_STUDENT"...)
+
+========================================
+D) Auth API service layer (based on your Postman)
+6) Create file: src/api/auth.api.js
+   - Methods:
+     - register({ email, password, fullName }) -> POST /auth/register
+     - login({ email, password }) -> POST /auth/login
+     - refresh({ refreshToken }) -> POST /auth/refresh
+     - logout({ refreshToken }) -> POST /auth/logout
+   - Response shape (from your collection):
+     - { code: "00", message: null, data: { accessToken, refreshToken, tokenType, expiresIn } }
+   - Ensure functions return ONLY the "data" field (tokens) OR throw a normalized error
+
+========================================
+E) Auth state (React Context)
+7) Create file: src/contexts/AuthContext.jsx
+   - Provide:
+     - authUser (decoded from accessToken)
+     - isAuthenticated (boolean)
+     - login(email, password) -> calls API, stores tokens, sets user
+     - register(payload) -> calls API, then optionally auto-login OR redirect to login
+     - logout() -> calls API /auth/logout (best-effort), clears tokens, clears user
+     - refreshSession() -> calls /auth/refresh using refreshToken, updates accessToken, updates user
+   - On app init:
+     - read tokens from localStorage
+     - if accessToken exists and not expired -> set user
+     - if accessToken expired but refreshToken exists -> try refreshSession()
+     - if refresh fails -> clear tokens
+
+========================================
+F) Axios interceptors (attach token + refresh on 401)
+8) Create file: src/util/axios.interceptors.js
+   - Function: setupInterceptors(axiosInstance, { getAccessToken, refreshSession, logout })
+   - Request interceptor:
+     - if accessToken exists -> set header Authorization: "Bearer <token>"
+   - Response interceptor:
+     - if 401 and request not retried:
+       - call refreshSession()
+       - retry original request with new token
+     - if refresh fails -> logout() and reject
+   - Prevent infinite loop with:
+     - config._retry = true
+   - Call setup once in app bootstrap (see next section)
+
+========================================
+G) Wire AuthProvider at app root
+9) Update src/main.jsx
+   - Wrap RouterProvider with <AuthProvider>
+10) Ensure interceptors are initialized exactly once:
+   - Best place:
+     - inside AuthProvider useEffect OR a small component <AuthBootstrap />
+   - Must not register interceptors multiple times on re-render
+
+========================================
+H) Protected routes (auth + role guards)
+11) Create guards:
+   - File: src/components/auth/RequireAuth.jsx
+     - if not authenticated -> redirect to /login (keep returnTo)
+   - File: src/components/auth/RequireRole.jsx
+     - props: allowedRoles (array)
+     - if authenticated but role not allowed -> show Vietnamese message page:
+       - Title: "Không có quyền truy cập"
+       - Subtitle: "Bạn không được phép truy cập trang này."
+12) Apply route guards in router:
+   - /me/*, /learn/* require ROLE_STUDENT
+   - /instructor/* require ROLE_INSTRUCTOR
+   - /admin/* require ROLE_ADMIN
+   - Keep public routes accessible without auth
+
+========================================
+I) Login / Register pages (Vietnamese UI)
+13) Update/create:
+   - src/pages/auth/login.jsx
+   - src/pages/auth/register.jsx
+   Requirements:
+   - Use shadcn/ui components (Card, Input, Button, Label)
+   - Vietnamese strings:
+     - Login title: "Đăng nhập"
+     - Register title: "Đăng ký"
+     - Email label: "Email"
+     - Password label: "Mật khẩu"
+     - Full name label (register): "Họ và tên"
+     - Submit buttons: "Đăng nhập" / "Tạo tài khoản"
+     - Loading text: "Đang xử lý..."
+   - On successful login:
+     - If role includes ROLE_ADMIN -> navigate("/admin")
+     - Else if ROLE_INSTRUCTOR -> navigate("/instructor")
+     - Else -> navigate("/") or navigate(returnTo)
+   - Show validation errors in Vietnamese:
+     - "Vui lòng nhập email"
+     - "Vui lòng nhập mật khẩu"
+
+========================================
+J) Header integration (Vietnamese + user menu)
+14) Update src/components/app/Header.jsx
+   - If NOT authenticated:
+     - show "Đăng nhập" and "Đăng ký"
+   - If authenticated:
+     - show dropdown:
+       - greeting: "Xin chào, <email hoặc tên>"
+       - item "Trang của tôi" (student) OR "Bảng điều khiển" (instructor/admin)
+       - item "Đăng xuất"
+   - All strings Vietnamese
+   - No avatar logic required yet (optional placeholder circle)
+
+========================================
+K) Minimal QA checklist (manual tests)
+15) Manual tests:
+   - Register new user -> redirect to login or auto-login (decide & implement consistently)
+   - Login as student (token contains ROLE_STUDENT) -> redirect to /
+   - Login as instructor (ROLE_INSTRUCTOR) -> redirect to /instructor
+   - Login as admin (ROLE_ADMIN) -> redirect to /admin
+   - Refresh browser -> session restored from localStorage
+   - Force 401 (simulate by editing token) -> refresh flow triggers /auth/refresh
+   - Logout -> tokens cleared + redirect to /login
+
+Deliverable:
+- Working auth foundation + role-based routing guards + Vietnamese UI strings.
+- No course/catalog features yet.
+
+
+
+
+
+NEXT CHECKLIST (Task 3) — Public Catalog + Course Detail (Read-only) using BE APIs (UI text in Vietnamese)
+
+API reference (Postman collection): :contentReference[oaicite:0]{index=0}
+
+Goal:
+- Implement public browsing experience (Udemy-like):
+  - Home highlights (simple)
+  - Search/Catalog page with filters + pagination
+  - Course detail page (hero + summary + curriculum preview placeholders)
+- Only READ operations (no purchase/enroll yet)
+- All visible UI strings must be Vietnamese
+
+Endpoints to use (from Postman):
+- GET /categories  (list categories)
+- GET /tags        (list tags)
+- GET /courses     (search courses / catalog)
+- GET /courses/:courseId (course detail)
+
+Important notes:
+- Some requests in Postman show bearer auth, but this is “public” in naming. Try WITHOUT token first.
+- If your BE actually requires auth, reuse axios interceptor to attach token automatically.
+
+========================================
+A) API layer (catalog)
+1) Create folder: src/api/
+2) Create file: src/api/catalog.api.js
+   - export async functions:
+     - fetchCategories()
+       -> GET /categories
+     - fetchTags()
+       -> GET /tags
+     - searchCourses(params)
+       -> GET /courses with query params (at minimum: q, page, size, categoryId, tagId, level, language, sort)
+       -> if BE does not support some params, still implement FE param plumbing but omit unknown params from request
+     - fetchCourseDetail(courseId)
+       -> GET /courses/:courseId
+   - Response unwrap:
+     - backend returns { code, message, data }
+     - always return response.data.data
+   - Normalize error:
+     - throw new Error(vietnameseMessage)
+
+========================================
+B) Shared UI components
+3) Create components folder: src/components/catalog/
+4) Create CourseCard.jsx
+   - Props: course
+   - Show (Vietnamese labels):
+     - thumbnail (if missing, use placeholder block)
+     - title
+     - instructors (if present)
+     - rating (if present) + reviewCount (if present)
+     - price (if present) else show “Miễn phí”
+   - Click -> navigate to `/courses/:courseId` OR `/course/:slug` depending on your router (choose 1 and keep consistent)
+
+5) Create PaginationBar.jsx (or use shadcn Pagination)
+   - Props: page, size, totalPages, onChange(page)
+   - Vietnamese text:
+     - “Trang trước”, “Trang sau”, “Trang X / Y”
+
+6) Create FilterSidebar.jsx
+   - Filters:
+     - Category (single select)
+     - Tag (single select)
+     - Level (BEGINNER/INTERMEDIATE/ADVANCED) display Vietnamese:
+       - “Cơ bản”, “Trung cấp”, “Nâng cao”
+     - Language (VI/EN) display Vietnamese:
+       - “Tiếng Việt”, “Tiếng Anh”
+   - Use shadcn/ui: Card, Button, Select, Separator
+   - Add “Xóa bộ lọc” button
+
+========================================
+C) Search/Catalog page (public)
+7) Update/create page: src/pages/public/search.jsx
+   - URL-driven state:
+     - read query params from location.search:
+       - q, page, categoryId, tagId, level, language
+     - when user changes filters, update URL query params (push navigation)
+   - Data loading:
+     - fetchCategories() and fetchTags() once (cache in state)
+     - call searchCourses() whenever query params change
+   - UI layout (Vietnamese):
+     - Left: FilterSidebar (desktop), collapsible (mobile optional)
+     - Right: result header:
+       - “Kết quả tìm kiếm”
+       - show q: “Từ khóa: …”
+       - show result count if BE provides it
+     - Grid of CourseCard (responsive 1/2/3/4 columns)
+     - PaginationBar below
+
+8) Search box behavior
+   - Ensure Header search form navigates to /search?q=<keyword>&page=0
+   - Placeholder Vietnamese: “Tìm kiếm khóa học”
+
+9) Loading & error states
+   - Skeleton cards while loading (simple gray blocks)
+   - Error box (Vietnamese):
+     - Title: “Có lỗi xảy ra”
+     - Button: “Thử lại”
+
+========================================
+D) Home page (public) — minimal but Udemy-like
+10) Update/create: src/pages/public/home.jsx
+   - Sections (Vietnamese headings):
+     - “Danh mục nổi bật” -> show 8 categories (chips/buttons) linking to /search?categoryId=...
+     - “Khóa học mới” (or “Gợi ý cho bạn”) -> call searchCourses({ page:0, size:8, sort:"newest" }) if supported
+       - If BE doesn’t support sort, just call /courses?page=0&size=8
+   - Reuse CourseCard grid
+   - Keep it simple (no complex carousels yet)
+
+========================================
+E) Course detail page (public)
+11) Update/create: src/pages/public/course-detail.jsx
+   - Route should match existing router (e.g. /courses/:courseId)
+12) Fetch data:
+   - fetchCourseDetail(courseId)
+13) UI sections (Vietnamese):
+   - Hero:
+     - Title
+     - Short description
+     - Category + tags chips (if provided)
+     - Language + level (mapped to Vietnamese)
+     - Price display: “Miễn phí” or formatted currency
+     - CTA button (no enroll yet):
+       - “Đăng ký học” (disabled or navigates to login if needed)
+   - Tabs/sections:
+     - “Giới thiệu”
+     - “Nội dung khóa học”
+     - “Yêu cầu”
+   - Curriculum preview:
+     - If detail API includes sections/lessons: render collapsible list
+     - If not included: show placeholder text:
+       - “Nội dung khóa học sẽ được hiển thị sau.”
+
+14) Metadata rendering rules
+   - Be defensive: fields may be null
+   - Use placeholders:
+     - rating not available -> hide rating row
+     - no thumbnail -> placeholder gradient block
+
+========================================
+F) Routing
+15) Update router:
+   - Ensure:
+     - /search -> Search page
+     - /courses/:courseId -> CourseDetail page
+   - All pages inside PublicLayout
+
+========================================
+G) Manual verification
+16) Run: npm run dev
+17) Verify:
+   - Home loads categories + a course grid (if BE has data)
+   - Header search -> /search?q=java updates results
+   - Filter changes update URL and reload results
+   - Pagination works (page param changes)
+   - Clicking CourseCard opens CourseDetail and loads info
+   - All visible strings are Vietnamese
+
+Deliverable:
+- Working public catalog + search filters + course detail read-only UI, integrated with your BE endpoints listed above.

@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,7 +11,20 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/contexts/AuthContext";
-import { hasRole } from "@/util/jwt";
+
+const resolveUserRoles = (user) => {
+  const roles = new Set();
+  if (Array.isArray(user?.roles)) {
+    user.roles.forEach((role) => roles.add(role));
+  }
+  if (user?.role) {
+    const normalized = user.role.startsWith("ROLE_")
+      ? user.role
+      : `ROLE_${user.role}`;
+    roles.add(normalized);
+  }
+  return roles;
+};
 
 export default function RegisterPage() {
   const navigate = useNavigate();
@@ -47,10 +60,11 @@ export default function RegisterPage() {
         password: password.trim(),
         fullName: fullName.trim(),
       });
+      const roles = resolveUserRoles(user);
       let target = "/";
-      if (hasRole(user, "ROLE_ADMIN")) {
+      if (roles.has("ROLE_ADMIN")) {
         target = "/admin";
-      } else if (hasRole(user, "ROLE_INSTRUCTOR")) {
+      } else if (roles.has("ROLE_INSTRUCTOR")) {
         target = "/instructor";
       }
       navigate(target, { replace: true });
@@ -66,7 +80,9 @@ export default function RegisterPage() {
       <Card>
         <CardHeader>
           <CardTitle>Đăng ký</CardTitle>
-          <CardDescription>Tạo tài khoản mới để bắt đầu học tập.</CardDescription>
+          <CardDescription>
+            Tạo tài khoản mới để bắt đầu học tập.
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <form className="space-y-4" onSubmit={handleSubmit}>
@@ -103,7 +119,7 @@ export default function RegisterPage() {
               />
             </div>
             {error ? (
-              <p className="text-sm text-destructive">{error}</p>
+              <p className="text-sm text-red-600">{error}</p>
             ) : null}
             <Button type="submit" className="w-full" disabled={loading}>
               {loading ? "Đang xử lý..." : "Tạo tài khoản"}

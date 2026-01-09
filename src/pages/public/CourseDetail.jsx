@@ -1,9 +1,10 @@
-import { useEffect, useMemo, useState } from "react";
+﻿import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { fetchCourseDetail } from "@/api/catalog.api";
 import { useAuth } from "@/contexts/AuthContext";
+import useFileUrl from "@/hooks/useFileUrl";
 
 const LEVEL_MAP = {
   BEGINNER: "Cơ bản",
@@ -16,7 +17,15 @@ const LANGUAGE_MAP = {
   EN: "Tiếng Anh",
 };
 
-const formatPrice = (price) => {
+const formatPrice = (priceCents, price) => {
+  if (priceCents === 0) return "Miễn phí";
+  if (typeof priceCents === "number") {
+    return (priceCents / 100).toLocaleString("vi-VN", {
+      style: "currency",
+      currency: "VND",
+      maximumFractionDigits: 0,
+    });
+  }
   if (price === null || price === undefined) return "Miễn phí";
   if (typeof price === "number") {
     return price.toLocaleString("vi-VN", {
@@ -35,22 +44,31 @@ export default function CourseDetail() {
   const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [requiresAuth, setRequiresAuth] = useState(false);
+
+  const { url: thumbnailUrl } = useFileUrl(course?.thumbnail);
 
   useEffect(() => {
     const loadDetail = async () => {
       setLoading(true);
       setError("");
+      setRequiresAuth(false);
       try {
         const data = await fetchCourseDetail(courseId);
         setCourse(data);
       } catch (err) {
-        setError(err?.message || "Không tải được thông tin khóa học.");
+        if (err?.status === 401 && !isAuthenticated) {
+          setRequiresAuth(true);
+          setError("");
+        } else {
+          setError(err?.message || "Không tải được thông tin khóa học.");
+        }
       } finally {
         setLoading(false);
       }
     };
     loadDetail();
-  }, [courseId]);
+  }, [courseId, isAuthenticated]);
 
   const sections = useMemo(() => {
     if (!course) return [];
@@ -65,14 +83,32 @@ export default function CourseDetail() {
   };
 
   if (loading) {
-    return <div className="p-6 text-sm text-muted-foreground">Đang tải...</div>;
+    return <div className="p-6 text-sm text-slate-500">Đang tải...</div>;
+  }
+
+  if (requiresAuth) {
+    return (
+      <Card className="p-6">
+        <p className="text-lg font-semibold">
+          Vui lòng đăng nhập để xem chi tiết khóa học.
+        </p>
+        <Button
+          className="mt-4"
+          onClick={() =>
+            navigate("/login", { state: { returnTo: `/courses/${courseId}` } })
+          }
+        >
+          Đăng nhập
+        </Button>
+      </Card>
+    );
   }
 
   if (error) {
     return (
       <Card className="p-4">
-        <p className="font-semibold text-destructive">Có lỗi xảy ra</p>
-        <p className="text-sm text-muted-foreground">{error}</p>
+        <p className="font-semibold text-red-600">Có lỗi xảy ra</p>
+        <p className="text-sm text-slate-500">{error}</p>
       </Card>
     );
   }
@@ -81,32 +117,52 @@ export default function CourseDetail() {
     return (
       <Card className="p-4">
         <p className="font-semibold">Không tìm thấy khóa học</p>
-        <p className="text-sm text-muted-foreground">
-          Vui lòng thử lại sau.
-        </p>
+        <p className="text-sm text-slate-500">Vui lòng thử lại sau.</p>
       </Card>
     );
   }
 
   return (
     <div className="space-y-6">
-      <div className="rounded-xl border bg-background p-6 shadow-sm">
-        <p className="text-sm text-muted-foreground">
+      <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+        {thumbnailUrl ? (
+          <div className="mb-6 aspect-video w-full overflow-hidden rounded-lg bg-slate-100">
+            <img
+              src={thumbnailUrl}
+              alt={course.title}
+              className="h-full w-full object-cover"
+            />
+          </div>
+        ) : (
+          <div className="mb-6 aspect-video w-full rounded-lg bg-gradient-to-r from-slate-100 to-slate-200" />
+        )}
+        <p className="text-sm text-slate-500">
           {course.category?.name || course.categoryName || "Khóa học"}
         </p>
-        <h1 className="mt-2 text-3xl font-bold">{course.title}</h1>
-        <p className="mt-3 text-sm text-muted-foreground">
+        <h1 className="mt-2 text-2xl font-semibold tracking-tight">
+          {course.title}
+        </h1>
+        <p className="mt-3 text-sm text-slate-600">
           {course.shortDescription || course.subtitle || "Khóa học trực tuyến"}
         </p>
 
-        <div className="mt-4 flex flex-wrap gap-2 text-sm text-muted-foreground">
+        {course.instructors?.length ? (
+          <p className="mt-3 text-sm text-slate-600">
+            Giảng viên: {" "}
+            {course.instructors
+              .map((ins) => ins.fullName || ins.name || ins)
+              .join(", ")}
+          </p>
+        ) : null}
+
+        <div className="mt-4 flex flex-wrap gap-2 text-sm">
           {course.language ? (
-            <span className="rounded-full bg-muted px-3 py-1">
+            <span className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-slate-600">
               {LANGUAGE_MAP[course.language] || course.language}
             </span>
           ) : null}
           {course.level ? (
-            <span className="rounded-full bg-muted px-3 py-1">
+            <span className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-slate-600">
               {LEVEL_MAP[course.level] || course.level}
             </span>
           ) : null}
@@ -114,7 +170,7 @@ export default function CourseDetail() {
             ? course.tags.map((tag) => (
                 <span
                   key={tag.id || tag.name}
-                  className="rounded-full bg-muted px-3 py-1"
+                  className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-slate-600"
                 >
                   {tag.name || tag.title}
                 </span>
@@ -123,13 +179,15 @@ export default function CourseDetail() {
         </div>
 
         <div className="mt-4 flex flex-wrap items-center gap-4">
-          <p className="text-2xl font-semibold">{formatPrice(course.price)}</p>
-          {course.rating ? (
-            <p className="text-sm text-foreground">
-              {course.rating}{" "}
-              {course.reviewCount ? (
-                <span className="text-muted-foreground">
-                  ({course.reviewCount} đánh giá)
+          <p className="text-2xl font-semibold text-[#BE123C]">
+            {formatPrice(course.priceCents, course.price)}
+          </p>
+          {course.ratingAvg ? (
+            <p className="text-sm text-slate-900">
+              {course.ratingAvg}{" "}
+              {course.ratingCount ? (
+                <span className="text-slate-500">
+                  ({course.ratingCount} đánh giá)
                 </span>
               ) : null}
             </p>
@@ -151,7 +209,7 @@ export default function CourseDetail() {
           <CardHeader>
             <CardTitle>Giới thiệu</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-3 text-sm text-muted-foreground">
+          <CardContent className="space-y-3 text-sm text-slate-600">
             <p>{course.description || "Giới thiệu về khóa học."}</p>
           </CardContent>
         </Card>
@@ -160,18 +218,18 @@ export default function CourseDetail() {
           <CardHeader>
             <CardTitle>Thông tin</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-2 text-sm text-muted-foreground">
+          <CardContent className="space-y-2 text-sm text-slate-600">
             <p>
-              <span className="font-medium text-foreground">Ngôn ngữ: </span>
+              <span className="font-medium text-slate-900">Ngôn ngữ: </span>
               {LANGUAGE_MAP[course.language] || course.language || "Không rõ"}
             </p>
             <p>
-              <span className="font-medium text-foreground">Trình độ: </span>
+              <span className="font-medium text-slate-900">Trình độ: </span>
               {LEVEL_MAP[course.level] || course.level || "Không rõ"}
             </p>
             {course.category?.name || course.categoryName ? (
               <p>
-                <span className="font-medium text-foreground">Danh mục: </span>
+                <span className="font-medium text-slate-900">Danh mục: </span>
                 {course.category?.name || course.categoryName}
               </p>
             ) : null}
@@ -185,13 +243,13 @@ export default function CourseDetail() {
         </CardHeader>
         <CardContent>
           {Array.isArray(course.requirements) && course.requirements.length ? (
-            <ul className="list-disc space-y-1 pl-5 text-sm text-muted-foreground">
+            <ul className="list-disc space-y-1 pl-5 text-sm text-slate-600">
               {course.requirements.map((req, idx) => (
                 <li key={idx}>{req}</li>
               ))}
             </ul>
           ) : (
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-slate-500">
               Yêu cầu khóa học sẽ được cập nhật sau.
             </p>
           )}
@@ -206,12 +264,15 @@ export default function CourseDetail() {
           {sections.length ? (
             <div className="space-y-3">
               {sections.map((section, idx) => (
-                <div key={section.id || idx} className="rounded-lg border p-3">
-                  <p className="font-medium">
+                <div
+                  key={section.id || idx}
+                  className="rounded-lg border border-slate-200 p-3"
+                >
+                  <p className="font-medium text-slate-900">
                     {section.title || section.name || `Phần ${idx + 1}`}
                   </p>
                   {section.lessons?.length ? (
-                    <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-muted-foreground">
+                    <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-slate-600">
                       {section.lessons.map((lesson, lIdx) => (
                         <li key={lesson.id || lIdx}>
                           {lesson.title || lesson.name || `Bài ${lIdx + 1}`}
@@ -223,7 +284,7 @@ export default function CourseDetail() {
               ))}
             </div>
           ) : (
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-slate-500">
               Nội dung khóa học sẽ được hiển thị sau.
             </p>
           )}

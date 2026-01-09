@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
+﻿import { createBrowserRouter } from "react-router-dom";
 import RequireAuth from "@/components/auth/RequireAuth";
 import RequireRole from "@/components/auth/RequireRole";
 import AdminLayout from "@/layouts/AdminLayout";
@@ -19,7 +19,7 @@ import MyLearning from "@/pages/student/MyLearning";
 
 function NotFound() {
   return (
-    <div className="p-6 text-2xl font-semibold text-muted-foreground">
+    <div className="p-6 text-2xl font-semibold tracking-tight text-slate-600">
       Không tìm thấy trang (404)
       <div className="mt-2 text-sm font-normal">
         Trang bạn yêu cầu không tồn tại.

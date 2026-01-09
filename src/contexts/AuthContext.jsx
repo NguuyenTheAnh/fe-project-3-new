@@ -1,4 +1,4 @@
-import {
+﻿import {
   createContext,
   useCallback,
   useContext,
@@ -46,7 +46,7 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  const syncUserFromToken = useCallback((token) => {
+  const syncUserFromToken = useCallback((token, userFromResponse) => {
     if (!token) {
       setAuthUser(null);
       return null;
@@ -56,8 +56,24 @@ export const AuthProvider = ({ children }) => {
       setAuthUser(null);
       return null;
     }
-    setAuthUser(parsed);
-    return parsed;
+    const normalizedRole = userFromResponse?.role
+      ? userFromResponse.role.startsWith("ROLE_")
+        ? userFromResponse.role
+        : `ROLE_${userFromResponse.role}`
+      : null;
+    const roles = Array.isArray(userFromResponse?.roles)
+      ? userFromResponse.roles
+      : normalizedRole
+      ? [normalizedRole]
+      : parsed.roles || [];
+
+    const mergedUser = {
+      ...parsed,
+      ...userFromResponse,
+      roles,
+    };
+    setAuthUser(mergedUser);
+    return mergedUser;
   }, []);
 
   const logout = useCallback(async () => {
@@ -79,9 +95,9 @@ export const AuthProvider = ({ children }) => {
   const login = useCallback(
     async (email, password) => {
       const tokens = await authApi.login({ email, password });
-      const { accessToken, refreshToken } = tokens || {};
+      const { accessToken, refreshToken, user } = tokens || {};
       persistTokens(accessToken, refreshToken);
-      return syncUserFromToken(accessToken);
+      return syncUserFromToken(accessToken, user);
     },
     [persistTokens, syncUserFromToken]
   );
@@ -89,9 +105,9 @@ export const AuthProvider = ({ children }) => {
   const register = useCallback(
     async ({ email, password, fullName }) => {
       const tokens = await authApi.register({ email, password, fullName });
-      const { accessToken, refreshToken } = tokens || {};
+      const { accessToken, refreshToken, user } = tokens || {};
       persistTokens(accessToken, refreshToken);
-      return syncUserFromToken(accessToken);
+      return syncUserFromToken(accessToken, user);
     },
     [persistTokens, syncUserFromToken]
   );

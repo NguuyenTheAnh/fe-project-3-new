@@ -1,39 +1,21 @@
 import axiosInstance from "@/util/axios.customize";
-
-const unwrap = (response) => {
-  const body = response?.data;
-  if (!body) {
-    throw new Error("Không có dữ liệu từ máy chủ.");
-  }
-  if (body.data !== undefined) {
-    return body.data;
-  }
-  throw new Error(body.message || "Có lỗi xảy ra, vui lòng thử lại.");
-};
-
-const handleError = (error) => {
-  const message =
-    error?.response?.data?.message ||
-    error?.message ||
-    "Có lỗi xảy ra, vui lòng thử lại.";
-  throw new Error(message);
-};
+import { handleApiError, unwrapResponse } from "@/util/api.response";
 
 export async function fetchCategories() {
   try {
     const response = await axiosInstance.get("/categories");
-    return unwrap(response) ?? [];
+    return unwrapResponse(response) ?? [];
   } catch (error) {
-    handleError(error);
+    handleApiError(error);
   }
 }
 
 export async function fetchTags() {
   try {
     const response = await axiosInstance.get("/tags");
-    return unwrap(response) ?? [];
+    return unwrapResponse(response) ?? [];
   } catch (error) {
-    handleError(error);
+    handleApiError(error);
   }
 }
 
@@ -61,17 +43,17 @@ export async function searchCourses(params = {}) {
     if (sort) query.sort = sort;
 
     const response = await axiosInstance.get("/courses", { params: query });
-    return unwrap(response);
+    return unwrapResponse(response);
   } catch (error) {
-    handleError(error);
+    handleApiError(error);
   }
 }
 
 export async function fetchCourseDetail(courseId) {
   try {
     const response = await axiosInstance.get(`/courses/${courseId}`);
-    return unwrap(response);
+    return unwrapResponse(response);
   } catch (error) {
-    handleError(error);
+    handleApiError(error);
   }
 }

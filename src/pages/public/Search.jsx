@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+﻿import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import FilterSidebar from "@/components/catalog/FilterSidebar";
 import PaginationBar from "@/components/catalog/PaginationBar";
@@ -80,7 +80,6 @@ export default function Search() {
         setCategories(cats || []);
         setTags(tags || []);
       } catch (err) {
-        // silent for filter lists
         console.error(err);
       }
     };
@@ -144,8 +143,10 @@ export default function Search() {
 
       <div className="space-y-4">
         <div>
-          <h1 className="text-2xl font-semibold">Kết quả tìm kiếm</h1>
-          <p className="mt-2 text-sm text-muted-foreground">
+          <h1 className="text-2xl font-semibold tracking-tight">
+            Kết quả tìm kiếm
+          </h1>
+          <p className="mt-2 text-sm text-slate-600">
             {queryState.q ? `Từ khóa: "${queryState.q}"` : "Tất cả khóa học"}
             {courses.totalElements
               ? ` · ${courses.totalElements} kết quả`
@@ -155,8 +156,8 @@ export default function Search() {
 
         {error ? (
           <Card className="p-4">
-            <p className="font-medium text-destructive">Có lỗi xảy ra</p>
-            <p className="text-sm text-muted-foreground">
+            <p className="font-medium text-red-600">Có lỗi xảy ra</p>
+            <p className="text-sm text-slate-500">
               {error || "Vui lòng thử lại."}
             </p>
             <Button variant="outline" className="mt-3" onClick={handleRetry}>
@@ -168,13 +169,16 @@ export default function Search() {
         {loading ? (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {skeletons.map((_, idx) => (
-              <Card key={idx} className="h-64 animate-pulse bg-muted/50" />
+              <Card
+                key={idx}
+                className="h-64 animate-pulse bg-slate-100 border border-slate-200"
+              />
             ))}
           </div>
         ) : !courses.items.length ? (
           <Card className="p-4">
             <p className="font-medium">Không tìm thấy khóa học nào</p>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-slate-500">
               Hãy thử đổi từ khóa hoặc bộ lọc khác.
             </p>
           </Card>
