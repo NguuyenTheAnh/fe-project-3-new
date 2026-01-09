@@ -28,6 +28,17 @@ export async function getFileMeta(fileId) {
   }
 }
 
+export async function getFileUrl(fileId) {
+  try {
+    const response = await axiosInstance.get(`/files/${fileId}/url`);
+    const payload = unwrapResponse(response);
+    if (typeof payload === "string") return payload;
+    return payload?.accessUrl || null;
+  } catch (error) {
+    handleApiError(error);
+  }
+}
+
 export async function resolveFileAccessUrl(file, isAuthenticated) {
   if (!file) return null;
   if (typeof file === "string") return file;
@@ -41,20 +52,33 @@ export async function resolveFileAccessUrl(file, isAuthenticated) {
   const cached = getCachedFileUrl(fileId);
   if (cached) return cached;
 
-  try {
-    const publicMeta = await getFileMetaPublic(fileId);
-    if (publicMeta?.accessUrl) {
-      setCachedFileUrl(fileId, publicMeta.accessUrl);
-      return publicMeta.accessUrl;
+  const isPublic = file.isPublic === true;
+
+  if (isPublic || file.isPublic === undefined) {
+    try {
+      const publicMeta = await getFileMetaPublic(fileId);
+      if (publicMeta?.accessUrl) {
+        setCachedFileUrl(fileId, publicMeta.accessUrl);
+        return publicMeta.accessUrl;
+      }
+    } catch (error) {
+      // Public access failed, fallback below if authenticated.
     }
-  } catch (error) {
-    // Public access failed, fallback below if authenticated.
   }
 
   if (!isAuthenticated) return null;
 
-  const meta = await getFileMeta(fileId);
-  const url = meta?.accessUrl;
+  let url = null;
+  try {
+    url = await getFileUrl(fileId);
+  } catch (error) {
+    url = null;
+  }
+
+  if (!url) {
+    const meta = await getFileMeta(fileId);
+    url = meta?.accessUrl;
+  }
   if (url) {
     setCachedFileUrl(fileId, url);
   }

@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import useFileUrl from "@/hooks/useFileUrl";
 
@@ -53,7 +53,7 @@ export default function CourseCard({ course }) {
   const language = course?.language
     ? LANGUAGE_LABELS[course.language] || course.language
     : "";
-  const meta = [level, language].filter(Boolean).join(" · ");
+  const meta = [level, language].filter(Boolean).join(" • ");
 
   return (
     <Link to={href}>
@@ -74,26 +74,15 @@ export default function CourseCard({ course }) {
           <h3 className="line-clamp-2 text-base font-semibold">
             {course?.title || "Khóa học"}
           </h3>
-          {instructors ? (
-            <p className="text-xs text-slate-500">
-              {instructors}
-            </p>
-          ) : null}
+          {instructors ? <p className="text-xs text-slate-500">{instructors}</p> : null}
           {meta ? <p className="text-xs text-slate-500">{meta}</p> : null}
           {rating ? (
             <p className="text-sm text-foreground">
-              {rating}{" "}
-              {reviewCount ? (
-                <span className="text-slate-500">
-                  ({reviewCount} đánh giá)
-                </span>
-              ) : null}
+              {rating} {reviewCount ? <span className="text-slate-500">({reviewCount} đánh giá)</span> : null}
             </p>
           ) : null}
           {totalStudents ? (
-            <p className="text-xs text-slate-500">
-              {totalStudents} học viên
-            </p>
+            <p className="text-xs text-slate-500">{totalStudents} học viên</p>
           ) : null}
           <p className="text-sm font-semibold text-[#BE123C]">
             {formatPrice(course?.priceCents, course?.price)}

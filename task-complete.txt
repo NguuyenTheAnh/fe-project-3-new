@@ -1,0 +1,40 @@
+﻿# Task completion summary (FE)
+
+Ngu?n ??i chi?u: API-be-lms.postman_collection.json
+
+## 1) Auth (Trang x?c th?c)
+- Trang: /login (src/pages/auth/login.jsx)
+  - API: POST /auth/login
+  - M?c ??ch: ??ng nh?p, nh?n accessToken/refreshToken v? user.role
+- Trang: /register (src/pages/auth/register.jsx)
+  - API: POST /auth/register
+  - M?c ??ch: ??ng k?, nh?n accessToken/refreshToken v? user.role
+- Ng? c?nh to?n app (src/contexts/AuthContext.jsx)
+  - API: POST /auth/refresh (t? refresh khi token h?t h?n)
+  - API: POST /auth/logout (??ng xu?t, best-effort)
+
+## 2) Public Catalog (Trang c?ng khai)
+- Trang: / (Home) (src/pages/public/Home.jsx)
+  - API: GET /categories (hi?n th? danh m?c n?i b?t)
+  - API: GET /courses (hi?n th? kh?a h?c m?i/g?i ?)
+- Trang: /search (src/pages/public/Search.jsx)
+  - API: GET /categories (b? l?c danh m?c)
+  - API: GET /tags (b? l?c th?)
+  - API: GET /courses (t?m ki?m + ph?n trang)
+- Trang: /courses/:courseId (src/pages/public/CourseDetail.jsx)
+  - API: GET /courses/:id (chi ti?t kh?a h?c)
+
+## 3) Thumbnails / file meta (h?nh ?nh kh?a h?c)
+- D?ng cho CourseCard + CourseDetail (th?ng qua useFileUrl)
+  - API: GET /files/meta/public/{fileId} (?u ti?n, khi file public)
+  - API: GET /files/meta/{fileId} (fallback n?u c?n auth)
+  - Ghi ch?: /files/meta/public kh?ng c? trong Postman c? nh?ng ?? ???c BE c?p nh?t theo y?u c?u m?i.
+
+## 4) Layout/Pages kh?c (kh?ng g?i API)
+- Student: /me/learning, /learn/:courseId (placeholder)
+- Instructor: /instructor, /instructor/courses (placeholder)
+- Admin: /admin (placeholder)
+
+## 5) Ghi ch? k? thu?t
+- T?t c? response ???c unwrap theo chu?n { code, message, data }
+- Axios interceptor t? g?n Authorization: Bearer <accessToken> n?u c?

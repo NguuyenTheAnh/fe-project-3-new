@@ -26,6 +26,12 @@ function AdminSidebar() {
         <NavLink to="/admin/courses" className={linkClasses}>
           Khóa học
         </NavLink>
+        <NavLink to="/admin/categories" className={linkClasses}>
+          Danh mục
+        </NavLink>
+        <NavLink to="/admin/tags" className={linkClasses}>
+          Thẻ
+        </NavLink>
       </nav>
     </div>
   );

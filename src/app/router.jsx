@@ -7,6 +7,8 @@ import PublicLayout from "@/layouts/PublicLayout";
 import RootLayout from "@/layouts/RootLayout";
 import StudentLayout from "@/layouts/StudentLayout";
 import AdminHome from "@/pages/admin/AdminHome";
+import AdminCategories from "@/pages/admin/AdminCategories";
+import AdminTags from "@/pages/admin/AdminTags";
 import LoginPage from "@/pages/auth/login";
 import RegisterPage from "@/pages/auth/register";
 import InstructorCourses from "@/pages/instructor/InstructorCourses";
@@ -89,7 +91,11 @@ export const router = createBrowserRouter([
             </RequireRole>
           </RequireAuth>
         ),
-        children: [{ index: true, element: <AdminHome /> }],
+        children: [
+          { index: true, element: <AdminHome /> },
+          { path: "categories", element: <AdminCategories /> },
+          { path: "tags", element: <AdminTags /> },
+        ],
       },
     ],
   },

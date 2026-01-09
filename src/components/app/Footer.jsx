@@ -10,9 +10,7 @@ export default function Footer() {
       <div className="w-full px-4 sm:px-6 lg:px-10 py-10">
         <div className="grid gap-8 md:grid-cols-3">
           <div>
-            <h3 className="text-sm font-semibold text-slate-900">
-              Về HUSTemy
-            </h3>
+            <h3 className="text-sm font-semibold text-slate-900">Về HUSTemy</h3>
             <ul className="mt-3 flex flex-col gap-2">
               <li>
                 <Link to="#" className={linkClassName}>

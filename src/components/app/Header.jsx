@@ -1,4 +1,4 @@
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+﻿import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -41,13 +41,22 @@ export default function Header() {
   const displayLetter = displayName
     ? displayName.trim().charAt(0).toUpperCase()
     : "U";
+  const isStudent = isAuthenticated && hasRole("ROLE_STUDENT");
 
   return (
     <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/80 backdrop-blur">
       <div className="relative w-full px-4 sm:px-6 lg:px-10 py-3">
         <div className="flex items-center justify-between">
-          <div className="flex items-center">
+          <div className="flex items-center gap-4">
             <Logo />
+            {isStudent ? (
+              <Link
+                to="/me/learning"
+                className="hidden md:inline-flex items-center text-sm font-medium text-slate-700 hover:text-[#E11D48] transition"
+              >
+                Khóa học của tôi
+              </Link>
+            ) : null}
           </div>
 
           <div className="flex items-center justify-end gap-2">

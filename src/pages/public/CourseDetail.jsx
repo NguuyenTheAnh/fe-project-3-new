@@ -5,6 +5,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { fetchCourseDetail } from "@/api/catalog.api";
 import { useAuth } from "@/contexts/AuthContext";
 import useFileUrl from "@/hooks/useFileUrl";
+import useEnrollmentStatus from "@/hooks/useEnrollmentStatus";
+import { enrollCourse } from "@/services/enrollment.service";
 
 const LEVEL_MAP = {
   BEGINNER: "Cơ bản",
@@ -40,13 +42,23 @@ const formatPrice = (priceCents, price) => {
 export default function CourseDetail() {
   const { courseId } = useParams();
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, hasRole } = useAuth();
   const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [requiresAuth, setRequiresAuth] = useState(false);
+  const [enrollLoading, setEnrollLoading] = useState(false);
+  const [actionMessage, setActionMessage] = useState("");
+  const [actionError, setActionError] = useState("");
+  const [enrolled, setEnrolled] = useState(null);
 
   const { url: thumbnailUrl } = useFileUrl(course?.thumbnail);
+  const {
+    enrolled: enrolledStatus,
+    loading: statusLoading,
+    error: statusError,
+  } = useEnrollmentStatus(courseId);
+  const isStudent = isAuthenticated && hasRole("ROLE_STUDENT");
 
   useEffect(() => {
     const loadDetail = async () => {
@@ -75,10 +87,39 @@ export default function CourseDetail() {
     return course.sections || course.curriculum || course.chapters || [];
   }, [course]);
 
-  const handleEnroll = () => {
-    if (!isAuthenticated) {
-      navigate("/login", { state: { returnTo: `/courses/${courseId}` } });
-      return;
+  useEffect(() => {
+    setEnrolled(enrolledStatus);
+  }, [enrolledStatus]);
+
+  useEffect(() => {
+    setActionMessage("");
+    setActionError("");
+    setEnrolled(null);
+  }, [courseId]);
+
+  const handleLoginRedirect = () => {
+    navigate("/login", { state: { returnTo: `/courses/${courseId}` } });
+  };
+
+  const handleStartLearning = () => {
+    navigate(`/learn/${courseId}`);
+  };
+
+  const handleEnroll = async () => {
+    if (!courseId) return;
+    setEnrollLoading(true);
+    setActionMessage("");
+    setActionError("");
+    try {
+      await enrollCourse(courseId);
+      setEnrolled(true);
+      setActionMessage("Đăng ký khóa học thành công.");
+    } catch (err) {
+      setActionError(
+        err?.message || "Không thể đăng ký khóa học. Vui lòng thử lại."
+      );
+    } finally {
+      setEnrollLoading(false);
     }
   };
 
@@ -194,13 +235,37 @@ export default function CourseDetail() {
           ) : null}
         </div>
 
-        <div className="mt-6 flex flex-wrap gap-3">
-          <Button size="lg" onClick={handleEnroll}>
-            Đăng ký học
-          </Button>
-          <Button size="lg" variant="outline">
-            Lưu vào danh sách
-          </Button>
+        <div className="mt-6 space-y-3">
+          {!isAuthenticated ? (
+            <Button size="lg" onClick={handleLoginRedirect}>
+              Đăng nhập để học
+            </Button>
+          ) : !isStudent ? (
+            <p className="text-sm text-slate-500">
+              Tài khoản này không có quyền ghi danh.
+            </p>
+          ) : statusLoading || (enrolled === null && !statusError) ? (
+            <Button size="lg" disabled>
+              Đang kiểm tra...
+            </Button>
+          ) : enrolled ? (
+            <Button size="lg" onClick={handleStartLearning}>
+              Học ngay
+            </Button>
+          ) : (
+            <Button size="lg" onClick={handleEnroll} disabled={enrollLoading}>
+              {enrollLoading ? "Đang xử lý..." : "Đăng ký học"}
+            </Button>
+          )}
+          {statusError && isStudent ? (
+            <p className="text-sm text-slate-500">{statusError}</p>
+          ) : null}
+          {actionMessage ? (
+            <p className="text-sm text-green-600">{actionMessage}</p>
+          ) : null}
+          {actionError ? (
+            <p className="text-sm text-red-600">{actionError}</p>
+          ) : null}
         </div>
       </div>
 

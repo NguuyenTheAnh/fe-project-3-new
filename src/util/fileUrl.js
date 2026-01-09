@@ -26,4 +26,14 @@ export async function resolveThumbnailUrl(thumbnail, isAuthenticatedOverride) {
   return url || PLACEHOLDER_URL;
 }
 
+export async function getFileUrl(fileId, isPublic, isAuthenticatedOverride) {
+  if (!fileId) return null;
+  const isAuthenticated =
+    typeof isAuthenticatedOverride === "boolean"
+      ? isAuthenticatedOverride
+      : Boolean(getAccessToken());
+  const file = { id: fileId, isPublic };
+  return resolveFileAccessUrl(file, isAuthenticated);
+}
+
 export const placeholderThumbnailUrl = PLACEHOLDER_URL;

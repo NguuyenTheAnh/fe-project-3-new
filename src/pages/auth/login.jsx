@@ -101,9 +101,7 @@ export default function LoginPage() {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
-            {error ? (
-              <p className="text-sm text-red-600">{error}</p>
-            ) : null}
+            {error ? <p className="text-sm text-red-600">{error}</p> : null}
             <Button type="submit" className="w-full" disabled={loading}>
               {loading ? "Đang xử lý..." : "Đăng nhập"}
             </Button>
