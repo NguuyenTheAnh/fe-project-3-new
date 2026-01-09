@@ -7,7 +7,7 @@ const linkClassName =
 export default function Footer() {
   return (
     <footer className="border-t border-slate-200 bg-slate-50">
-      <div className="mx-auto max-w-6xl px-4 py-10">
+      <div className="mx-auto max-w-7xl px-3 sm:px-4 lg:px-6 py-10">
         <div className="grid gap-8 md:grid-cols-3">
           <div>
             <h3 className="text-sm font-semibold text-slate-900">

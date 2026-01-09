@@ -45,9 +45,9 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/80 backdrop-blur">
-      <div className="mx-auto max-w-6xl px-4 py-3 flex items-center gap-4 text-slate-900">
+      <div className="mx-auto max-w-7xl px-3 sm:px-4 lg:px-6 py-3 flex items-center gap-4 text-slate-900">
         <Logo />
-        <form onSubmit={handleSubmit} className="flex-1">
+        <form onSubmit={handleSubmit} className="flex-1 max-w-2xl">
           <Input
             name="q"
             defaultValue={defaultQuery}
