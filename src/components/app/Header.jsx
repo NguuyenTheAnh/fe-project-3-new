@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/contexts/AuthContext";
+import Logo from "@/components/app/Logo";
 
 export default function Header() {
   const navigate = useNavigate();
@@ -45,9 +46,7 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/80 backdrop-blur">
       <div className="mx-auto max-w-6xl px-4 py-3 flex items-center gap-4 text-slate-900">
-        <Link to="/" className="font-semibold text-lg">
-          UdemyClone
-        </Link>
+        <Logo />
         <form onSubmit={handleSubmit} className="flex-1">
           <Input
             name="q"
