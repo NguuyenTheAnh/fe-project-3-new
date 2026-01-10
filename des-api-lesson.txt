@@ -1,0 +1,75 @@
+########################################################################
+# API: Instructor view lesson detail
+########################################################################
+
+Endpoint
+- Method: GET
+- URL: /api/v1/instructor/courses/{courseId}/lessons/{lessonId}
+
+Auth
+- Required: Bearer token
+- Roles: ADMIN or INSTRUCTOR
+- Access: Instructor must belong to the course; Admin can view all
+
+Request
+- Path params:
+  - courseId (long) : course id
+  - lessonId (long) : lesson id
+- Headers:
+  - Authorization: Bearer <ACCESS_TOKEN>
+
+Example cURL
+curl -X GET "{{baseURL}}/instructor/courses/{courseId}/lessons/{lessonId}" \
+  -H "Authorization: Bearer {{INSTRUCTOR_TOKEN}}"
+
+Response (success)
+{
+  "code": "00",
+  "message": null,
+  "data": {
+    "id": 123,
+    "courseId": 10,
+    "courseSectionId": 15,
+    "title": "Lesson 1 - Getting Started",
+    "lessonType": "VIDEO",
+    "contentText": null,
+    "durationSeconds": 600,
+    "isFreePreview": false,
+    "isPreview": false,
+    "videoFile": {
+      "id": 301,
+      "storageProvider": "MINIO",
+      "bucket": "lms-files",
+      "objectKey": "videos/lesson-1.mp4",
+      "originalName": "lesson-1.mp4",
+      "contentType": "video/mp4",
+      "sizeBytes": 12345678,
+      "checksumSha256": "....",
+      "isPublic": false,
+      "accessUrl": "https://....presigned...."
+    },
+    "documents": [
+      {
+        "id": 901,
+        "title": "Slide",
+        "position": 1,
+        "file": {
+          "id": 5001,
+          "storageProvider": "MINIO",
+          "bucket": "lms-files",
+          "objectKey": "other/slide.pdf",
+          "originalName": "slide.pdf",
+          "contentType": "application/pdf",
+          "sizeBytes": 204800,
+          "checksumSha256": "....",
+          "isPublic": false,
+          "accessUrl": "https://....presigned...."
+        }
+      }
+    ]
+  }
+}
+
+Response (error)
+- 403: auth.forbidden (not instructor of the course)
+- 404: data.not_found (course/lesson/mapping not found)

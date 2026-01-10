@@ -12,6 +12,7 @@ import {
   deleteLesson,
   deleteLessonDocument,
   deleteSection,
+  getLessonDetail,
   updateCourseDocument,
   updateLesson,
   updateLessonDocument,
@@ -86,6 +87,12 @@ export default function CourseCurriculum({ backTo, title }) {
   const [uploadingDocument, setUploadingDocument] = useState(false);
   const [documentUploadMessage, setDocumentUploadMessage] = useState("");
   const [openingDocumentId, setOpeningDocumentId] = useState(null);
+  const [openDocumentLessonIds, setOpenDocumentLessonIds] = useState([]);
+  const [lessonDetailOpen, setLessonDetailOpen] = useState(false);
+  const [lessonDetailLoading, setLessonDetailLoading] = useState(false);
+  const [lessonDetailError, setLessonDetailError] = useState("");
+  const [lessonDetail, setLessonDetail] = useState(null);
+  const [lessonVideoUrl, setLessonVideoUrl] = useState("");
 
   const loadCourse = useCallback(async () => {
     if (!courseId) return;
@@ -579,6 +586,49 @@ export default function CourseCurriculum({ backTo, title }) {
     }
   };
 
+  const toggleLessonDocuments = (lessonId) => {
+    if (!lessonId) return;
+    setOpenDocumentLessonIds((prev) =>
+      prev.includes(lessonId)
+        ? prev.filter((id) => id !== lessonId)
+        : [...prev, lessonId]
+    );
+  };
+
+  const handleOpenLessonDetail = async (lesson) => {
+    if (!courseId || !lesson?.id) return;
+    setLessonDetailOpen(true);
+    setLessonDetailLoading(true);
+    setLessonDetailError("");
+    setLessonDetail(null);
+    setLessonVideoUrl("");
+    try {
+      const detail = await getLessonDetail(courseId, lesson.id);
+      setLessonDetail(detail);
+      const videoFile = detail?.videoFile;
+      if (videoFile?.accessUrl) {
+        setLessonVideoUrl(videoFile.accessUrl);
+      } else if (videoFile?.id) {
+        const url = await getFileAccessUrl({
+          fileId: videoFile.id,
+          isPublic: videoFile.isPublic,
+        });
+        setLessonVideoUrl(url || "");
+      }
+    } catch (err) {
+      setLessonDetailError(err?.message || "Không thể tải chi tiết bài học.");
+    } finally {
+      setLessonDetailLoading(false);
+    }
+  };
+
+  const handleCloseLessonDetail = () => {
+    setLessonDetailOpen(false);
+    setLessonDetail(null);
+    setLessonDetailError("");
+    setLessonVideoUrl("");
+  };
+
 
   return (
     <div className="mx-auto w-full max-w-[1200px] px-4 py-6">
@@ -768,10 +818,16 @@ export default function CourseCurriculum({ backTo, title }) {
                           const documents = Array.isArray(lesson.documents)
                             ? lesson.documents
                             : [];
+                          const isDocumentsOpen = openDocumentLessonIds.includes(
+                            lesson.id
+                          );
 
                           return (
                             <Fragment key={lesson.id}>
-                              <tr className="border-t hover:bg-slate-50">
+                              <tr
+                                className="border-t hover:bg-slate-50 cursor-pointer"
+                                onDoubleClick={() => handleOpenLessonDetail(lesson)}
+                              >
                                 <td className="px-4 py-3 text-slate-700">
                                   {lesson.id}
                                 </td>
@@ -794,7 +850,18 @@ export default function CourseCurriculum({ backTo, title }) {
                                 <td className="px-4 py-3 text-slate-700">
                                   {lesson.position ?? "-"}
                                 </td>
-                                <td className="px-4 py-3 text-right">
+                                <td
+                                  className="px-4 py-3 text-right"
+                                  onDoubleClick={(event) => event.stopPropagation()}
+                                >
+                                  <button
+                                    type="button"
+                                    onClick={() => toggleLessonDocuments(lesson.id)}
+                                    className="text-slate-700 hover:text-slate-900 hover:underline underline-offset-4"
+                                  >
+                                    Tài liệu
+                                  </button>
+                                  <span className="mx-2 text-slate-300">|</span>
                                   <button
                                     type="button"
                                     onClick={() => openEditLesson(section, lesson)}
@@ -812,86 +879,90 @@ export default function CourseCurriculum({ backTo, title }) {
                                   </button>
                                 </td>
                               </tr>
-                              <tr className="border-t bg-slate-50/60">
-                                <td colSpan="7" className="px-4 py-3">
-                                  <div className="flex flex-wrap items-center justify-between gap-2">
-                                    <div className="text-xs font-semibold text-slate-700">
-                                      Tài liệu bài học ({documents.length})
+                              {isDocumentsOpen ? (
+                                <tr className="border-t bg-slate-50/60">
+                                  <td colSpan="7" className="px-4 py-3">
+                                    <div className="flex flex-wrap items-center justify-between gap-2">
+                                      <div className="text-xs font-semibold text-slate-700">
+                                        Tài liệu bài học ({documents.length})
+                                      </div>
+                                      <Button
+                                        size="sm"
+                                        variant="outline"
+                                        onClick={() =>
+                                          openCreateLessonDocument(lesson)
+                                        }
+                                      >
+                                        + Thêm tài liệu
+                                      </Button>
                                     </div>
-                                    <Button
-                                      size="sm"
-                                      variant="outline"
-                                      onClick={() => openCreateLessonDocument(lesson)}
-                                    >
-                                      + Thêm tài liệu
-                                    </Button>
-                                  </div>
-                                  {documents.length ? (
-                                    <div className="mt-2 grid gap-2 md:grid-cols-2">
-                                      {documents.map((document) => (
-                                        <div
-                                          key={document.id}
-                                          className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs text-slate-600"
-                                        >
-                                          <div className="font-medium text-slate-900 truncate">
-                                            {document.title || "Tài liệu"}
+                                    {documents.length ? (
+                                      <div className="mt-2 grid gap-2 md:grid-cols-2">
+                                        {documents.map((document) => (
+                                          <div
+                                            key={document.id}
+                                            className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs text-slate-600"
+                                          >
+                                            <div className="font-medium text-slate-900 truncate">
+                                              {document.title || "Tài liệu"}
+                                            </div>
+                                            <div className="mt-1 text-slate-500 truncate">
+                                              {document.file?.originalName ||
+                                                "Chưa có tệp"}
+                                            </div>
+                                            <div className="mt-2 flex flex-wrap items-center gap-2">
+                                              <button
+                                                type="button"
+                                                onClick={() =>
+                                                  handleOpenDocumentFile(document)
+                                                }
+                                                disabled={
+                                                  openingDocumentId === document.id
+                                                }
+                                                className="text-slate-700 hover:text-slate-900 hover:underline underline-offset-4 disabled:opacity-60"
+                                              >
+                                                {openingDocumentId === document.id
+                                                  ? "Đang mở..."
+                                                  : "Mở"}
+                                              </button>
+                                              <span className="text-slate-300">|</span>
+                                              <button
+                                                type="button"
+                                                onClick={() =>
+                                                  openEditLessonDocument(
+                                                    lesson,
+                                                    document
+                                                  )
+                                                }
+                                                className="text-slate-700 hover:text-slate-900 hover:underline underline-offset-4"
+                                              >
+                                                Sửa
+                                              </button>
+                                              <span className="text-slate-300">|</span>
+                                              <button
+                                                type="button"
+                                                onClick={() =>
+                                                  handleDeleteLessonDocument(
+                                                    lesson,
+                                                    document
+                                                  )
+                                                }
+                                                className="text-red-600 hover:text-red-700 hover:underline underline-offset-4"
+                                              >
+                                                Xóa
+                                              </button>
+                                            </div>
                                           </div>
-                                          <div className="mt-1 text-slate-500 truncate">
-                                            {document.file?.originalName ||
-                                              "Chưa có tệp"}
-                                          </div>
-                                          <div className="mt-2 flex flex-wrap items-center gap-2">
-                                            <button
-                                              type="button"
-                                              onClick={() =>
-                                                handleOpenDocumentFile(document)
-                                              }
-                                              disabled={
-                                                openingDocumentId === document.id
-                                              }
-                                              className="text-slate-700 hover:text-slate-900 hover:underline underline-offset-4 disabled:opacity-60"
-                                            >
-                                              {openingDocumentId === document.id
-                                                ? "Đang mở..."
-                                                : "Mở"}
-                                            </button>
-                                            <span className="text-slate-300">|</span>
-                                            <button
-                                              type="button"
-                                              onClick={() =>
-                                                openEditLessonDocument(
-                                                  lesson,
-                                                  document
-                                                )
-                                              }
-                                              className="text-slate-700 hover:text-slate-900 hover:underline underline-offset-4"
-                                            >
-                                              Sửa
-                                            </button>
-                                            <span className="text-slate-300">|</span>
-                                            <button
-                                              type="button"
-                                              onClick={() =>
-                                                handleDeleteLessonDocument(
-                                                  lesson,
-                                                  document
-                                                )
-                                              }
-                                              className="text-red-600 hover:text-red-700 hover:underline underline-offset-4"
-                                            >
-                                              Xóa
-                                            </button>
-                                          </div>
-                                        </div>
-                                      ))}
-                                    </div>
-                                  ) : (
-                                    <div className="mt-2 text-xs text-slate-500">
-                                      Chưa có tài liệu cho bài học này.
-                                    </div>
-                                  )}
-                                </td>
-                              </tr>
+                                        ))}
+                                      </div>
+                                    ) : (
+                                      <div className="mt-2 text-xs text-slate-500">
+                                        Chưa có tài liệu cho bài học này.
+                                      </div>
+                                    )}
+                                  </td>
+                                </tr>
+                              ) : null}
                             </Fragment>
                           );
                         })
@@ -1315,6 +1386,145 @@ export default function CourseCurriculum({ backTo, title }) {
                 </Button>
               </div>
             </form>
+          </div>
+        </>
+      ) : null}
+
+      {lessonDetailOpen ? (
+        <>
+          <div
+            className="fixed inset-0 z-50 bg-black/40"
+            onClick={handleCloseLessonDetail}
+          />
+          <div className="fixed left-1/2 top-1/2 z-50 w-[92vw] max-w-5xl -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white p-6 shadow-xl">
+            <h2 className="text-lg font-semibold text-slate-900">
+              Chi tiết bài học
+            </h2>
+            <p className="mt-1 text-sm text-slate-500">
+              Xem nhanh nội dung và tài nguyên bài học.
+            </p>
+
+            {lessonDetailLoading ? (
+              <div className="mt-6 text-sm text-slate-500">Đang tải...</div>
+            ) : lessonDetailError ? (
+              <div className="mt-6 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+                {lessonDetailError}
+              </div>
+            ) : (
+              <div className="mt-6 grid gap-6 lg:grid-cols-[1.2fr,1fr]">
+                <div className="space-y-4">
+                  <div>
+                    <div className="text-xs text-slate-500">Tiêu đề</div>
+                    <div className="mt-1 text-sm font-medium text-slate-900">
+                      {lessonDetail?.title || "-"}
+                    </div>
+                  </div>
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    <div>
+                      <div className="text-xs text-slate-500">Loại bài</div>
+                      <div className="mt-1 text-sm text-slate-900">
+                        {lessonDetail?.lessonType || "-"}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-xs text-slate-500">Thời lượng</div>
+                      <div className="mt-1 text-sm text-slate-900">
+                        {formatDuration(lessonDetail?.durationSeconds)}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-xs text-slate-500">Preview</div>
+                      <div className="mt-1 text-sm text-slate-900">
+                        {lessonDetail?.isPreview ? "Có" : "Không"}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-xs text-slate-500">Miễn phí xem trước</div>
+                      <div className="mt-1 text-sm text-slate-900">
+                        {lessonDetail?.isFreePreview ? "Có" : "Không"}
+                      </div>
+                    </div>
+                  </div>
+
+                  {lessonDetail?.contentText ? (
+                    <div>
+                      <div className="text-xs text-slate-500">Nội dung bài viết</div>
+                      <div className="mt-1 text-sm text-slate-700 whitespace-pre-line">
+                        {lessonDetail.contentText}
+                      </div>
+                    </div>
+                  ) : null}
+                </div>
+
+                <div className="space-y-4">
+                  <div className="rounded-xl border border-slate-200 bg-white p-4">
+                    <div className="text-sm font-semibold text-slate-900">
+                      Video bài học
+                    </div>
+                    <div className="mt-2 h-36 overflow-hidden rounded-lg bg-slate-100 md:h-40">
+                      {lessonVideoUrl ? (
+                        <video
+                          controls
+                          className="h-full w-full rounded-lg bg-black object-cover"
+                        >
+                          <source src={lessonVideoUrl} type="video/mp4" />
+                        </video>
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center text-xs text-slate-500">
+                          Chưa có video bài học
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="rounded-xl border border-slate-200 bg-white p-4">
+                    <div className="text-sm font-semibold text-slate-900">
+                      Tài liệu đính kèm
+                    </div>
+                    {lessonDetail?.documents?.length ? (
+                      <div className="mt-2 space-y-2">
+                        {lessonDetail.documents.map((document) => (
+                          <div
+                            key={document.id}
+                            className="flex items-center justify-between gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs text-slate-600"
+                          >
+                            <div className="min-w-0">
+                              <div className="font-medium text-slate-900 truncate">
+                                {document.title || "Tài liệu"}
+                              </div>
+                              <div className="mt-1 text-slate-500 truncate">
+                                {document.file?.originalName || "-"}
+                              </div>
+                            </div>
+                            <button
+                              type="button"
+                              onClick={() => handleOpenDocumentFile(document)}
+                              className="text-slate-700 hover:text-slate-900 hover:underline underline-offset-4"
+                            >
+                              Mở
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="mt-2 text-xs text-slate-500">
+                        Chưa có tài liệu đính kèm.
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <div className="mt-6 flex items-center justify-end gap-2">
+              <button
+                type="button"
+                onClick={handleCloseLessonDetail}
+                className="h-10 rounded-lg border border-slate-200 bg-white px-4 text-sm font-medium hover:bg-slate-50 transition inline-flex items-center justify-center"
+              >
+                Đóng
+              </button>
+            </div>
           </div>
         </>
       ) : null}

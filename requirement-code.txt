@@ -1,0 +1,1 @@
+xem các file đã có của tôi để triển khai sao cho giao diện hài hòa, thống nhất, không được để mỗi giao diện một kiểu, mỗi bảng, mỗi phân trang, mỗi button một kiểu. thiết kế đẹp, nhất quán, css inline với tailwind

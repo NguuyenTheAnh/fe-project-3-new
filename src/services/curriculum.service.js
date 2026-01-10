@@ -71,6 +71,17 @@ export async function deleteLesson(courseId, lessonId) {
   }
 }
 
+export async function getLessonDetail(courseId, lessonId) {
+  try {
+    const response = await axiosInstance.get(
+      `/instructor/courses/${courseId}/lessons/${lessonId}`
+    );
+    return unwrapResponse(response);
+  } catch (error) {
+    handleApiError(error);
+  }
+}
+
 export async function createCourseDocument(courseId, payload) {
   try {
     const response = await axiosInstance.post(

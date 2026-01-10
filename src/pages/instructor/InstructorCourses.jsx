@@ -7,6 +7,7 @@ import { fetchCategories, fetchTags } from "@/api/catalog.api";
 import { useAuth } from "@/contexts/AuthContext";
 import { getCourseDetail } from "@/services/course.service";
 import {
+  getFileAccessUrl,
   uploadFileDirect,
   uploadFileWithPresign,
 } from "@/services/file.service";
@@ -154,6 +155,12 @@ export default function InstructorCourses() {
   const [selectedIntroFile, setSelectedIntroFile] = useState(null);
   const [introUploading, setIntroUploading] = useState(false);
   const [introMessage, setIntroMessage] = useState("");
+  const [detailModalOpen, setDetailModalOpen] = useState(false);
+  const [detailLoading, setDetailLoading] = useState(false);
+  const [detailError, setDetailError] = useState("");
+  const [detailCourse, setDetailCourse] = useState(null);
+  const [detailThumbnailUrl, setDetailThumbnailUrl] = useState("");
+  const [detailIntroUrl, setDetailIntroUrl] = useState("");
 
   const loadCourses = useCallback(async (pageNumber = 0) => {
     setLoading(true);
@@ -341,7 +348,7 @@ export default function InstructorCourses() {
     try {
       const uploaded = await uploadFileDirect({
         file: selectedThumbnailFile,
-        isPublic: false,
+        isPublic: true,
         purpose: "THUMBNAIL",
         courseId: activeCourse?.id || null,
       });
@@ -380,7 +387,7 @@ export default function InstructorCourses() {
     try {
       const uploaded = await uploadFileWithPresign({
         file: selectedIntroFile,
-        isPublic: false,
+        isPublic: true,
         purpose: "INTRO_VIDEO",
         courseId: activeCourse?.id || null,
       });
@@ -399,6 +406,54 @@ export default function InstructorCourses() {
     } finally {
       setIntroUploading(false);
     }
+  };
+
+  const handleOpenDetail = async (course) => {
+    if (!course?.id) return;
+    setDetailModalOpen(true);
+    setDetailLoading(true);
+    setDetailError("");
+    setDetailCourse(null);
+    setDetailThumbnailUrl("");
+    setDetailIntroUrl("");
+    try {
+      const detail = await getCourseDetail(course.id);
+      setDetailCourse(detail);
+      const thumbnailFile = detail?.thumbnail;
+      const introFile = detail?.introVideo;
+      const [thumbUrl, introUrl] = await Promise.all([
+        thumbnailFile?.accessUrl
+          ? Promise.resolve(thumbnailFile.accessUrl)
+          : thumbnailFile?.id
+          ? getFileAccessUrl({
+              fileId: thumbnailFile.id,
+              isPublic: thumbnailFile.isPublic,
+            })
+          : Promise.resolve(""),
+        introFile?.accessUrl
+          ? Promise.resolve(introFile.accessUrl)
+          : introFile?.id
+          ? getFileAccessUrl({
+              fileId: introFile.id,
+              isPublic: introFile.isPublic,
+            })
+          : Promise.resolve(""),
+      ]);
+      setDetailThumbnailUrl(thumbUrl || "");
+      setDetailIntroUrl(introUrl || "");
+    } catch (err) {
+      setDetailError(err?.message || "Không thể tải chi tiết khóa học.");
+    } finally {
+      setDetailLoading(false);
+    }
+  };
+
+  const handleCloseDetail = () => {
+    setDetailModalOpen(false);
+    setDetailCourse(null);
+    setDetailError("");
+    setDetailThumbnailUrl("");
+    setDetailIntroUrl("");
   };
 
   const toggleTag = (tagId) => {
@@ -606,7 +661,11 @@ export default function InstructorCourses() {
                 const priceLabel = formatPrice(course.priceCents, course.isFree);
 
                 return (
-                  <tr key={course.id} className="group border-t hover:bg-slate-50">
+                  <tr
+                    key={course.id}
+                    onDoubleClick={() => handleOpenDetail(course)}
+                    className="group border-t hover:bg-slate-50 cursor-pointer"
+                  >
                     <td className="sticky left-0 z-10 w-20 bg-white px-4 py-3 text-slate-700 whitespace-nowrap group-hover:bg-slate-50">{course.id}</td>
                     <td className="px-4 py-3 min-w-[280px]">
                       <div className="font-medium text-slate-900 truncate">
@@ -628,7 +687,10 @@ export default function InstructorCourses() {
                     <td className="px-4 py-3 text-slate-700 whitespace-nowrap">{levelLabel}</td>
                     <td className="px-4 py-3 text-slate-700 whitespace-nowrap">{languageLabel}</td>
                     <td className="px-4 py-3 text-slate-700 whitespace-nowrap">{priceLabel}</td>
-                    <td className="sticky right-0 z-10 bg-white px-4 py-3 text-right whitespace-nowrap group-hover:bg-slate-50">
+                    <td
+                      className="sticky right-0 z-10 bg-white px-4 py-3 text-right whitespace-nowrap group-hover:bg-slate-50"
+                      onDoubleClick={(event) => event.stopPropagation()}
+                    >
                       <Link
                         to={`/instructor/courses/${course.id}/curriculum`}
                         className="text-slate-700 hover:text-slate-900 hover:underline underline-offset-4"
@@ -963,6 +1025,185 @@ export default function InstructorCourses() {
                 </div>
               </form>
             )}
+          </div>
+        </>
+      ) : null}
+
+      {detailModalOpen ? (
+        <>
+          <div
+            className="fixed inset-0 z-50 bg-black/40"
+            onClick={handleCloseDetail}
+          />
+          <div className="fixed left-1/2 top-1/2 z-50 w-[92vw] max-w-5xl -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white p-6 shadow-xl">
+            <h2 className="text-lg font-semibold text-slate-900">
+              Chi tiết khóa học
+            </h2>
+            <p className="mt-1 text-sm text-slate-500">
+              Xem nhanh thông tin và media của khóa học.
+            </p>
+
+            {detailLoading ? (
+              <div className="mt-6 text-sm text-slate-500">Đang tải...</div>
+            ) : detailError ? (
+              <div className="mt-6 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+                {detailError}
+              </div>
+            ) : (
+              <div className="mt-6 space-y-6">
+                <div className="grid gap-4 md:grid-cols-2">
+                  <div className="rounded-xl border border-slate-200 bg-white p-4">
+                    <div className="text-sm font-semibold text-slate-900">
+                      Ảnh bìa
+                    </div>
+                    <div className="mt-2 h-36 overflow-hidden rounded-lg bg-slate-100 md:h-40">
+                      {detailThumbnailUrl ? (
+                        <img
+                          src={detailThumbnailUrl}
+                          alt={detailCourse?.title || "Ảnh bìa khóa học"}
+                          className="h-full w-full object-cover"
+                        />
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center text-xs text-slate-500">
+                          Chưa có ảnh bìa
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="rounded-xl border border-slate-200 bg-white p-4">
+                    <div className="text-sm font-semibold text-slate-900">
+                      Video giới thiệu
+                    </div>
+                    <div className="mt-2 h-36 overflow-hidden rounded-lg bg-slate-100 md:h-40">
+                      {detailIntroUrl ? (
+                        <video
+                          controls
+                          className="h-full w-full rounded-lg bg-black object-cover"
+                        >
+                          <source src={detailIntroUrl} type="video/mp4" />
+                        </video>
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center text-xs text-slate-500">
+                          Chưa có video giới thiệu
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <div className="grid gap-3 md:grid-cols-2">
+                    <div>
+                      <div className="text-xs text-slate-500">Tiêu đề</div>
+                      <div className="text-sm font-medium text-slate-900">
+                        {detailCourse?.title || "-"}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-xs text-slate-500">Slug</div>
+                      <div className="text-sm text-slate-900">
+                        {detailCourse?.slug || "-"}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-xs text-slate-500">Danh mục</div>
+                      <div className="text-sm text-slate-900">
+                        {detailCourse?.category?.name || "-"}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-xs text-slate-500">Trạng thái</div>
+                      <div className="text-sm text-slate-900">
+                        {STATUS_LABELS[detailCourse?.status] ||
+                          detailCourse?.status ||
+                          "-"}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-xs text-slate-500">Trình độ</div>
+                      <div className="text-sm text-slate-900">
+                        {detailCourse?.level
+                          ? LEVEL_LABELS[detailCourse.level] ||
+                            detailCourse.level
+                          : "-"}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-xs text-slate-500">Ngôn ngữ</div>
+                      <div className="text-sm text-slate-900">
+                        {detailCourse?.language
+                          ? LANGUAGE_LABELS[detailCourse.language] ||
+                            detailCourse.language
+                          : "-"}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-xs text-slate-500">Giá</div>
+                      <div className="text-sm text-slate-900">
+                        {formatPrice(
+                          detailCourse?.priceCents,
+                          detailCourse?.isFree
+                        )}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-xs text-slate-500">Giảng viên</div>
+                      <div className="text-sm text-slate-900">
+                        {detailCourse?.instructors?.length
+                          ? detailCourse.instructors
+                              .map((ins) => ins.fullName || ins.email)
+                              .filter(Boolean)
+                              .join(", ")
+                          : "-"}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <div className="text-xs text-slate-500">Thẻ</div>
+                    <div className="mt-1 flex flex-wrap gap-2">
+                      {detailCourse?.tags?.length ? (
+                        detailCourse.tags.map((tag) => (
+                          <span
+                            key={tag.id || tag.slug}
+                            className="inline-flex items-center rounded-full border border-slate-200 bg-white px-3 py-1 text-xs text-slate-600"
+                          >
+                            {tag.name}
+                          </span>
+                        ))
+                      ) : (
+                        <span className="text-sm text-slate-500">-</span>
+                      )}
+                    </div>
+                  </div>
+
+                  <div>
+                    <div className="text-xs text-slate-500">Mô tả ngắn</div>
+                    <div className="mt-1 text-sm text-slate-700">
+                      {detailCourse?.shortDescription || "-"}
+                    </div>
+                  </div>
+
+                  <div>
+                    <div className="text-xs text-slate-500">Mô tả chi tiết</div>
+                    <div className="mt-1 text-sm text-slate-700 whitespace-pre-line">
+                      {detailCourse?.description || "-"}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <div className="mt-6 flex items-center justify-end gap-2">
+              <button
+                type="button"
+                onClick={handleCloseDetail}
+                className="h-10 rounded-lg border border-slate-200 bg-white px-4 text-sm font-medium hover:bg-slate-50 transition inline-flex items-center justify-center"
+              >
+                Đóng
+              </button>
+            </div>
           </div>
         </>
       ) : null}
