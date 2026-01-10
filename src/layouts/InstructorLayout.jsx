@@ -15,9 +15,7 @@ function InstructorSidebar() {
 
   return (
     <div className="space-y-2">
-      <div className="px-3 text-sm font-semibold text-slate-900">
-        Giảng viên
-      </div>
+      <div className="px-3 text-sm font-semibold text-slate-900">Giảng viên</div>
       <nav className="space-y-1">
         <NavLink to="/instructor" end className={linkClasses}>
           Tổng quan

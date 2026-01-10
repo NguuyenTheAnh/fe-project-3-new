@@ -1,0 +1,777 @@
+		{
+			"name": "Files",
+			"item": [
+				{
+					"name": "upload nhỏ",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ADMIN_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/D:/Dai hoc/Kiến trúc hệ thống/Slide/Chapter 2.1. Archimate.pdf"
+								},
+								{
+									"key": "public",
+									"value": "false",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/files",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"files"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "upload nhỏ",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "file",
+											"type": "file",
+											"src": "/D:/Dai hoc/Kiến trúc hệ thống/Slide/Chapter 1. Introduction.pdf"
+										},
+										{
+											"key": "public",
+											"value": "false",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseURL}}/files",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"files"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 06 Jan 2026 16:59:38 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": \"00\",\n    \"message\": null,\n    \"data\": {\n        \"id\": 20,\n        \"storageProvider\": \"MINIO\",\n        \"bucket\": \"lms-files\",\n        \"objectKey\": \"other/51c1be8e14fe4bdf87c7adf870d3440e.pdf\",\n        \"originalName\": \"Chapter 1. Introduction.pdf\",\n        \"contentType\": \"application/pdf\",\n        \"sizeBytes\": 1662675,\n        \"checksumSha256\": \"19be92df27edfb7983d5d5fa8fa8a93c85a5ff9c625774264848e3fd252a4d77\",\n        \"isPublic\": false,\n        \"accessUrl\": \"http://localhost:9000/lms-files/other/51c1be8e14fe4bdf87c7adf870d3440e.pdf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20260106T165938Z&X-Amz-SignedHeaders=host&X-Amz-Credential=minioadmin%2F20260106%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=300&X-Amz-Signature=735d56fafc49d5e5d5ad2824330f40fe71b45743a855280fac2fcf43e716e941\",\n        \"status\": \"READY\",\n        \"purpose\": \"GENERIC\",\n        \"courseId\": null,\n        \"lessonId\": null\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Presign PUT (video/lớn)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ADMIN_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"filename\": \"test0601-1.mp4\",\n    \"contentType\": \"video/mp4\",\n    \"size\": 104857600,\n    \"purpose\": \"INTRO_VIDEO\",\n    \"courseId\": null,\n    \"lessonId\": null,\n    \"isPublic\": false\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/files/presign/put",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"files",
+								"presign",
+								"put"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Presign PUT (video/lớn)",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"filename\": \"test0601-1.mp4\",\n    \"contentType\": \"video/mp4\",\n    \"size\": 104857600,\n    \"purpose\": \"INTRO_VIDEO\",\n    \"courseId\": null,\n    \"lessonId\": null,\n    \"isPublic\": false\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/files/presign/put",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"files",
+										"presign",
+										"put"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 06 Jan 2026 17:00:01 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": \"00\",\n    \"message\": null,\n    \"data\": {\n        \"url\": \"http://localhost:9000/lms-files/videos/9285a41662074c96a003426c29905d35.mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20260106T170001Z&X-Amz-SignedHeaders=content-type%3Bhost&X-Amz-Credential=minioadmin%2F20260106%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=600&X-Amz-Signature=3a8e16e3e3ad9fb2c6953b0937103995fc729aeb60c84042760e00ba9d413ed7\",\n        \"method\": \"PUT\",\n        \"expiresAt\": \"2026-01-06T17:10:01.161242900Z\",\n        \"bucket\": \"lms-files\",\n        \"objectKey\": \"videos/9285a41662074c96a003426c29905d35.mp4\",\n        \"headers\": {\n            \"host\": \"localhost:9000\",\n            \"content-type\": \"video/mp4\"\n        },\n        \"fileId\": 21\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Fe upload",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "video/mp4"
+							}
+						],
+						"body": {
+							"mode": "file",
+							"file": {
+								"src": "/D:/Web dev/Project_3_lms/Tài liệu/intro.mp4"
+							}
+						},
+						"url": {
+							"raw": "{{presignedURL}}",
+							"host": [
+								"{{presignedURL}}"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Fe upload",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "video/mp4"
+									}
+								],
+								"body": {
+									"mode": "file",
+									"file": {
+										"src": "/D:/Web dev/Project_3_lms/Tài liệu/intro.mp4"
+									}
+								},
+								"url": {
+									"raw": "{{presignedURL}}",
+									"host": [
+										"{{presignedURL}}"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Accept-Ranges",
+									"value": "bytes"
+								},
+								{
+									"key": "Content-Length",
+									"value": "0"
+								},
+								{
+									"key": "ETag",
+									"value": "\"e413e579e3d8a57efe181b8d5be3934f\""
+								},
+								{
+									"key": "Server",
+									"value": "MinIO"
+								},
+								{
+									"key": "Strict-Transport-Security",
+									"value": "max-age=31536000; includeSubDomains"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept-Encoding"
+								},
+								{
+									"key": "X-Amz-Id-2",
+									"value": "dd9025bab4ad464b049177c95eb6ebf374d3b3fd1af9251148b658df7ac2e3e8"
+								},
+								{
+									"key": "X-Amz-Request-Id",
+									"value": "188832EA8BAE81AD"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-Ratelimit-Limit",
+									"value": "1858"
+								},
+								{
+									"key": "X-Ratelimit-Remaining",
+									"value": "1858"
+								},
+								{
+									"key": "X-Xss-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 06 Jan 2026 17:00:37 GMT"
+								}
+							],
+							"cookie": [],
+							"body": null
+						}
+					]
+				},
+				{
+					"name": "Complete upload",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ADMIN_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"fileId\": 21\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/files/complete",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"files",
+								"complete"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Complete upload",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"fileId\": 21\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/files/complete",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"files",
+										"complete"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 06 Jan 2026 17:00:57 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": \"00\",\n    \"message\": null,\n    \"data\": {\n        \"id\": 21,\n        \"storageProvider\": \"MINIO\",\n        \"bucket\": \"lms-files\",\n        \"objectKey\": \"videos/9285a41662074c96a003426c29905d35.mp4\",\n        \"originalName\": \"test0601-1.mp4\",\n        \"contentType\": \"video/mp4\",\n        \"sizeBytes\": 58676323,\n        \"checksumSha256\": \"\\\"e413e579e3d8a57efe181b8d5be3934f\\\"\",\n        \"isPublic\": false,\n        \"accessUrl\": \"http://localhost:9000/lms-files/videos/9285a41662074c96a003426c29905d35.mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20260106T170057Z&X-Amz-SignedHeaders=host&X-Amz-Credential=minioadmin%2F20260106%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=300&X-Amz-Signature=74f9e1ce5936c4f767f2320a17026b801db7af748c7c678291fc1b523b4d47f1\",\n        \"status\": \"READY\",\n        \"purpose\": \"INTRO_VIDEO\",\n        \"courseId\": null,\n        \"lessonId\": null\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "get metadata (if status ATTACHED)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{STUDENT_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/files/meta/:id",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"files",
+								"meta",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "18"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "get metadata (if status ATTACHED)",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/files/meta/:id",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"files",
+										"meta",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "18"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 07 Jan 2026 04:43:14 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": \"00\",\n    \"message\": null,\n    \"data\": {\n        \"id\": 18,\n        \"storageProvider\": \"MINIO\",\n        \"bucket\": \"lms-files\",\n        \"objectKey\": \"videos/08fb8224b0224f169d75f34c12251eb6.mp4\",\n        \"originalName\": \"test0501-2.mp4\",\n        \"contentType\": \"video/mp4\",\n        \"sizeBytes\": 58676323,\n        \"checksumSha256\": \"\\\"e413e579e3d8a57efe181b8d5be3934f\\\"\",\n        \"isPublic\": false,\n        \"accessUrl\": \"http://localhost:9000/lms-files/videos/08fb8224b0224f169d75f34c12251eb6.mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20260107T044313Z&X-Amz-SignedHeaders=host&X-Amz-Credential=minioadmin%2F20260107%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=300&X-Amz-Signature=7ddc00d779eb881c0a781e9a632a023b833d0c6b5a53dba2c2bd3a153fae5b33\",\n        \"status\": \"ATTACHED\",\n        \"purpose\": \"LESSON_VIDEO\",\n        \"courseId\": 4,\n        \"lessonId\": 6\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Presign GET (if status ATTACHED)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{STUDENT_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/files/:fileId/url",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"files",
+								":fileId",
+								"url"
+							],
+							"variable": [
+								{
+									"key": "fileId",
+									"value": "18"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Presign GET (if status ATTACHED)",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/files/:fileId/url",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"files",
+										":fileId",
+										"url"
+									],
+									"variable": [
+										{
+											"key": "fileId",
+											"value": "18"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 07 Jan 2026 04:43:42 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": \"00\",\n    \"message\": null,\n    \"data\": {\n        \"url\": \"http://localhost:9000/lms-files/videos/08fb8224b0224f169d75f34c12251eb6.mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20260107T044342Z&X-Amz-SignedHeaders=host&X-Amz-Credential=minioadmin%2F20260107%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=300&X-Amz-Signature=25be507c1597bb1fa00dcd28a1f54643ac7110e47caaf0550c0717aa682b6956\",\n        \"method\": \"GET\",\n        \"expiresAt\": \"2026-01-07T04:48:42.589855500Z\",\n        \"bucket\": \"lms-files\",\n        \"objectKey\": \"videos/08fb8224b0224f169d75f34c12251eb6.mp4\",\n        \"headers\": {\n            \"host\": \"localhost:9000\"\n        },\n        \"fileId\": null\n    }\n}"
+						}
+					]
+				}
+			]
+		},

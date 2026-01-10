@@ -52,3 +52,107 @@ export async function getFileAccessUrl({ fileId, isPublic }) {
 
   return null;
 }
+
+export async function uploadFileDirect({
+  file,
+  isPublic = false,
+  purpose = "LESSON_VIDEO",
+  courseId,
+  lessonId,
+} = {}) {
+  if (!file) {
+    throw new Error("Vui lòng chọn tệp để tải lên.");
+  }
+
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("public", String(isPublic));
+  if (purpose) formData.append("purpose", purpose);
+  if (courseId) formData.append("courseId", String(courseId));
+  if (lessonId) formData.append("lessonId", String(lessonId));
+
+  try {
+    const response = await axiosInstance.post("/files", formData);
+    return unwrapResponse(response);
+  } catch (error) {
+    handleApiError(error);
+  }
+}
+
+export async function requestPresignPut(payload) {
+  if (!payload) {
+    throw new Error("Thiếu thông tin tệp để tải lên.");
+  }
+  try {
+    const response = await axiosInstance.post("/files/presign/put", payload);
+    return unwrapResponse(response);
+  } catch (error) {
+    handleApiError(error);
+  }
+}
+
+export async function uploadToPresignedUrl({ url, file, headers }) {
+  if (!url || !file) {
+    throw new Error("Thiếu dữ liệu để tải lên.");
+  }
+
+  const uploadHeaders = {};
+  if (headers?.["content-type"]) {
+    uploadHeaders["Content-Type"] = headers["content-type"];
+  } else if (file.type) {
+    uploadHeaders["Content-Type"] = file.type;
+  }
+
+  const response = await fetch(url, {
+    method: "PUT",
+    headers: uploadHeaders,
+    body: file,
+  });
+
+  if (!response.ok) {
+    throw new Error("Tải lên thất bại.");
+  }
+}
+
+export async function completeFileUpload(fileId) {
+  if (!fileId) {
+    throw new Error("Không tìm thấy File ID.");
+  }
+  try {
+    const response = await axiosInstance.post("/files/complete", { fileId });
+    return unwrapResponse(response);
+  } catch (error) {
+    handleApiError(error);
+  }
+}
+
+export async function uploadFileWithPresign({
+  file,
+  isPublic = false,
+  purpose = "LESSON_VIDEO",
+  courseId,
+  lessonId,
+} = {}) {
+  if (!file) {
+    throw new Error("Vui lòng chọn tệp để tải lên.");
+  }
+
+  const presignPayload = {
+    filename: file.name,
+    contentType: file.type || "application/octet-stream",
+    size: file.size,
+    purpose,
+    courseId: courseId ? Number(courseId) : null,
+    lessonId: lessonId ? Number(lessonId) : null,
+    isPublic: Boolean(isPublic),
+  };
+
+  const presign = await requestPresignPut(presignPayload);
+  await uploadToPresignedUrl({
+    url: presign?.url,
+    file,
+    headers: presign?.headers,
+  });
+  const completed = await completeFileUpload(presign?.fileId);
+  return completed || presign;
+}

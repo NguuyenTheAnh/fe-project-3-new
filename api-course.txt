@@ -1,0 +1,2667 @@
+		{
+			"name": "Courses",
+			"item": [
+				{
+					"name": "Courses (Catalog)",
+					"item": [
+						{
+							"name": "Search courses (public)",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/courses",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"courses"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Search courses (public)",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseURL}}/courses",
+											"host": [
+												"{{baseURL}}"
+											],
+											"path": [
+												"courses"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": null,
+									"header": [
+										{
+											"key": "Vary",
+											"value": "Origin"
+										},
+										{
+											"key": "Vary",
+											"value": "Access-Control-Request-Method"
+										},
+										{
+											"key": "Vary",
+											"value": "Access-Control-Request-Headers"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "0"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Tue, 06 Jan 2026 17:18:19 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"code\": \"00\",\n    \"message\": null,\n    \"data\": {\n        \"content\": [\n            {\n                \"id\": 3,\n                \"title\": \"Java Spring Boot Masterclass (Updated)\",\n                \"slug\": \"java-spring-boot-masterclass\",\n                \"shortDescription\": \"Updated short desc\",\n                \"level\": \"INTERMEDIATE\",\n                \"language\": \"VI\",\n                \"priceCents\": 0,\n                \"ratingAvg\": 3,\n                \"ratingCount\": 1,\n                \"category\": {\n                    \"id\": 2,\n                    \"name\": \"Development\",\n                    \"slug\": \"development\",\n                    \"parentId\": null,\n                    \"description\": \"Software dev\",\n                    \"position\": 1\n                },\n                \"tags\": [\n                    {\n                        \"id\": 1,\n                        \"name\": \"Spring\",\n                        \"slug\": \"spring\"\n                    },\n                    {\n                        \"id\": 2,\n                        \"name\": \"Java\",\n                        \"slug\": \"java\"\n                    },\n                    {\n                        \"id\": 2,\n                        \"name\": \"Java\",\n                        \"slug\": \"java\"\n                    },\n                    {\n                        \"id\": 1,\n                        \"name\": \"Spring\",\n                        \"slug\": \"spring\"\n                    }\n                ],\n                \"thumbnail\": {\n                    \"id\": 6,\n                    \"storageProvider\": \"MINIO\",\n                    \"bucket\": \"lms-files\",\n                    \"objectKey\": \"images/53bf8c6c49234050acf525c681424b63.jpg\",\n                    \"originalName\": \"Nitro_Wallpaper_05_3840x2400.jpg\",\n                    \"contentType\": \"image/jpeg\",\n                    \"sizeBytes\": 3480308,\n                    \"checksumSha256\": \"6749a5c70011ccf944ce4f12544abeebf7522e1895761c2e0a7ca237b590794a\",\n                    \"isPublic\": false,\n                    \"accessUrl\": null,\n                    \"status\": \"ATTACHED\",\n                    \"purpose\": \"THUMBNAIL\",\n                    \"courseId\": 3,\n                    \"lessonId\": null\n                }\n            },\n            {\n                \"id\": 4,\n                \"title\": \"Java Spring Boot Masterclass\",\n                \"slug\": \"java-spring-boot-masterclass\",\n                \"shortDescription\": \"Learn Spring Boot end-to-end\",\n                \"level\": \"BEGINNER\",\n                \"language\": \"EN\",\n                \"priceCents\": 150000,\n                \"ratingAvg\": 0,\n                \"ratingCount\": 0,\n                \"category\": {\n                    \"id\": 2,\n                    \"name\": \"Development\",\n                    \"slug\": \"development\",\n                    \"parentId\": null,\n                    \"description\": \"Software dev\",\n                    \"position\": 1\n                },\n                \"tags\": [\n                    {\n                        \"id\": 1,\n                        \"name\": \"Spring\",\n                        \"slug\": \"spring\"\n                    },\n                    {\n                        \"id\": 2,\n                        \"name\": \"Java\",\n                        \"slug\": \"java\"\n                    }\n                ],\n                \"thumbnail\": {\n                    \"id\": 16,\n                    \"storageProvider\": \"MINIO\",\n                    \"bucket\": \"lms-files\",\n                    \"objectKey\": \"images/9aa82aacee0d486389f7143e16af2e0f.jpg\",\n                    \"originalName\": \"Java-Course-Duration-Syllabus-Eligibility-Salary-Fees-1024x576.jpg\",\n                    \"contentType\": \"image/jpeg\",\n                    \"sizeBytes\": 106502,\n                    \"checksumSha256\": \"1ce5f2f0e8e77d825c5f2fdac9679a8f133c9de2c1bb015ab98fee10540eb6fc\",\n                    \"isPublic\": false,\n                    \"accessUrl\": null,\n                    \"status\": \"ATTACHED\",\n                    \"purpose\": \"THUMBNAIL\",\n                    \"courseId\": 4,\n                    \"lessonId\": null\n                }\n            }\n        ],\n        \"pageable\": {\n            \"pageNumber\": 0,\n            \"pageSize\": 20,\n            \"sort\": [],\n            \"offset\": 0,\n            \"paged\": true,\n            \"unpaged\": false\n        },\n        \"last\": true,\n        \"totalElements\": 2,\n        \"totalPages\": 1,\n        \"size\": 20,\n        \"number\": 0,\n        \"sort\": [],\n        \"first\": true,\n        \"numberOfElements\": 2,\n        \"empty\": false\n    }\n}"
+								}
+							]
+						},
+						{
+							"name": "Detail",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{STUDENT_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/courses/:courseId",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"courses",
+										":courseId"
+									],
+									"variable": [
+										{
+											"key": "courseId",
+											"value": "4"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Detail",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseURL}}/courses/:courseId",
+											"host": [
+												"{{baseURL}}"
+											],
+											"path": [
+												"courses",
+												":courseId"
+											],
+											"variable": [
+												{
+													"key": "courseId",
+													"value": "4"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": null,
+									"header": [
+										{
+											"key": "Vary",
+											"value": "Origin"
+										},
+										{
+											"key": "Vary",
+											"value": "Access-Control-Request-Method"
+										},
+										{
+											"key": "Vary",
+											"value": "Access-Control-Request-Headers"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "0"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Tue, 06 Jan 2026 17:19:21 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"code\": \"00\",\n    \"message\": null,\n    \"data\": {\n        \"id\": 4,\n        \"title\": \"Java Spring Boot Masterclass\",\n        \"slug\": \"java-spring-boot-masterclass\",\n        \"shortDescription\": \"Learn Spring Boot end-to-end\",\n        \"description\": \"Full syllabus\",\n        \"level\": \"BEGINNER\",\n        \"language\": \"EN\",\n        \"status\": \"PUBLISHED\",\n        \"priceCents\": 150000,\n        \"publishedAt\": \"2026-01-05T23:46:09\",\n        \"ratingAvg\": 0,\n        \"ratingCount\": 0,\n        \"category\": {\n            \"id\": 2,\n            \"name\": \"Development\",\n            \"slug\": \"development\",\n            \"parentId\": null,\n            \"description\": \"Software dev\",\n            \"position\": 1\n        },\n        \"tags\": [\n            {\n                \"id\": 1,\n                \"name\": \"Spring\",\n                \"slug\": \"spring\"\n            },\n            {\n                \"id\": 2,\n                \"name\": \"Java\",\n                \"slug\": \"java\"\n            }\n        ],\n        \"thumbnail\": {\n            \"id\": 16,\n            \"storageProvider\": \"MINIO\",\n            \"bucket\": \"lms-files\",\n            \"objectKey\": \"images/9aa82aacee0d486389f7143e16af2e0f.jpg\",\n            \"originalName\": \"Java-Course-Duration-Syllabus-Eligibility-Salary-Fees-1024x576.jpg\",\n            \"contentType\": \"image/jpeg\",\n            \"sizeBytes\": 106502,\n            \"checksumSha256\": \"1ce5f2f0e8e77d825c5f2fdac9679a8f133c9de2c1bb015ab98fee10540eb6fc\",\n            \"isPublic\": false,\n            \"accessUrl\": null,\n            \"status\": \"ATTACHED\",\n            \"purpose\": \"THUMBNAIL\",\n            \"courseId\": 4,\n            \"lessonId\": null\n        },\n        \"introVideo\": {\n            \"id\": 17,\n            \"storageProvider\": \"MINIO\",\n            \"bucket\": \"lms-files\",\n            \"objectKey\": \"videos/e010de7bf19d4d4e82d61b1cdc8efbf1.mp4\",\n            \"originalName\": \"test0501.mp4\",\n            \"contentType\": \"video/mp4\",\n            \"sizeBytes\": 58676323,\n            \"checksumSha256\": \"\\\"e413e579e3d8a57efe181b8d5be3934f\\\"\",\n            \"isPublic\": false,\n            \"accessUrl\": null,\n            \"status\": \"ATTACHED\",\n            \"purpose\": \"INTRO_VIDEO\",\n            \"courseId\": 4,\n            \"lessonId\": null\n        },\n        \"instructors\": [\n            {\n                \"id\": 7,\n                \"fullName\": \"Instructor One\",\n                \"avatarFile\": null\n            }\n        ],\n        \"sections\": [\n            {\n                \"id\": 7,\n                \"title\": \"Section 1 - Basics\",\n                \"position\": 1,\n                \"lessons\": [\n                    {\n                        \"id\": 6,\n                        \"title\": \"Lesson 1 - Getting Started\",\n                        \"lessonType\": \"VIDEO\",\n                        \"durationSeconds\": 600,\n                        \"isPreview\": false,\n                        \"documents\": []\n                    }\n                ]\n            }\n        ],\n        \"courseDocuments\": []\n    }\n}"
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "Course lifecycle",
+					"item": [
+						{
+							"name": "Create course (DRAFT by default)",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ADMIN_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"title\": \"ReactJs Masterclass\",\n    \"slug\": \"reactjs-masterclass\",\n    \"categoryId\": 2,\n    \"shortDescription\": \"Learn ReactJs end-to-end\",\n    \"description\": \"Full lessons\",\n    \"level\": \"BEGINNER\",\n    \"language\": \"EN\",\n    \"thumbnailFileId\": 22,   \n    \"introVideoFileId\": 21,   \n    \"tagIds\": [1,2],\n    \"instructors\": [\n      {\"userId\": 4, \"instructorRole\": \"OWNER\", \"revenueShare\": 100}\n    ]\n  }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/instructor/courses",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"instructor",
+										"courses"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Create course (DRAFT by default)",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"title\": \"ReactJs Masterclass\",\n    \"slug\": \"reactjs-masterclass\",\n    \"categoryId\": 2,\n    \"shortDescription\": \"Learn ReactJs end-to-end\",\n    \"description\": \"Full lessons\",\n    \"level\": \"BEGINNER\",\n    \"language\": \"EN\",\n    \"thumbnailFileId\": 22,   \n    \"introVideoFileId\": 21,   \n    \"tagIds\": [1,2],\n    \"instructors\": [\n      {\"userId\": 4, \"instructorRole\": \"OWNER\", \"revenueShare\": 100}\n    ]\n  }",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseURL}}/instructor/courses",
+											"host": [
+												"{{baseURL}}"
+											],
+											"path": [
+												"instructor",
+												"courses"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": null,
+									"header": [
+										{
+											"key": "Vary",
+											"value": "Origin"
+										},
+										{
+											"key": "Vary",
+											"value": "Access-Control-Request-Method"
+										},
+										{
+											"key": "Vary",
+											"value": "Access-Control-Request-Headers"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "0"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Tue, 06 Jan 2026 17:22:29 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"code\": \"00\",\n    \"message\": null,\n    \"data\": {\n        \"id\": 6,\n        \"title\": \"ReactJs Masterclass\",\n        \"slug\": \"reactjs-masterclass\",\n        \"shortDescription\": \"Learn ReactJs end-to-end\",\n        \"description\": \"Full lessons\",\n        \"level\": \"BEGINNER\",\n        \"language\": \"EN\",\n        \"status\": \"DRAFT\",\n        \"priceCents\": 0,\n        \"publishedAt\": null,\n        \"ratingAvg\": 0,\n        \"ratingCount\": 0,\n        \"category\": {\n            \"id\": 2,\n            \"name\": \"Development\",\n            \"slug\": \"development\",\n            \"parentId\": null,\n            \"description\": \"Software dev\",\n            \"position\": 1\n        },\n        \"tags\": [\n            {\n                \"id\": 1,\n                \"name\": \"Spring\",\n                \"slug\": \"spring\"\n            },\n            {\n                \"id\": 2,\n                \"name\": \"Java\",\n                \"slug\": \"java\"\n            }\n        ],\n        \"thumbnail\": {\n            \"id\": 22,\n            \"storageProvider\": \"MINIO\",\n            \"bucket\": \"lms-files\",\n            \"objectKey\": \"images/0f7e13ffee5845cc83ab5bff1e224c5d.jpg\",\n            \"originalName\": \"Nitro_Wallpaper_05_3840x2400.jpg\",\n            \"contentType\": \"image/jpeg\",\n            \"sizeBytes\": 3480308,\n            \"checksumSha256\": \"6749a5c70011ccf944ce4f12544abeebf7522e1895761c2e0a7ca237b590794a\",\n            \"isPublic\": false,\n            \"accessUrl\": null,\n            \"status\": \"ATTACHED\",\n            \"purpose\": \"THUMBNAIL\",\n            \"courseId\": 6,\n            \"lessonId\": null\n        },\n        \"introVideo\": {\n            \"id\": 21,\n            \"storageProvider\": \"MINIO\",\n            \"bucket\": \"lms-files\",\n            \"objectKey\": \"videos/9285a41662074c96a003426c29905d35.mp4\",\n            \"originalName\": \"test0601-1.mp4\",\n            \"contentType\": \"video/mp4\",\n            \"sizeBytes\": 58676323,\n            \"checksumSha256\": \"\\\"e413e579e3d8a57efe181b8d5be3934f\\\"\",\n            \"isPublic\": false,\n            \"accessUrl\": null,\n            \"status\": \"ATTACHED\",\n            \"purpose\": \"INTRO_VIDEO\",\n            \"courseId\": 6,\n            \"lessonId\": null\n        },\n        \"instructors\": [\n            {\n                \"id\": 4,\n                \"fullName\": \"My New Name\",\n                \"avatarFile\": {\n                    \"id\": 3,\n                    \"storageProvider\": \"MINIO\",\n                    \"bucket\": \"lms-files\",\n                    \"objectKey\": \"images/6b71b400bab84d90b1f188ea057d1e3c.jpg\",\n                    \"originalName\": \"Nitro_Wallpaper_01_3840x2400.jpg\",\n                    \"contentType\": \"image/jpeg\",\n                    \"sizeBytes\": 4114576,\n                    \"checksumSha256\": \"a7583fdee261ce58a2ec91b64d6bd715a810645e8550efdd8c3a5a1c12815268\",\n                    \"isPublic\": false,\n                    \"accessUrl\": null,\n                    \"status\": \"ATTACHED\",\n                    \"purpose\": \"DOCUMENT\",\n                    \"courseId\": null,\n                    \"lessonId\": null\n                }\n            }\n        ],\n        \"sections\": [],\n        \"courseDocuments\": []\n    }\n}"
+								}
+							]
+						},
+						{
+							"name": "Update course landing page (partial)",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ADMIN_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"title\": \"ReactJs Masterclass (Updated)\",\n    \"shortDescription\": \"Updated short desc\",\n    \"description\": \"Updated full desc\",\n    \"level\": \"INTERMEDIATE\",\n    \"language\": \"VI\"\n  }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/instructor/courses/:courseId",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"instructor",
+										"courses",
+										":courseId"
+									],
+									"variable": [
+										{
+											"key": "courseId",
+											"value": "6"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Update course landing page (partial)",
+									"originalRequest": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"title\": \"ReactJs Masterclass (Updated)\",\n    \"shortDescription\": \"Updated short desc\",\n    \"description\": \"Updated full desc\",\n    \"level\": \"INTERMEDIATE\",\n    \"language\": \"VI\"\n  }",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseURL}}/instructor/courses/:courseId",
+											"host": [
+												"{{baseURL}}"
+											],
+											"path": [
+												"instructor",
+												"courses",
+												":courseId"
+											],
+											"variable": [
+												{
+													"key": "courseId",
+													"value": "6"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": null,
+									"header": [
+										{
+											"key": "Vary",
+											"value": "Origin"
+										},
+										{
+											"key": "Vary",
+											"value": "Access-Control-Request-Method"
+										},
+										{
+											"key": "Vary",
+											"value": "Access-Control-Request-Headers"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "0"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Tue, 06 Jan 2026 17:23:05 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"code\": \"00\",\n    \"message\": null,\n    \"data\": {\n        \"id\": 6,\n        \"title\": \"ReactJs Masterclass (Updated)\",\n        \"slug\": \"reactjs-masterclass\",\n        \"shortDescription\": \"Updated short desc\",\n        \"description\": \"Updated full desc\",\n        \"level\": \"INTERMEDIATE\",\n        \"language\": \"VI\",\n        \"status\": \"DRAFT\",\n        \"priceCents\": 0,\n        \"publishedAt\": null,\n        \"ratingAvg\": 0,\n        \"ratingCount\": 0,\n        \"category\": {\n            \"id\": 2,\n            \"name\": \"Development\",\n            \"slug\": \"development\",\n            \"parentId\": null,\n            \"description\": \"Software dev\",\n            \"position\": 1\n        },\n        \"tags\": [\n            {\n                \"id\": 1,\n                \"name\": \"Spring\",\n                \"slug\": \"spring\"\n            },\n            {\n                \"id\": 2,\n                \"name\": \"Java\",\n                \"slug\": \"java\"\n            }\n        ],\n        \"thumbnail\": {\n            \"id\": 22,\n            \"storageProvider\": \"MINIO\",\n            \"bucket\": \"lms-files\",\n            \"objectKey\": \"images/0f7e13ffee5845cc83ab5bff1e224c5d.jpg\",\n            \"originalName\": \"Nitro_Wallpaper_05_3840x2400.jpg\",\n            \"contentType\": \"image/jpeg\",\n            \"sizeBytes\": 3480308,\n            \"checksumSha256\": \"6749a5c70011ccf944ce4f12544abeebf7522e1895761c2e0a7ca237b590794a\",\n            \"isPublic\": false,\n            \"accessUrl\": null,\n            \"status\": \"ATTACHED\",\n            \"purpose\": \"THUMBNAIL\",\n            \"courseId\": 6,\n            \"lessonId\": null\n        },\n        \"introVideo\": {\n            \"id\": 21,\n            \"storageProvider\": \"MINIO\",\n            \"bucket\": \"lms-files\",\n            \"objectKey\": \"videos/9285a41662074c96a003426c29905d35.mp4\",\n            \"originalName\": \"test0601-1.mp4\",\n            \"contentType\": \"video/mp4\",\n            \"sizeBytes\": 58676323,\n            \"checksumSha256\": \"\\\"e413e579e3d8a57efe181b8d5be3934f\\\"\",\n            \"isPublic\": false,\n            \"accessUrl\": null,\n            \"status\": \"ATTACHED\",\n            \"purpose\": \"INTRO_VIDEO\",\n            \"courseId\": 6,\n            \"lessonId\": null\n        },\n        \"instructors\": [\n            {\n                \"id\": 4,\n                \"fullName\": \"My New Name\",\n                \"avatarFile\": {\n                    \"id\": 3,\n                    \"storageProvider\": \"MINIO\",\n                    \"bucket\": \"lms-files\",\n                    \"objectKey\": \"images/6b71b400bab84d90b1f188ea057d1e3c.jpg\",\n                    \"originalName\": \"Nitro_Wallpaper_01_3840x2400.jpg\",\n                    \"contentType\": \"image/jpeg\",\n                    \"sizeBytes\": 4114576,\n                    \"checksumSha256\": \"a7583fdee261ce58a2ec91b64d6bd715a810645e8550efdd8c3a5a1c12815268\",\n                    \"isPublic\": false,\n                    \"accessUrl\": null,\n                    \"status\": \"ATTACHED\",\n                    \"purpose\": \"DOCUMENT\",\n                    \"courseId\": null,\n                    \"lessonId\": null\n                }\n            }\n        ],\n        \"sections\": [],\n        \"courseDocuments\": []\n    }\n}"
+								}
+							]
+						},
+						{
+							"name": "Publish/Unpublish/Archive course",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ADMIN_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"status\":\"PUBLISHED\"}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/instructor/courses/:courseId/status",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"instructor",
+										"courses",
+										":courseId",
+										"status"
+									],
+									"variable": [
+										{
+											"key": "courseId",
+											"value": "6"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Publish/Unpublish/Archive course",
+									"originalRequest": {
+										"method": "PATCH",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\"status\":\"PUBLISHED\"}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseURL}}/instructor/courses/:courseId/status",
+											"host": [
+												"{{baseURL}}"
+											],
+											"path": [
+												"instructor",
+												"courses",
+												":courseId",
+												"status"
+											],
+											"variable": [
+												{
+													"key": "courseId",
+													"value": "6"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": null,
+									"header": [
+										{
+											"key": "Vary",
+											"value": "Origin"
+										},
+										{
+											"key": "Vary",
+											"value": "Access-Control-Request-Method"
+										},
+										{
+											"key": "Vary",
+											"value": "Access-Control-Request-Headers"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "0"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Tue, 06 Jan 2026 17:23:38 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"code\": \"00\",\n    \"message\": null,\n    \"data\": {\n        \"id\": 6,\n        \"title\": \"ReactJs Masterclass (Updated)\",\n        \"slug\": \"reactjs-masterclass\",\n        \"shortDescription\": \"Updated short desc\",\n        \"description\": \"Updated full desc\",\n        \"level\": \"INTERMEDIATE\",\n        \"language\": \"VI\",\n        \"status\": \"PUBLISHED\",\n        \"priceCents\": 0,\n        \"publishedAt\": null,\n        \"ratingAvg\": 0,\n        \"ratingCount\": 0,\n        \"category\": {\n            \"id\": 2,\n            \"name\": \"Development\",\n            \"slug\": \"development\",\n            \"parentId\": null,\n            \"description\": \"Software dev\",\n            \"position\": 1\n        },\n        \"tags\": [\n            {\n                \"id\": 1,\n                \"name\": \"Spring\",\n                \"slug\": \"spring\"\n            },\n            {\n                \"id\": 2,\n                \"name\": \"Java\",\n                \"slug\": \"java\"\n            }\n        ],\n        \"thumbnail\": {\n            \"id\": 22,\n            \"storageProvider\": \"MINIO\",\n            \"bucket\": \"lms-files\",\n            \"objectKey\": \"images/0f7e13ffee5845cc83ab5bff1e224c5d.jpg\",\n            \"originalName\": \"Nitro_Wallpaper_05_3840x2400.jpg\",\n            \"contentType\": \"image/jpeg\",\n            \"sizeBytes\": 3480308,\n            \"checksumSha256\": \"6749a5c70011ccf944ce4f12544abeebf7522e1895761c2e0a7ca237b590794a\",\n            \"isPublic\": false,\n            \"accessUrl\": null,\n            \"status\": \"ATTACHED\",\n            \"purpose\": \"THUMBNAIL\",\n            \"courseId\": 6,\n            \"lessonId\": null\n        },\n        \"introVideo\": {\n            \"id\": 21,\n            \"storageProvider\": \"MINIO\",\n            \"bucket\": \"lms-files\",\n            \"objectKey\": \"videos/9285a41662074c96a003426c29905d35.mp4\",\n            \"originalName\": \"test0601-1.mp4\",\n            \"contentType\": \"video/mp4\",\n            \"sizeBytes\": 58676323,\n            \"checksumSha256\": \"\\\"e413e579e3d8a57efe181b8d5be3934f\\\"\",\n            \"isPublic\": false,\n            \"accessUrl\": null,\n            \"status\": \"ATTACHED\",\n            \"purpose\": \"INTRO_VIDEO\",\n            \"courseId\": 6,\n            \"lessonId\": null\n        },\n        \"instructors\": [\n            {\n                \"id\": 4,\n                \"fullName\": \"My New Name\",\n                \"avatarFile\": {\n                    \"id\": 3,\n                    \"storageProvider\": \"MINIO\",\n                    \"bucket\": \"lms-files\",\n                    \"objectKey\": \"images/6b71b400bab84d90b1f188ea057d1e3c.jpg\",\n                    \"originalName\": \"Nitro_Wallpaper_01_3840x2400.jpg\",\n                    \"contentType\": \"image/jpeg\",\n                    \"sizeBytes\": 4114576,\n                    \"checksumSha256\": \"a7583fdee261ce58a2ec91b64d6bd715a810645e8550efdd8c3a5a1c12815268\",\n                    \"isPublic\": false,\n                    \"accessUrl\": null,\n                    \"status\": \"ATTACHED\",\n                    \"purpose\": \"DOCUMENT\",\n                    \"courseId\": null,\n                    \"lessonId\": null\n                }\n            }\n        ],\n        \"sections\": [],\n        \"courseDocuments\": []\n    }\n}"
+								}
+							]
+						},
+						{
+							"name": "Update tags separately",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ADMIN_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "[1]\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/instructor/courses/:courseId/tags",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"instructor",
+										"courses",
+										":courseId",
+										"tags"
+									],
+									"variable": [
+										{
+											"key": "courseId",
+											"value": "6"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Update tags separately",
+									"originalRequest": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "[1]\r\n",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseURL}}/instructor/courses/:courseId/tags",
+											"host": [
+												"{{baseURL}}"
+											],
+											"path": [
+												"instructor",
+												"courses",
+												":courseId",
+												"tags"
+											],
+											"variable": [
+												{
+													"key": "courseId",
+													"value": "6"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": null,
+									"header": [
+										{
+											"key": "Vary",
+											"value": "Origin"
+										},
+										{
+											"key": "Vary",
+											"value": "Access-Control-Request-Method"
+										},
+										{
+											"key": "Vary",
+											"value": "Access-Control-Request-Headers"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "0"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Tue, 06 Jan 2026 17:25:21 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"code\": \"00\",\n    \"message\": null,\n    \"data\": {\n        \"id\": 6,\n        \"title\": \"ReactJs Masterclass (Updated)\",\n        \"slug\": \"reactjs-masterclass\",\n        \"shortDescription\": \"Updated short desc\",\n        \"description\": \"Updated full desc\",\n        \"level\": \"INTERMEDIATE\",\n        \"language\": \"VI\",\n        \"status\": \"PUBLISHED\",\n        \"priceCents\": 0,\n        \"publishedAt\": \"2026-01-07T00:25:03\",\n        \"ratingAvg\": 0,\n        \"ratingCount\": 0,\n        \"category\": {\n            \"id\": 2,\n            \"name\": \"Development\",\n            \"slug\": \"development\",\n            \"parentId\": null,\n            \"description\": \"Software dev\",\n            \"position\": 1\n        },\n        \"tags\": [\n            {\n                \"id\": 1,\n                \"name\": \"Spring\",\n                \"slug\": \"spring\"\n            },\n            {\n                \"id\": 2,\n                \"name\": \"Java\",\n                \"slug\": \"java\"\n            }\n        ],\n        \"thumbnail\": {\n            \"id\": 22,\n            \"storageProvider\": \"MINIO\",\n            \"bucket\": \"lms-files\",\n            \"objectKey\": \"images/0f7e13ffee5845cc83ab5bff1e224c5d.jpg\",\n            \"originalName\": \"Nitro_Wallpaper_05_3840x2400.jpg\",\n            \"contentType\": \"image/jpeg\",\n            \"sizeBytes\": 3480308,\n            \"checksumSha256\": \"6749a5c70011ccf944ce4f12544abeebf7522e1895761c2e0a7ca237b590794a\",\n            \"isPublic\": false,\n            \"accessUrl\": null,\n            \"status\": \"ATTACHED\",\n            \"purpose\": \"THUMBNAIL\",\n            \"courseId\": 6,\n            \"lessonId\": null\n        },\n        \"introVideo\": {\n            \"id\": 21,\n            \"storageProvider\": \"MINIO\",\n            \"bucket\": \"lms-files\",\n            \"objectKey\": \"videos/9285a41662074c96a003426c29905d35.mp4\",\n            \"originalName\": \"test0601-1.mp4\",\n            \"contentType\": \"video/mp4\",\n            \"sizeBytes\": 58676323,\n            \"checksumSha256\": \"\\\"e413e579e3d8a57efe181b8d5be3934f\\\"\",\n            \"isPublic\": false,\n            \"accessUrl\": null,\n            \"status\": \"ATTACHED\",\n            \"purpose\": \"INTRO_VIDEO\",\n            \"courseId\": 6,\n            \"lessonId\": null\n        },\n        \"instructors\": [\n            {\n                \"id\": 4,\n                \"fullName\": \"My New Name\",\n                \"avatarFile\": {\n                    \"id\": 3,\n                    \"storageProvider\": \"MINIO\",\n                    \"bucket\": \"lms-files\",\n                    \"objectKey\": \"images/6b71b400bab84d90b1f188ea057d1e3c.jpg\",\n                    \"originalName\": \"Nitro_Wallpaper_01_3840x2400.jpg\",\n                    \"contentType\": \"image/jpeg\",\n                    \"sizeBytes\": 4114576,\n                    \"checksumSha256\": \"a7583fdee261ce58a2ec91b64d6bd715a810645e8550efdd8c3a5a1c12815268\",\n                    \"isPublic\": false,\n                    \"accessUrl\": null,\n                    \"status\": \"ATTACHED\",\n                    \"purpose\": \"DOCUMENT\",\n                    \"courseId\": null,\n                    \"lessonId\": null\n                }\n            }\n        ],\n        \"sections\": [],\n        \"courseDocuments\": []\n    }\n}"
+								}
+							]
+						},
+						{
+							"name": "Update instructors",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ADMIN_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "[\n    {\n        \"userId\": 4,\n        \"instructorRole\": \"OWNER\",\n        \"revenueShare\": 70\n    }\n]",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/instructor/courses/:courseId/instructors",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"instructor",
+										"courses",
+										":courseId",
+										"instructors"
+									],
+									"variable": [
+										{
+											"key": "courseId",
+											"value": "3"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Update instructors",
+									"originalRequest": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "[\n    {\n        \"userId\": 4,\n        \"instructorRole\": \"OWNER\",\n        \"revenueShare\": 70\n    }\n]",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseURL}}/instructor/courses/:courseId/instructors",
+											"host": [
+												"{{baseURL}}"
+											],
+											"path": [
+												"instructor",
+												"courses",
+												":courseId",
+												"instructors"
+											],
+											"variable": [
+												{
+													"key": "courseId",
+													"value": "3"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": null,
+									"header": [
+										{
+											"key": "Vary",
+											"value": "Origin"
+										},
+										{
+											"key": "Vary",
+											"value": "Access-Control-Request-Method"
+										},
+										{
+											"key": "Vary",
+											"value": "Access-Control-Request-Headers"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "0"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Tue, 06 Jan 2026 17:25:42 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"code\": \"00\",\n    \"message\": null,\n    \"data\": {\n        \"id\": 3,\n        \"title\": \"Java Spring Boot Masterclass (Updated)\",\n        \"slug\": \"java-spring-boot-masterclass\",\n        \"shortDescription\": \"Updated short desc\",\n        \"description\": \"Updated full desc\",\n        \"level\": \"INTERMEDIATE\",\n        \"language\": \"VI\",\n        \"status\": \"PUBLISHED\",\n        \"priceCents\": 0,\n        \"publishedAt\": null,\n        \"ratingAvg\": 3,\n        \"ratingCount\": 1,\n        \"category\": {\n            \"id\": 2,\n            \"name\": \"Development\",\n            \"slug\": \"development\",\n            \"parentId\": null,\n            \"description\": \"Software dev\",\n            \"position\": 1\n        },\n        \"tags\": [\n            {\n                \"id\": 1,\n                \"name\": \"Spring\",\n                \"slug\": \"spring\"\n            },\n            {\n                \"id\": 2,\n                \"name\": \"Java\",\n                \"slug\": \"java\"\n            }\n        ],\n        \"thumbnail\": {\n            \"id\": 6,\n            \"storageProvider\": \"MINIO\",\n            \"bucket\": \"lms-files\",\n            \"objectKey\": \"images/53bf8c6c49234050acf525c681424b63.jpg\",\n            \"originalName\": \"Nitro_Wallpaper_05_3840x2400.jpg\",\n            \"contentType\": \"image/jpeg\",\n            \"sizeBytes\": 3480308,\n            \"checksumSha256\": \"6749a5c70011ccf944ce4f12544abeebf7522e1895761c2e0a7ca237b590794a\",\n            \"isPublic\": false,\n            \"accessUrl\": null,\n            \"status\": \"ATTACHED\",\n            \"purpose\": \"THUMBNAIL\",\n            \"courseId\": 3,\n            \"lessonId\": null\n        },\n        \"introVideo\": {\n            \"id\": 10,\n            \"storageProvider\": \"MINIO\",\n            \"bucket\": \"lms-files\",\n            \"objectKey\": \"videos/e2f6bea8eb9847f7ab71c8002eb0ded7.mp4\",\n            \"originalName\": \"intro.mp4\",\n            \"contentType\": \"video/mp4\",\n            \"sizeBytes\": 58676323,\n            \"checksumSha256\": \"\\\"e413e579e3d8a57efe181b8d5be3934f\\\"\",\n            \"isPublic\": false,\n            \"accessUrl\": null,\n            \"status\": \"ATTACHED\",\n            \"purpose\": \"INTRO_VIDEO\",\n            \"courseId\": 3,\n            \"lessonId\": null\n        },\n        \"instructors\": [\n            {\n                \"id\": 4,\n                \"fullName\": \"My New Name\",\n                \"avatarFile\": {\n                    \"id\": 3,\n                    \"storageProvider\": \"MINIO\",\n                    \"bucket\": \"lms-files\",\n                    \"objectKey\": \"images/6b71b400bab84d90b1f188ea057d1e3c.jpg\",\n                    \"originalName\": \"Nitro_Wallpaper_01_3840x2400.jpg\",\n                    \"contentType\": \"image/jpeg\",\n                    \"sizeBytes\": 4114576,\n                    \"checksumSha256\": \"a7583fdee261ce58a2ec91b64d6bd715a810645e8550efdd8c3a5a1c12815268\",\n                    \"isPublic\": false,\n                    \"accessUrl\": null,\n                    \"status\": \"ATTACHED\",\n                    \"purpose\": \"DOCUMENT\",\n                    \"courseId\": null,\n                    \"lessonId\": null\n                }\n            },\n            {\n                \"id\": 4,\n                \"fullName\": \"My New Name\",\n                \"avatarFile\": {\n                    \"id\": 3,\n                    \"storageProvider\": \"MINIO\",\n                    \"bucket\": \"lms-files\",\n                    \"objectKey\": \"images/6b71b400bab84d90b1f188ea057d1e3c.jpg\",\n                    \"originalName\": \"Nitro_Wallpaper_01_3840x2400.jpg\",\n                    \"contentType\": \"image/jpeg\",\n                    \"sizeBytes\": 4114576,\n                    \"checksumSha256\": \"a7583fdee261ce58a2ec91b64d6bd715a810645e8550efdd8c3a5a1c12815268\",\n                    \"isPublic\": false,\n                    \"accessUrl\": null,\n                    \"status\": \"ATTACHED\",\n                    \"purpose\": \"DOCUMENT\",\n                    \"courseId\": null,\n                    \"lessonId\": null\n                }\n            },\n            {\n                \"id\": 4,\n                \"fullName\": \"My New Name\",\n                \"avatarFile\": {\n                    \"id\": 3,\n                    \"storageProvider\": \"MINIO\",\n                    \"bucket\": \"lms-files\",\n                    \"objectKey\": \"images/6b71b400bab84d90b1f188ea057d1e3c.jpg\",\n                    \"originalName\": \"Nitro_Wallpaper_01_3840x2400.jpg\",\n                    \"contentType\": \"image/jpeg\",\n                    \"sizeBytes\": 4114576,\n                    \"checksumSha256\": \"a7583fdee261ce58a2ec91b64d6bd715a810645e8550efdd8c3a5a1c12815268\",\n                    \"isPublic\": false,\n                    \"accessUrl\": null,\n                    \"status\": \"ATTACHED\",\n                    \"purpose\": \"DOCUMENT\",\n                    \"courseId\": null,\n                    \"lessonId\": null\n                }\n            }\n        ],\n        \"sections\": [\n            {\n                \"id\": 6,\n                \"title\": \"Section 1 - Intro Updated\",\n                \"position\": 1,\n                \"lessons\": []\n            },\n            {\n                \"id\": 5,\n                \"title\": \"Section 1 - Introduction\",\n                \"position\": 2,\n                \"lessons\": [\n                    {\n                        \"id\": 5,\n                        \"title\": \"Lesson 2 - Vocab\",\n                        \"lessonType\": \"VIDEO\",\n                        \"durationSeconds\": 600,\n                        \"isPreview\": false,\n                        \"documents\": []\n                    },\n                    {\n                        \"id\": 2,\n                        \"title\": \"Lesson 1 - Updated\",\n                        \"lessonType\": \"ARTICLE\",\n                        \"durationSeconds\": 300,\n                        \"isPreview\": true,\n                        \"documents\": [\n                            {\n                                \"id\": 1,\n                                \"title\": \"Lesson handout v2\",\n                                \"position\": 2,\n                                \"file\": {\n                                    \"id\": 15,\n                                    \"storageProvider\": \"MINIO\",\n                                    \"bucket\": \"lms-files\",\n                                    \"objectKey\": \"other/c19c83d6d2004461bb67e848305adfe9.pdf\",\n                                    \"originalName\": \"Chapter 3.1. BPMN.pdf\",\n                                    \"contentType\": \"application/pdf\",\n                                    \"sizeBytes\": 1002535,\n                                    \"checksumSha256\": \"4dd0e658717842920eb8234f4b66cf161f89b277350bdc50097dcecd4740a28c\",\n                                    \"isPublic\": false,\n                                    \"accessUrl\": null,\n                                    \"status\": \"ATTACHED\",\n                                    \"purpose\": \"DOCUMENT\",\n                                    \"courseId\": 3,\n                                    \"lessonId\": 2\n                                }\n                            }\n                        ]\n                    }\n                ]\n            }\n        ],\n        \"courseDocuments\": [\n            {\n                \"id\": 1,\n                \"title\": \"Syllabus v2\",\n                \"position\": 2,\n                \"file\": {\n                    \"id\": 14,\n                    \"storageProvider\": \"MINIO\",\n                    \"bucket\": \"lms-files\",\n                    \"objectKey\": \"other/77baa187ffb843a882a9bd0bc0b890a9.pdf\",\n                    \"originalName\": \"Chương 4.1 Kien_truc_ung_dung_TOGAF_ArchiMate_Data_Object.pdf\",\n                    \"contentType\": \"application/pdf\",\n                    \"sizeBytes\": 1021391,\n                    \"checksumSha256\": \"c566b22ff84d8aef89200d4a335a3a8c08dd1a1ba61a2196ecae2e8588cde0fb\",\n                    \"isPublic\": false,\n                    \"accessUrl\": null,\n                    \"status\": \"ATTACHED\",\n                    \"purpose\": \"DOCUMENT\",\n                    \"courseId\": 3,\n                    \"lessonId\": null\n                }\n            }\n        ]\n    }\n}"
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "Section",
+					"item": [
+						{
+							"name": "Create section",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ADMIN_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"title\": \"Section 2 - End\",\r\n    \"position\": 5\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/instructor/courses/:courseId/sections",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"instructor",
+										"courses",
+										":courseId",
+										"sections"
+									],
+									"variable": [
+										{
+											"key": "courseId",
+											"value": "6"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Create section",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"title\": \"Section 1 - Introduction\",\r\n    \"position\": 1\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseURL}}/instructor/courses/:courseId/sections",
+											"host": [
+												"{{baseURL}}"
+											],
+											"path": [
+												"instructor",
+												"courses",
+												":courseId",
+												"sections"
+											],
+											"variable": [
+												{
+													"key": "courseId",
+													"value": "6"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": null,
+									"header": [
+										{
+											"key": "Vary",
+											"value": "Origin"
+										},
+										{
+											"key": "Vary",
+											"value": "Access-Control-Request-Method"
+										},
+										{
+											"key": "Vary",
+											"value": "Access-Control-Request-Headers"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "0"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Tue, 06 Jan 2026 17:26:03 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"code\": \"00\",\n    \"message\": null,\n    \"data\": {\n        \"id\": 6,\n        \"title\": \"ReactJs Masterclass (Updated)\",\n        \"slug\": \"reactjs-masterclass\",\n        \"shortDescription\": \"Updated short desc\",\n        \"description\": \"Updated full desc\",\n        \"level\": \"INTERMEDIATE\",\n        \"language\": \"VI\",\n        \"status\": \"PUBLISHED\",\n        \"priceCents\": 0,\n        \"publishedAt\": \"2026-01-07T00:25:03\",\n        \"ratingAvg\": 0,\n        \"ratingCount\": 0,\n        \"category\": {\n            \"id\": 2,\n            \"name\": \"Development\",\n            \"slug\": \"development\",\n            \"parentId\": null,\n            \"description\": \"Software dev\",\n            \"position\": 1\n        },\n        \"tags\": [\n            {\n                \"id\": 1,\n                \"name\": \"Spring\",\n                \"slug\": \"spring\"\n            },\n            {\n                \"id\": 2,\n                \"name\": \"Java\",\n                \"slug\": \"java\"\n            }\n        ],\n        \"thumbnail\": {\n            \"id\": 22,\n            \"storageProvider\": \"MINIO\",\n            \"bucket\": \"lms-files\",\n            \"objectKey\": \"images/0f7e13ffee5845cc83ab5bff1e224c5d.jpg\",\n            \"originalName\": \"Nitro_Wallpaper_05_3840x2400.jpg\",\n            \"contentType\": \"image/jpeg\",\n            \"sizeBytes\": 3480308,\n            \"checksumSha256\": \"6749a5c70011ccf944ce4f12544abeebf7522e1895761c2e0a7ca237b590794a\",\n            \"isPublic\": false,\n            \"accessUrl\": null,\n            \"status\": \"ATTACHED\",\n            \"purpose\": \"THUMBNAIL\",\n            \"courseId\": 6,\n            \"lessonId\": null\n        },\n        \"introVideo\": {\n            \"id\": 21,\n            \"storageProvider\": \"MINIO\",\n            \"bucket\": \"lms-files\",\n            \"objectKey\": \"videos/9285a41662074c96a003426c29905d35.mp4\",\n            \"originalName\": \"test0601-1.mp4\",\n            \"contentType\": \"video/mp4\",\n            \"sizeBytes\": 58676323,\n            \"checksumSha256\": \"\\\"e413e579e3d8a57efe181b8d5be3934f\\\"\",\n            \"isPublic\": false,\n            \"accessUrl\": null,\n            \"status\": \"ATTACHED\",\n            \"purpose\": \"INTRO_VIDEO\",\n            \"courseId\": 6,\n            \"lessonId\": null\n        },\n        \"instructors\": [\n            {\n                \"id\": 4,\n                \"fullName\": \"My New Name\",\n                \"avatarFile\": {\n                    \"id\": 3,\n                    \"storageProvider\": \"MINIO\",\n                    \"bucket\": \"lms-files\",\n                    \"objectKey\": \"images/6b71b400bab84d90b1f188ea057d1e3c.jpg\",\n                    \"originalName\": \"Nitro_Wallpaper_01_3840x2400.jpg\",\n                    \"contentType\": \"image/jpeg\",\n                    \"sizeBytes\": 4114576,\n                    \"checksumSha256\": \"a7583fdee261ce58a2ec91b64d6bd715a810645e8550efdd8c3a5a1c12815268\",\n                    \"isPublic\": false,\n                    \"accessUrl\": null,\n                    \"status\": \"ATTACHED\",\n                    \"purpose\": \"DOCUMENT\",\n                    \"courseId\": null,\n                    \"lessonId\": null\n                }\n            }\n        ],\n        \"sections\": [\n            {\n                \"id\": 8,\n                \"title\": \"Section 1 - Introduction\",\n                \"position\": 1,\n                \"lessons\": []\n            }\n        ],\n        \"courseDocuments\": []\n    }\n}"
+								}
+							]
+						},
+						{
+							"name": "Update section",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ADMIN_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"title\":\"Section 1 - Intro Updated\",\"position\":2}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/instructor/courses/:courseId/sections/:sectionId",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"instructor",
+										"courses",
+										":courseId",
+										"sections",
+										":sectionId"
+									],
+									"variable": [
+										{
+											"key": "courseId",
+											"value": "6"
+										},
+										{
+											"key": "sectionId",
+											"value": "8"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Update section",
+									"originalRequest": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\"title\":\"Section 1 - Intro Updated\",\"position\":2}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseURL}}/instructor/courses/:courseId/sections/:sectionId",
+											"host": [
+												"{{baseURL}}"
+											],
+											"path": [
+												"instructor",
+												"courses",
+												":courseId",
+												"sections",
+												":sectionId"
+											],
+											"variable": [
+												{
+													"key": "courseId",
+													"value": "6"
+												},
+												{
+													"key": "sectionId",
+													"value": "8"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": null,
+									"header": [
+										{
+											"key": "Vary",
+											"value": "Origin"
+										},
+										{
+											"key": "Vary",
+											"value": "Access-Control-Request-Method"
+										},
+										{
+											"key": "Vary",
+											"value": "Access-Control-Request-Headers"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "0"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Tue, 06 Jan 2026 17:26:40 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"code\": \"00\",\n    \"message\": null,\n    \"data\": {\n        \"id\": 6,\n        \"title\": \"ReactJs Masterclass (Updated)\",\n        \"slug\": \"reactjs-masterclass\",\n        \"shortDescription\": \"Updated short desc\",\n        \"description\": \"Updated full desc\",\n        \"level\": \"INTERMEDIATE\",\n        \"language\": \"VI\",\n        \"status\": \"PUBLISHED\",\n        \"priceCents\": 0,\n        \"publishedAt\": \"2026-01-07T00:25:03\",\n        \"ratingAvg\": 0,\n        \"ratingCount\": 0,\n        \"category\": {\n            \"id\": 2,\n            \"name\": \"Development\",\n            \"slug\": \"development\",\n            \"parentId\": null,\n            \"description\": \"Software dev\",\n            \"position\": 1\n        },\n        \"tags\": [\n            {\n                \"id\": 1,\n                \"name\": \"Spring\",\n                \"slug\": \"spring\"\n            },\n            {\n                \"id\": 2,\n                \"name\": \"Java\",\n                \"slug\": \"java\"\n            }\n        ],\n        \"thumbnail\": {\n            \"id\": 22,\n            \"storageProvider\": \"MINIO\",\n            \"bucket\": \"lms-files\",\n            \"objectKey\": \"images/0f7e13ffee5845cc83ab5bff1e224c5d.jpg\",\n            \"originalName\": \"Nitro_Wallpaper_05_3840x2400.jpg\",\n            \"contentType\": \"image/jpeg\",\n            \"sizeBytes\": 3480308,\n            \"checksumSha256\": \"6749a5c70011ccf944ce4f12544abeebf7522e1895761c2e0a7ca237b590794a\",\n            \"isPublic\": false,\n            \"accessUrl\": null,\n            \"status\": \"ATTACHED\",\n            \"purpose\": \"THUMBNAIL\",\n            \"courseId\": 6,\n            \"lessonId\": null\n        },\n        \"introVideo\": {\n            \"id\": 21,\n            \"storageProvider\": \"MINIO\",\n            \"bucket\": \"lms-files\",\n            \"objectKey\": \"videos/9285a41662074c96a003426c29905d35.mp4\",\n            \"originalName\": \"test0601-1.mp4\",\n            \"contentType\": \"video/mp4\",\n            \"sizeBytes\": 58676323,\n            \"checksumSha256\": \"\\\"e413e579e3d8a57efe181b8d5be3934f\\\"\",\n            \"isPublic\": false,\n            \"accessUrl\": null,\n            \"status\": \"ATTACHED\",\n            \"purpose\": \"INTRO_VIDEO\",\n            \"courseId\": 6,\n            \"lessonId\": null\n        },\n        \"instructors\": [\n            {\n                \"id\": 4,\n                \"fullName\": \"My New Name\",\n                \"avatarFile\": {\n                    \"id\": 3,\n                    \"storageProvider\": \"MINIO\",\n                    \"bucket\": \"lms-files\",\n                    \"objectKey\": \"images/6b71b400bab84d90b1f188ea057d1e3c.jpg\",\n                    \"originalName\": \"Nitro_Wallpaper_01_3840x2400.jpg\",\n                    \"contentType\": \"image/jpeg\",\n                    \"sizeBytes\": 4114576,\n                    \"checksumSha256\": \"a7583fdee261ce58a2ec91b64d6bd715a810645e8550efdd8c3a5a1c12815268\",\n                    \"isPublic\": false,\n                    \"accessUrl\": null,\n                    \"status\": \"ATTACHED\",\n                    \"purpose\": \"DOCUMENT\",\n                    \"courseId\": null,\n                    \"lessonId\": null\n                }\n            }\n        ],\n        \"sections\": [\n            {\n                \"id\": 8,\n                \"title\": \"Section 1 - Intro Updated\",\n                \"position\": 2,\n                \"lessons\": []\n            }\n        ],\n        \"courseDocuments\": []\n    }\n}"
+								}
+							]
+						},
+						{
+							"name": "Delete section",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{authToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/instructor/courses/:courseId/sections/:sectionId",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"instructor",
+										"courses",
+										":courseId",
+										"sections",
+										":sectionId"
+									],
+									"variable": [
+										{
+											"key": "courseId",
+											"value": "3"
+										},
+										{
+											"key": "sectionId",
+											"value": "4"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Reorder sections",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ADMIN_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"items\": [\n      {\"id\": 8, \"position\": 2},\n      {\"id\": 9, \"position\": 1}\n    ]\n  }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/instructor/courses/:courseId/sections/reorder",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"instructor",
+										"courses",
+										":courseId",
+										"sections",
+										"reorder"
+									],
+									"variable": [
+										{
+											"key": "courseId",
+											"value": "6"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Reorder sections",
+									"originalRequest": {
+										"method": "PATCH",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"items\": [\n      {\"id\": 8, \"position\": 2},\n      {\"id\": 9, \"position\": 1}\n    ]\n  }",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseURL}}/instructor/courses/:courseId/sections/reorder",
+											"host": [
+												"{{baseURL}}"
+											],
+											"path": [
+												"instructor",
+												"courses",
+												":courseId",
+												"sections",
+												"reorder"
+											],
+											"variable": [
+												{
+													"key": "courseId",
+													"value": "6"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": null,
+									"header": [
+										{
+											"key": "Vary",
+											"value": "Origin"
+										},
+										{
+											"key": "Vary",
+											"value": "Access-Control-Request-Method"
+										},
+										{
+											"key": "Vary",
+											"value": "Access-Control-Request-Headers"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "0"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Tue, 06 Jan 2026 17:27:40 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"code\": \"00\",\n    \"message\": null,\n    \"data\": {\n        \"id\": 6,\n        \"title\": \"ReactJs Masterclass (Updated)\",\n        \"slug\": \"reactjs-masterclass\",\n        \"shortDescription\": \"Updated short desc\",\n        \"description\": \"Updated full desc\",\n        \"level\": \"INTERMEDIATE\",\n        \"language\": \"VI\",\n        \"status\": \"PUBLISHED\",\n        \"priceCents\": 0,\n        \"publishedAt\": \"2026-01-07T00:25:03\",\n        \"ratingAvg\": 0,\n        \"ratingCount\": 0,\n        \"category\": {\n            \"id\": 2,\n            \"name\": \"Development\",\n            \"slug\": \"development\",\n            \"parentId\": null,\n            \"description\": \"Software dev\",\n            \"position\": 1\n        },\n        \"tags\": [\n            {\n                \"id\": 1,\n                \"name\": \"Spring\",\n                \"slug\": \"spring\"\n            },\n            {\n                \"id\": 2,\n                \"name\": \"Java\",\n                \"slug\": \"java\"\n            }\n        ],\n        \"thumbnail\": {\n            \"id\": 22,\n            \"storageProvider\": \"MINIO\",\n            \"bucket\": \"lms-files\",\n            \"objectKey\": \"images/0f7e13ffee5845cc83ab5bff1e224c5d.jpg\",\n            \"originalName\": \"Nitro_Wallpaper_05_3840x2400.jpg\",\n            \"contentType\": \"image/jpeg\",\n            \"sizeBytes\": 3480308,\n            \"checksumSha256\": \"6749a5c70011ccf944ce4f12544abeebf7522e1895761c2e0a7ca237b590794a\",\n            \"isPublic\": false,\n            \"accessUrl\": null,\n            \"status\": \"ATTACHED\",\n            \"purpose\": \"THUMBNAIL\",\n            \"courseId\": 6,\n            \"lessonId\": null\n        },\n        \"introVideo\": {\n            \"id\": 21,\n            \"storageProvider\": \"MINIO\",\n            \"bucket\": \"lms-files\",\n            \"objectKey\": \"videos/9285a41662074c96a003426c29905d35.mp4\",\n            \"originalName\": \"test0601-1.mp4\",\n            \"contentType\": \"video/mp4\",\n            \"sizeBytes\": 58676323,\n            \"checksumSha256\": \"\\\"e413e579e3d8a57efe181b8d5be3934f\\\"\",\n            \"isPublic\": false,\n            \"accessUrl\": null,\n            \"status\": \"ATTACHED\",\n            \"purpose\": \"INTRO_VIDEO\",\n            \"courseId\": 6,\n            \"lessonId\": null\n        },\n        \"instructors\": [\n            {\n                \"id\": 4,\n                \"fullName\": \"My New Name\",\n                \"avatarFile\": {\n                    \"id\": 3,\n                    \"storageProvider\": \"MINIO\",\n                    \"bucket\": \"lms-files\",\n                    \"objectKey\": \"images/6b71b400bab84d90b1f188ea057d1e3c.jpg\",\n                    \"originalName\": \"Nitro_Wallpaper_01_3840x2400.jpg\",\n                    \"contentType\": \"image/jpeg\",\n                    \"sizeBytes\": 4114576,\n                    \"checksumSha256\": \"a7583fdee261ce58a2ec91b64d6bd715a810645e8550efdd8c3a5a1c12815268\",\n                    \"isPublic\": false,\n                    \"accessUrl\": null,\n                    \"status\": \"ATTACHED\",\n                    \"purpose\": \"DOCUMENT\",\n                    \"courseId\": null,\n                    \"lessonId\": null\n                }\n            }\n        ],\n        \"sections\": [\n            {\n                \"id\": 9,\n                \"title\": \"Section 2 - End\",\n                \"position\": 1,\n                \"lessons\": []\n            },\n            {\n                \"id\": 8,\n                \"title\": \"Section 1 - Intro Updated\",\n                \"position\": 2,\n                \"lessons\": []\n            }\n        ],\n        \"courseDocuments\": []\n    }\n}"
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "Lessons",
+					"item": [
+						{
+							"name": "Create lesson",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ADMIN_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"courseSectionId\": 8,\n    \"title\": \"Lesson 2 - Section ends\",\n    \"lessonType\": \"VIDEO\",\n    \"contentText\": null,\n    \"videoFileId\": 19,  \n    \"durationSeconds\": 600,\n    \"isFreePreview\": false,\n    \"isPreview\": false,\n    \"position\": 1\n  }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/instructor/courses/:courseId/lessons",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"instructor",
+										"courses",
+										":courseId",
+										"lessons"
+									],
+									"variable": [
+										{
+											"key": "courseId",
+											"value": "6"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Create lesson",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"courseSectionId\": 8,\n    \"title\": \"Lesson 1 - Vocab\",\n    \"lessonType\": \"VIDEO\",\n    \"contentText\": null,\n    \"videoFileId\": 19,  \n    \"durationSeconds\": 600,\n    \"isFreePreview\": false,\n    \"isPreview\": false,\n    \"position\": 1\n  }",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseURL}}/instructor/courses/:courseId/lessons",
+											"host": [
+												"{{baseURL}}"
+											],
+											"path": [
+												"instructor",
+												"courses",
+												":courseId",
+												"lessons"
+											],
+											"variable": [
+												{
+													"key": "courseId",
+													"value": "6"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": null,
+									"header": [
+										{
+											"key": "Vary",
+											"value": "Origin"
+										},
+										{
+											"key": "Vary",
+											"value": "Access-Control-Request-Method"
+										},
+										{
+											"key": "Vary",
+											"value": "Access-Control-Request-Headers"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "0"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Tue, 06 Jan 2026 17:29:34 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"code\": \"00\",\n    \"message\": null,\n    \"data\": {\n        \"id\": 6,\n        \"title\": \"ReactJs Masterclass (Updated)\",\n        \"slug\": \"reactjs-masterclass\",\n        \"shortDescription\": \"Updated short desc\",\n        \"description\": \"Updated full desc\",\n        \"level\": \"INTERMEDIATE\",\n        \"language\": \"VI\",\n        \"status\": \"PUBLISHED\",\n        \"priceCents\": 0,\n        \"publishedAt\": \"2026-01-07T00:25:03\",\n        \"ratingAvg\": 0,\n        \"ratingCount\": 0,\n        \"category\": {\n            \"id\": 2,\n            \"name\": \"Development\",\n            \"slug\": \"development\",\n            \"parentId\": null,\n            \"description\": \"Software dev\",\n            \"position\": 1\n        },\n        \"tags\": [\n            {\n                \"id\": 1,\n                \"name\": \"Spring\",\n                \"slug\": \"spring\"\n            },\n            {\n                \"id\": 2,\n                \"name\": \"Java\",\n                \"slug\": \"java\"\n            }\n        ],\n        \"thumbnail\": {\n            \"id\": 22,\n            \"storageProvider\": \"MINIO\",\n            \"bucket\": \"lms-files\",\n            \"objectKey\": \"images/0f7e13ffee5845cc83ab5bff1e224c5d.jpg\",\n            \"originalName\": \"Nitro_Wallpaper_05_3840x2400.jpg\",\n            \"contentType\": \"image/jpeg\",\n            \"sizeBytes\": 3480308,\n            \"checksumSha256\": \"6749a5c70011ccf944ce4f12544abeebf7522e1895761c2e0a7ca237b590794a\",\n            \"isPublic\": false,\n            \"accessUrl\": null,\n            \"status\": \"ATTACHED\",\n            \"purpose\": \"THUMBNAIL\",\n            \"courseId\": 6,\n            \"lessonId\": null\n        },\n        \"introVideo\": {\n            \"id\": 21,\n            \"storageProvider\": \"MINIO\",\n            \"bucket\": \"lms-files\",\n            \"objectKey\": \"videos/9285a41662074c96a003426c29905d35.mp4\",\n            \"originalName\": \"test0601-1.mp4\",\n            \"contentType\": \"video/mp4\",\n            \"sizeBytes\": 58676323,\n            \"checksumSha256\": \"\\\"e413e579e3d8a57efe181b8d5be3934f\\\"\",\n            \"isPublic\": false,\n            \"accessUrl\": null,\n            \"status\": \"ATTACHED\",\n            \"purpose\": \"INTRO_VIDEO\",\n            \"courseId\": 6,\n            \"lessonId\": null\n        },\n        \"instructors\": [\n            {\n                \"id\": 4,\n                \"fullName\": \"My New Name\",\n                \"avatarFile\": {\n                    \"id\": 3,\n                    \"storageProvider\": \"MINIO\",\n                    \"bucket\": \"lms-files\",\n                    \"objectKey\": \"images/6b71b400bab84d90b1f188ea057d1e3c.jpg\",\n                    \"originalName\": \"Nitro_Wallpaper_01_3840x2400.jpg\",\n                    \"contentType\": \"image/jpeg\",\n                    \"sizeBytes\": 4114576,\n                    \"checksumSha256\": \"a7583fdee261ce58a2ec91b64d6bd715a810645e8550efdd8c3a5a1c12815268\",\n                    \"isPublic\": false,\n                    \"accessUrl\": null,\n                    \"status\": \"ATTACHED\",\n                    \"purpose\": \"DOCUMENT\",\n                    \"courseId\": null,\n                    \"lessonId\": null\n                }\n            }\n        ],\n        \"sections\": [\n            {\n                \"id\": 9,\n                \"title\": \"Section 2 - End\",\n                \"position\": 1,\n                \"lessons\": []\n            },\n            {\n                \"id\": 8,\n                \"title\": \"Section 1 - Intro Updated\",\n                \"position\": 2,\n                \"lessons\": [\n                    {\n                        \"id\": 7,\n                        \"title\": \"Lesson 1 - Vocab\",\n                        \"lessonType\": \"VIDEO\",\n                        \"durationSeconds\": 600,\n                        \"isPreview\": false,\n                        \"documents\": []\n                    }\n                ]\n            }\n        ],\n        \"courseDocuments\": []\n    }\n}"
+								}
+							]
+						},
+						{
+							"name": "Update lesson",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ADMIN_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"courseSectionId\": 8,\n    \"title\": \"Lesson 1 - Updated\",\n    \"lessonType\": \"ARTICLE\",\n    \"contentText\": \"<p>Updated article content</p>\",\n    \"videoFileId\": null,\n    \"durationSeconds\": 300,\n    \"isFreePreview\": true,\n    \"isPreview\": true,\n    \"position\": 1\n  }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/instructor/courses/:courseId/lessons/:lessonId",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"instructor",
+										"courses",
+										":courseId",
+										"lessons",
+										":lessonId"
+									],
+									"variable": [
+										{
+											"key": "courseId",
+											"value": "6"
+										},
+										{
+											"key": "lessonId",
+											"value": "7"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Update lesson",
+									"originalRequest": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"courseSectionId\": 8,\n    \"title\": \"Lesson 1 - Updated\",\n    \"lessonType\": \"ARTICLE\",\n    \"contentText\": \"<p>Updated article content</p>\",\n    \"videoFileId\": null,\n    \"durationSeconds\": 300,\n    \"isFreePreview\": true,\n    \"isPreview\": true,\n    \"position\": 1\n  }",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseURL}}/instructor/courses/:courseId/lessons/:lessonId",
+											"host": [
+												"{{baseURL}}"
+											],
+											"path": [
+												"instructor",
+												"courses",
+												":courseId",
+												"lessons",
+												":lessonId"
+											],
+											"variable": [
+												{
+													"key": "courseId",
+													"value": "6"
+												},
+												{
+													"key": "lessonId",
+													"value": "7"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": null,
+									"header": [
+										{
+											"key": "Vary",
+											"value": "Origin"
+										},
+										{
+											"key": "Vary",
+											"value": "Access-Control-Request-Method"
+										},
+										{
+											"key": "Vary",
+											"value": "Access-Control-Request-Headers"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "0"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Tue, 06 Jan 2026 17:30:55 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"code\": \"00\",\n    \"message\": null,\n    \"data\": {\n        \"id\": 6,\n        \"title\": \"ReactJs Masterclass (Updated)\",\n        \"slug\": \"reactjs-masterclass\",\n        \"shortDescription\": \"Updated short desc\",\n        \"description\": \"Updated full desc\",\n        \"level\": \"INTERMEDIATE\",\n        \"language\": \"VI\",\n        \"status\": \"PUBLISHED\",\n        \"priceCents\": 0,\n        \"publishedAt\": \"2026-01-07T00:25:03\",\n        \"ratingAvg\": 0,\n        \"ratingCount\": 0,\n        \"category\": {\n            \"id\": 2,\n            \"name\": \"Development\",\n            \"slug\": \"development\",\n            \"parentId\": null,\n            \"description\": \"Software dev\",\n            \"position\": 1\n        },\n        \"tags\": [\n            {\n                \"id\": 1,\n                \"name\": \"Spring\",\n                \"slug\": \"spring\"\n            },\n            {\n                \"id\": 2,\n                \"name\": \"Java\",\n                \"slug\": \"java\"\n            }\n        ],\n        \"thumbnail\": {\n            \"id\": 22,\n            \"storageProvider\": \"MINIO\",\n            \"bucket\": \"lms-files\",\n            \"objectKey\": \"images/0f7e13ffee5845cc83ab5bff1e224c5d.jpg\",\n            \"originalName\": \"Nitro_Wallpaper_05_3840x2400.jpg\",\n            \"contentType\": \"image/jpeg\",\n            \"sizeBytes\": 3480308,\n            \"checksumSha256\": \"6749a5c70011ccf944ce4f12544abeebf7522e1895761c2e0a7ca237b590794a\",\n            \"isPublic\": false,\n            \"accessUrl\": null,\n            \"status\": \"ATTACHED\",\n            \"purpose\": \"THUMBNAIL\",\n            \"courseId\": 6,\n            \"lessonId\": null\n        },\n        \"introVideo\": {\n            \"id\": 21,\n            \"storageProvider\": \"MINIO\",\n            \"bucket\": \"lms-files\",\n            \"objectKey\": \"videos/9285a41662074c96a003426c29905d35.mp4\",\n            \"originalName\": \"test0601-1.mp4\",\n            \"contentType\": \"video/mp4\",\n            \"sizeBytes\": 58676323,\n            \"checksumSha256\": \"\\\"e413e579e3d8a57efe181b8d5be3934f\\\"\",\n            \"isPublic\": false,\n            \"accessUrl\": null,\n            \"status\": \"ATTACHED\",\n            \"purpose\": \"INTRO_VIDEO\",\n            \"courseId\": 6,\n            \"lessonId\": null\n        },\n        \"instructors\": [\n            {\n                \"id\": 4,\n                \"fullName\": \"My New Name\",\n                \"avatarFile\": {\n                    \"id\": 3,\n                    \"storageProvider\": \"MINIO\",\n                    \"bucket\": \"lms-files\",\n                    \"objectKey\": \"images/6b71b400bab84d90b1f188ea057d1e3c.jpg\",\n                    \"originalName\": \"Nitro_Wallpaper_01_3840x2400.jpg\",\n                    \"contentType\": \"image/jpeg\",\n                    \"sizeBytes\": 4114576,\n                    \"checksumSha256\": \"a7583fdee261ce58a2ec91b64d6bd715a810645e8550efdd8c3a5a1c12815268\",\n                    \"isPublic\": false,\n                    \"accessUrl\": null,\n                    \"status\": \"ATTACHED\",\n                    \"purpose\": \"DOCUMENT\",\n                    \"courseId\": null,\n                    \"lessonId\": null\n                }\n            }\n        ],\n        \"sections\": [\n            {\n                \"id\": 9,\n                \"title\": \"Section 2 - End\",\n                \"position\": 1,\n                \"lessons\": []\n            },\n            {\n                \"id\": 8,\n                \"title\": \"Section 1 - Intro Updated\",\n                \"position\": 2,\n                \"lessons\": [\n                    {\n                        \"id\": 7,\n                        \"title\": \"Lesson 1 - Updated\",\n                        \"lessonType\": \"ARTICLE\",\n                        \"durationSeconds\": 300,\n                        \"isPreview\": true,\n                        \"documents\": []\n                    }\n                ]\n            }\n        ],\n        \"courseDocuments\": []\n    }\n}"
+								}
+							]
+						},
+						{
+							"name": "Delete lesson",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{authToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/instructor/courses/:courseId/lessons/:lessonId",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"instructor",
+										"courses",
+										":courseId",
+										"lessons",
+										":lessonId"
+									],
+									"variable": [
+										{
+											"key": "courseId",
+											"value": "3"
+										},
+										{
+											"key": "lessonId",
+											"value": "4"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Reorder lessons",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ADMIN_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"items\": [\n      {\"id\": 7, \"position\": 1}\n    ]\n  }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/instructor/courses/:courseId/lessons/reorder",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"instructor",
+										"courses",
+										":courseId",
+										"lessons",
+										"reorder"
+									],
+									"variable": [
+										{
+											"key": "courseId",
+											"value": "6"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Course documents",
+					"item": [
+						{
+							"name": "Create",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ADMIN_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"uploadedFileId\": 20, \n    \"title\": \"Syllabus PDF\",\n    \"position\": 1\n  }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/instructor/courses/:courseId/documents",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"instructor",
+										"courses",
+										":courseId",
+										"documents"
+									],
+									"variable": [
+										{
+											"key": "courseId",
+											"value": "6"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Create",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"uploadedFileId\": 20, \n    \"title\": \"Syllabus PDF\",\n    \"position\": 1\n  }",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseURL}}/instructor/courses/:courseId/documents",
+											"host": [
+												"{{baseURL}}"
+											],
+											"path": [
+												"instructor",
+												"courses",
+												":courseId",
+												"documents"
+											],
+											"variable": [
+												{
+													"key": "courseId",
+													"value": "6"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": null,
+									"header": [
+										{
+											"key": "Vary",
+											"value": "Origin"
+										},
+										{
+											"key": "Vary",
+											"value": "Access-Control-Request-Method"
+										},
+										{
+											"key": "Vary",
+											"value": "Access-Control-Request-Headers"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "0"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Tue, 06 Jan 2026 17:33:51 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"code\": \"00\",\n    \"message\": null,\n    \"data\": {\n        \"id\": 6,\n        \"title\": \"ReactJs Masterclass (Updated)\",\n        \"slug\": \"reactjs-masterclass\",\n        \"shortDescription\": \"Updated short desc\",\n        \"description\": \"Updated full desc\",\n        \"level\": \"INTERMEDIATE\",\n        \"language\": \"VI\",\n        \"status\": \"PUBLISHED\",\n        \"priceCents\": 0,\n        \"publishedAt\": \"2026-01-07T00:25:03\",\n        \"ratingAvg\": 0,\n        \"ratingCount\": 0,\n        \"category\": {\n            \"id\": 2,\n            \"name\": \"Development\",\n            \"slug\": \"development\",\n            \"parentId\": null,\n            \"description\": \"Software dev\",\n            \"position\": 1\n        },\n        \"tags\": [\n            {\n                \"id\": 1,\n                \"name\": \"Spring\",\n                \"slug\": \"spring\"\n            },\n            {\n                \"id\": 2,\n                \"name\": \"Java\",\n                \"slug\": \"java\"\n            }\n        ],\n        \"thumbnail\": {\n            \"id\": 22,\n            \"storageProvider\": \"MINIO\",\n            \"bucket\": \"lms-files\",\n            \"objectKey\": \"images/0f7e13ffee5845cc83ab5bff1e224c5d.jpg\",\n            \"originalName\": \"Nitro_Wallpaper_05_3840x2400.jpg\",\n            \"contentType\": \"image/jpeg\",\n            \"sizeBytes\": 3480308,\n            \"checksumSha256\": \"6749a5c70011ccf944ce4f12544abeebf7522e1895761c2e0a7ca237b590794a\",\n            \"isPublic\": false,\n            \"accessUrl\": null,\n            \"status\": \"ATTACHED\",\n            \"purpose\": \"THUMBNAIL\",\n            \"courseId\": 6,\n            \"lessonId\": null\n        },\n        \"introVideo\": {\n            \"id\": 21,\n            \"storageProvider\": \"MINIO\",\n            \"bucket\": \"lms-files\",\n            \"objectKey\": \"videos/9285a41662074c96a003426c29905d35.mp4\",\n            \"originalName\": \"test0601-1.mp4\",\n            \"contentType\": \"video/mp4\",\n            \"sizeBytes\": 58676323,\n            \"checksumSha256\": \"\\\"e413e579e3d8a57efe181b8d5be3934f\\\"\",\n            \"isPublic\": false,\n            \"accessUrl\": null,\n            \"status\": \"ATTACHED\",\n            \"purpose\": \"INTRO_VIDEO\",\n            \"courseId\": 6,\n            \"lessonId\": null\n        },\n        \"instructors\": [\n            {\n                \"id\": 4,\n                \"fullName\": \"My New Name\",\n                \"avatarFile\": {\n                    \"id\": 3,\n                    \"storageProvider\": \"MINIO\",\n                    \"bucket\": \"lms-files\",\n                    \"objectKey\": \"images/6b71b400bab84d90b1f188ea057d1e3c.jpg\",\n                    \"originalName\": \"Nitro_Wallpaper_01_3840x2400.jpg\",\n                    \"contentType\": \"image/jpeg\",\n                    \"sizeBytes\": 4114576,\n                    \"checksumSha256\": \"a7583fdee261ce58a2ec91b64d6bd715a810645e8550efdd8c3a5a1c12815268\",\n                    \"isPublic\": false,\n                    \"accessUrl\": null,\n                    \"status\": \"ATTACHED\",\n                    \"purpose\": \"DOCUMENT\",\n                    \"courseId\": null,\n                    \"lessonId\": null\n                }\n            }\n        ],\n        \"sections\": [\n            {\n                \"id\": 9,\n                \"title\": \"Section 2 - End\",\n                \"position\": 1,\n                \"lessons\": []\n            },\n            {\n                \"id\": 8,\n                \"title\": \"Section 1 - Intro Updated\",\n                \"position\": 2,\n                \"lessons\": [\n                    {\n                        \"id\": 7,\n                        \"title\": \"Lesson 1 - Updated\",\n                        \"lessonType\": \"ARTICLE\",\n                        \"durationSeconds\": 300,\n                        \"isPreview\": true,\n                        \"documents\": []\n                    }\n                ]\n            }\n        ],\n        \"courseDocuments\": [\n            {\n                \"id\": 2,\n                \"title\": \"Syllabus PDF\",\n                \"position\": 1,\n                \"file\": {\n                    \"id\": 20,\n                    \"storageProvider\": \"MINIO\",\n                    \"bucket\": \"lms-files\",\n                    \"objectKey\": \"other/51c1be8e14fe4bdf87c7adf870d3440e.pdf\",\n                    \"originalName\": \"Chapter 1. Introduction.pdf\",\n                    \"contentType\": \"application/pdf\",\n                    \"sizeBytes\": 1662675,\n                    \"checksumSha256\": \"19be92df27edfb7983d5d5fa8fa8a93c85a5ff9c625774264848e3fd252a4d77\",\n                    \"isPublic\": false,\n                    \"accessUrl\": null,\n                    \"status\": \"ATTACHED\",\n                    \"purpose\": \"DOCUMENT\",\n                    \"courseId\": 6,\n                    \"lessonId\": null\n                }\n            }\n        ]\n    }\n}"
+								}
+							]
+						},
+						{
+							"name": "Update",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ADMIN_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"uploadedFileId\": 20 ,\n    \"title\": \"Syllabus v2\",\n    \"position\": 2\n  }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/instructor/courses/:courseId/documents/:documentId",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"instructor",
+										"courses",
+										":courseId",
+										"documents",
+										":documentId"
+									],
+									"variable": [
+										{
+											"key": "courseId",
+											"value": "6"
+										},
+										{
+											"key": "documentId",
+											"value": "2"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Update",
+									"originalRequest": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"uploadedFileId\": 20 ,\n    \"title\": \"Syllabus v2\",\n    \"position\": 2\n  }",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseURL}}/instructor/courses/:courseId/documents/:documentId",
+											"host": [
+												"{{baseURL}}"
+											],
+											"path": [
+												"instructor",
+												"courses",
+												":courseId",
+												"documents",
+												":documentId"
+											],
+											"variable": [
+												{
+													"key": "courseId",
+													"value": "6"
+												},
+												{
+													"key": "documentId",
+													"value": "2"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": null,
+									"header": [
+										{
+											"key": "Vary",
+											"value": "Origin"
+										},
+										{
+											"key": "Vary",
+											"value": "Access-Control-Request-Method"
+										},
+										{
+											"key": "Vary",
+											"value": "Access-Control-Request-Headers"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "0"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Tue, 06 Jan 2026 17:36:18 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"code\": \"00\",\n    \"message\": null,\n    \"data\": {\n        \"id\": 6,\n        \"title\": \"ReactJs Masterclass (Updated)\",\n        \"slug\": \"reactjs-masterclass\",\n        \"shortDescription\": \"Updated short desc\",\n        \"description\": \"Updated full desc\",\n        \"level\": \"INTERMEDIATE\",\n        \"language\": \"VI\",\n        \"status\": \"PUBLISHED\",\n        \"priceCents\": 0,\n        \"publishedAt\": \"2026-01-07T00:25:03\",\n        \"ratingAvg\": 0,\n        \"ratingCount\": 0,\n        \"category\": {\n            \"id\": 2,\n            \"name\": \"Development\",\n            \"slug\": \"development\",\n            \"parentId\": null,\n            \"description\": \"Software dev\",\n            \"position\": 1\n        },\n        \"tags\": [\n            {\n                \"id\": 1,\n                \"name\": \"Spring\",\n                \"slug\": \"spring\"\n            },\n            {\n                \"id\": 2,\n                \"name\": \"Java\",\n                \"slug\": \"java\"\n            }\n        ],\n        \"thumbnail\": {\n            \"id\": 22,\n            \"storageProvider\": \"MINIO\",\n            \"bucket\": \"lms-files\",\n            \"objectKey\": \"images/0f7e13ffee5845cc83ab5bff1e224c5d.jpg\",\n            \"originalName\": \"Nitro_Wallpaper_05_3840x2400.jpg\",\n            \"contentType\": \"image/jpeg\",\n            \"sizeBytes\": 3480308,\n            \"checksumSha256\": \"6749a5c70011ccf944ce4f12544abeebf7522e1895761c2e0a7ca237b590794a\",\n            \"isPublic\": false,\n            \"accessUrl\": null,\n            \"status\": \"ATTACHED\",\n            \"purpose\": \"THUMBNAIL\",\n            \"courseId\": 6,\n            \"lessonId\": null\n        },\n        \"introVideo\": {\n            \"id\": 21,\n            \"storageProvider\": \"MINIO\",\n            \"bucket\": \"lms-files\",\n            \"objectKey\": \"videos/9285a41662074c96a003426c29905d35.mp4\",\n            \"originalName\": \"test0601-1.mp4\",\n            \"contentType\": \"video/mp4\",\n            \"sizeBytes\": 58676323,\n            \"checksumSha256\": \"\\\"e413e579e3d8a57efe181b8d5be3934f\\\"\",\n            \"isPublic\": false,\n            \"accessUrl\": null,\n            \"status\": \"ATTACHED\",\n            \"purpose\": \"INTRO_VIDEO\",\n            \"courseId\": 6,\n            \"lessonId\": null\n        },\n        \"instructors\": [\n            {\n                \"id\": 4,\n                \"fullName\": \"My New Name\",\n                \"avatarFile\": {\n                    \"id\": 3,\n                    \"storageProvider\": \"MINIO\",\n                    \"bucket\": \"lms-files\",\n                    \"objectKey\": \"images/6b71b400bab84d90b1f188ea057d1e3c.jpg\",\n                    \"originalName\": \"Nitro_Wallpaper_01_3840x2400.jpg\",\n                    \"contentType\": \"image/jpeg\",\n                    \"sizeBytes\": 4114576,\n                    \"checksumSha256\": \"a7583fdee261ce58a2ec91b64d6bd715a810645e8550efdd8c3a5a1c12815268\",\n                    \"isPublic\": false,\n                    \"accessUrl\": null,\n                    \"status\": \"ATTACHED\",\n                    \"purpose\": \"DOCUMENT\",\n                    \"courseId\": null,\n                    \"lessonId\": null\n                }\n            }\n        ],\n        \"sections\": [\n            {\n                \"id\": 9,\n                \"title\": \"Section 2 - End\",\n                \"position\": 1,\n                \"lessons\": []\n            },\n            {\n                \"id\": 8,\n                \"title\": \"Section 1 - Intro Updated\",\n                \"position\": 2,\n                \"lessons\": [\n                    {\n                        \"id\": 7,\n                        \"title\": \"Lesson 1 - Updated\",\n                        \"lessonType\": \"ARTICLE\",\n                        \"durationSeconds\": 300,\n                        \"isPreview\": true,\n                        \"documents\": []\n                    }\n                ]\n            }\n        ],\n        \"courseDocuments\": [\n            {\n                \"id\": 2,\n                \"title\": \"Syllabus v2\",\n                \"position\": 2,\n                \"file\": {\n                    \"id\": 20,\n                    \"storageProvider\": \"MINIO\",\n                    \"bucket\": \"lms-files\",\n                    \"objectKey\": \"other/51c1be8e14fe4bdf87c7adf870d3440e.pdf\",\n                    \"originalName\": \"Chapter 1. Introduction.pdf\",\n                    \"contentType\": \"application/pdf\",\n                    \"sizeBytes\": 1662675,\n                    \"checksumSha256\": \"19be92df27edfb7983d5d5fa8fa8a93c85a5ff9c625774264848e3fd252a4d77\",\n                    \"isPublic\": false,\n                    \"accessUrl\": null,\n                    \"status\": \"ATTACHED\",\n                    \"purpose\": \"DOCUMENT\",\n                    \"courseId\": 6,\n                    \"lessonId\": null\n                }\n            }\n        ]\n    }\n}"
+								}
+							]
+						},
+						{
+							"name": "Delete",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{authToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/instructor/courses/:courseId/documents/:documentId",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"instructor",
+										"courses",
+										":courseId",
+										"documents",
+										":documentId"
+									],
+									"variable": [
+										{
+											"key": "courseId",
+											"value": "3"
+										},
+										{
+											"key": "documentId",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Lesson documents",
+					"item": [
+						{
+							"name": "Create",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ADMIN_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"uploadedFileId\": 23,\n    \"title\": \"Lesson handout\",\n    \"position\": 1\n  }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/instructor/courses/:courseId/lessons/:lessonId/documents",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"instructor",
+										"courses",
+										":courseId",
+										"lessons",
+										":lessonId",
+										"documents"
+									],
+									"variable": [
+										{
+											"key": "courseId",
+											"value": "6"
+										},
+										{
+											"key": "lessonId",
+											"value": "7"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Create",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"uploadedFileId\": 23,\n    \"title\": \"Lesson handout\",\n    \"position\": 1\n  }",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseURL}}/instructor/courses/:courseId/lessons/:lessonId/documents",
+											"host": [
+												"{{baseURL}}"
+											],
+											"path": [
+												"instructor",
+												"courses",
+												":courseId",
+												"lessons",
+												":lessonId",
+												"documents"
+											],
+											"variable": [
+												{
+													"key": "courseId",
+													"value": "6"
+												},
+												{
+													"key": "lessonId",
+													"value": "7"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": null,
+									"header": [
+										{
+											"key": "Vary",
+											"value": "Origin"
+										},
+										{
+											"key": "Vary",
+											"value": "Access-Control-Request-Method"
+										},
+										{
+											"key": "Vary",
+											"value": "Access-Control-Request-Headers"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "0"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Tue, 06 Jan 2026 17:39:26 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"code\": \"00\",\n    \"message\": null,\n    \"data\": {\n        \"id\": 6,\n        \"title\": \"ReactJs Masterclass (Updated)\",\n        \"slug\": \"reactjs-masterclass\",\n        \"shortDescription\": \"Updated short desc\",\n        \"description\": \"Updated full desc\",\n        \"level\": \"INTERMEDIATE\",\n        \"language\": \"VI\",\n        \"status\": \"PUBLISHED\",\n        \"priceCents\": 0,\n        \"publishedAt\": \"2026-01-07T00:25:03\",\n        \"ratingAvg\": 0,\n        \"ratingCount\": 0,\n        \"category\": {\n            \"id\": 2,\n            \"name\": \"Development\",\n            \"slug\": \"development\",\n            \"parentId\": null,\n            \"description\": \"Software dev\",\n            \"position\": 1\n        },\n        \"tags\": [\n            {\n                \"id\": 1,\n                \"name\": \"Spring\",\n                \"slug\": \"spring\"\n            },\n            {\n                \"id\": 2,\n                \"name\": \"Java\",\n                \"slug\": \"java\"\n            }\n        ],\n        \"thumbnail\": {\n            \"id\": 22,\n            \"storageProvider\": \"MINIO\",\n            \"bucket\": \"lms-files\",\n            \"objectKey\": \"images/0f7e13ffee5845cc83ab5bff1e224c5d.jpg\",\n            \"originalName\": \"Nitro_Wallpaper_05_3840x2400.jpg\",\n            \"contentType\": \"image/jpeg\",\n            \"sizeBytes\": 3480308,\n            \"checksumSha256\": \"6749a5c70011ccf944ce4f12544abeebf7522e1895761c2e0a7ca237b590794a\",\n            \"isPublic\": false,\n            \"accessUrl\": null,\n            \"status\": \"ATTACHED\",\n            \"purpose\": \"THUMBNAIL\",\n            \"courseId\": 6,\n            \"lessonId\": null\n        },\n        \"introVideo\": {\n            \"id\": 21,\n            \"storageProvider\": \"MINIO\",\n            \"bucket\": \"lms-files\",\n            \"objectKey\": \"videos/9285a41662074c96a003426c29905d35.mp4\",\n            \"originalName\": \"test0601-1.mp4\",\n            \"contentType\": \"video/mp4\",\n            \"sizeBytes\": 58676323,\n            \"checksumSha256\": \"\\\"e413e579e3d8a57efe181b8d5be3934f\\\"\",\n            \"isPublic\": false,\n            \"accessUrl\": null,\n            \"status\": \"ATTACHED\",\n            \"purpose\": \"INTRO_VIDEO\",\n            \"courseId\": 6,\n            \"lessonId\": null\n        },\n        \"instructors\": [\n            {\n                \"id\": 4,\n                \"fullName\": \"My New Name\",\n                \"avatarFile\": {\n                    \"id\": 3,\n                    \"storageProvider\": \"MINIO\",\n                    \"bucket\": \"lms-files\",\n                    \"objectKey\": \"images/6b71b400bab84d90b1f188ea057d1e3c.jpg\",\n                    \"originalName\": \"Nitro_Wallpaper_01_3840x2400.jpg\",\n                    \"contentType\": \"image/jpeg\",\n                    \"sizeBytes\": 4114576,\n                    \"checksumSha256\": \"a7583fdee261ce58a2ec91b64d6bd715a810645e8550efdd8c3a5a1c12815268\",\n                    \"isPublic\": false,\n                    \"accessUrl\": null,\n                    \"status\": \"ATTACHED\",\n                    \"purpose\": \"DOCUMENT\",\n                    \"courseId\": null,\n                    \"lessonId\": null\n                }\n            }\n        ],\n        \"sections\": [\n            {\n                \"id\": 9,\n                \"title\": \"Section 2 - End\",\n                \"position\": 1,\n                \"lessons\": []\n            },\n            {\n                \"id\": 8,\n                \"title\": \"Section 1 - Intro Updated\",\n                \"position\": 2,\n                \"lessons\": [\n                    {\n                        \"id\": 7,\n                        \"title\": \"Lesson 1 - Updated\",\n                        \"lessonType\": \"ARTICLE\",\n                        \"durationSeconds\": 300,\n                        \"isPreview\": true,\n                        \"documents\": [\n                            {\n                                \"id\": 2,\n                                \"title\": \"Lesson handout\",\n                                \"position\": 1,\n                                \"file\": {\n                                    \"id\": 23,\n                                    \"storageProvider\": \"MINIO\",\n                                    \"bucket\": \"lms-files\",\n                                    \"objectKey\": \"other/2cec2994b4044dd5a1c322fb7957000d.pdf\",\n                                    \"originalName\": \"Chapter 2.1. Archimate.pdf\",\n                                    \"contentType\": \"application/pdf\",\n                                    \"sizeBytes\": 1703258,\n                                    \"checksumSha256\": \"90fbfa48a1ea0a021cb33429ae41beadc6101ff2fb48724d5236fb58c869fa81\",\n                                    \"isPublic\": false,\n                                    \"accessUrl\": null,\n                                    \"status\": \"ATTACHED\",\n                                    \"purpose\": \"DOCUMENT\",\n                                    \"courseId\": 6,\n                                    \"lessonId\": 7\n                                }\n                            }\n                        ]\n                    }\n                ]\n            }\n        ],\n        \"courseDocuments\": [\n            {\n                \"id\": 2,\n                \"title\": \"Syllabus v2\",\n                \"position\": 2,\n                \"file\": {\n                    \"id\": 20,\n                    \"storageProvider\": \"MINIO\",\n                    \"bucket\": \"lms-files\",\n                    \"objectKey\": \"other/51c1be8e14fe4bdf87c7adf870d3440e.pdf\",\n                    \"originalName\": \"Chapter 1. Introduction.pdf\",\n                    \"contentType\": \"application/pdf\",\n                    \"sizeBytes\": 1662675,\n                    \"checksumSha256\": \"19be92df27edfb7983d5d5fa8fa8a93c85a5ff9c625774264848e3fd252a4d77\",\n                    \"isPublic\": false,\n                    \"accessUrl\": null,\n                    \"status\": \"ATTACHED\",\n                    \"purpose\": \"DOCUMENT\",\n                    \"courseId\": 6,\n                    \"lessonId\": null\n                }\n            }\n        ]\n    }\n}"
+								}
+							]
+						},
+						{
+							"name": "Update",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ADMIN_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"uploadedFileId\": 23,\n    \"title\": \"Lesson handout v2\",\n    \"position\": 2\n  }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/instructor/courses/:courseId/lessons/:lessonId/documents/:documentId",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"instructor",
+										"courses",
+										":courseId",
+										"lessons",
+										":lessonId",
+										"documents",
+										":documentId"
+									],
+									"variable": [
+										{
+											"key": "courseId",
+											"value": "6"
+										},
+										{
+											"key": "lessonId",
+											"value": "7"
+										},
+										{
+											"key": "documentId",
+											"value": "2"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Update",
+									"originalRequest": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"uploadedFileId\": 23,\n    \"title\": \"Lesson handout v2\",\n    \"position\": 2\n  }",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseURL}}/instructor/courses/:courseId/lessons/:lessonId/documents/:documentId",
+											"host": [
+												"{{baseURL}}"
+											],
+											"path": [
+												"instructor",
+												"courses",
+												":courseId",
+												"lessons",
+												":lessonId",
+												"documents",
+												":documentId"
+											],
+											"variable": [
+												{
+													"key": "courseId",
+													"value": "6"
+												},
+												{
+													"key": "lessonId",
+													"value": "7"
+												},
+												{
+													"key": "documentId",
+													"value": "2"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": null,
+									"header": [
+										{
+											"key": "Vary",
+											"value": "Origin"
+										},
+										{
+											"key": "Vary",
+											"value": "Access-Control-Request-Method"
+										},
+										{
+											"key": "Vary",
+											"value": "Access-Control-Request-Headers"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "0"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Tue, 06 Jan 2026 17:41:13 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"code\": \"00\",\n    \"message\": null,\n    \"data\": {\n        \"id\": 6,\n        \"title\": \"ReactJs Masterclass (Updated)\",\n        \"slug\": \"reactjs-masterclass\",\n        \"shortDescription\": \"Updated short desc\",\n        \"description\": \"Updated full desc\",\n        \"level\": \"INTERMEDIATE\",\n        \"language\": \"VI\",\n        \"status\": \"PUBLISHED\",\n        \"priceCents\": 0,\n        \"publishedAt\": \"2026-01-07T00:25:03\",\n        \"ratingAvg\": 0,\n        \"ratingCount\": 0,\n        \"category\": {\n            \"id\": 2,\n            \"name\": \"Development\",\n            \"slug\": \"development\",\n            \"parentId\": null,\n            \"description\": \"Software dev\",\n            \"position\": 1\n        },\n        \"tags\": [\n            {\n                \"id\": 1,\n                \"name\": \"Spring\",\n                \"slug\": \"spring\"\n            },\n            {\n                \"id\": 2,\n                \"name\": \"Java\",\n                \"slug\": \"java\"\n            }\n        ],\n        \"thumbnail\": {\n            \"id\": 22,\n            \"storageProvider\": \"MINIO\",\n            \"bucket\": \"lms-files\",\n            \"objectKey\": \"images/0f7e13ffee5845cc83ab5bff1e224c5d.jpg\",\n            \"originalName\": \"Nitro_Wallpaper_05_3840x2400.jpg\",\n            \"contentType\": \"image/jpeg\",\n            \"sizeBytes\": 3480308,\n            \"checksumSha256\": \"6749a5c70011ccf944ce4f12544abeebf7522e1895761c2e0a7ca237b590794a\",\n            \"isPublic\": false,\n            \"accessUrl\": null,\n            \"status\": \"ATTACHED\",\n            \"purpose\": \"THUMBNAIL\",\n            \"courseId\": 6,\n            \"lessonId\": null\n        },\n        \"introVideo\": {\n            \"id\": 21,\n            \"storageProvider\": \"MINIO\",\n            \"bucket\": \"lms-files\",\n            \"objectKey\": \"videos/9285a41662074c96a003426c29905d35.mp4\",\n            \"originalName\": \"test0601-1.mp4\",\n            \"contentType\": \"video/mp4\",\n            \"sizeBytes\": 58676323,\n            \"checksumSha256\": \"\\\"e413e579e3d8a57efe181b8d5be3934f\\\"\",\n            \"isPublic\": false,\n            \"accessUrl\": null,\n            \"status\": \"ATTACHED\",\n            \"purpose\": \"INTRO_VIDEO\",\n            \"courseId\": 6,\n            \"lessonId\": null\n        },\n        \"instructors\": [\n            {\n                \"id\": 4,\n                \"fullName\": \"My New Name\",\n                \"avatarFile\": {\n                    \"id\": 3,\n                    \"storageProvider\": \"MINIO\",\n                    \"bucket\": \"lms-files\",\n                    \"objectKey\": \"images/6b71b400bab84d90b1f188ea057d1e3c.jpg\",\n                    \"originalName\": \"Nitro_Wallpaper_01_3840x2400.jpg\",\n                    \"contentType\": \"image/jpeg\",\n                    \"sizeBytes\": 4114576,\n                    \"checksumSha256\": \"a7583fdee261ce58a2ec91b64d6bd715a810645e8550efdd8c3a5a1c12815268\",\n                    \"isPublic\": false,\n                    \"accessUrl\": null,\n                    \"status\": \"ATTACHED\",\n                    \"purpose\": \"DOCUMENT\",\n                    \"courseId\": null,\n                    \"lessonId\": null\n                }\n            }\n        ],\n        \"sections\": [\n            {\n                \"id\": 9,\n                \"title\": \"Section 2 - End\",\n                \"position\": 1,\n                \"lessons\": []\n            },\n            {\n                \"id\": 8,\n                \"title\": \"Section 1 - Intro Updated\",\n                \"position\": 2,\n                \"lessons\": [\n                    {\n                        \"id\": 7,\n                        \"title\": \"Lesson 1 - Updated\",\n                        \"lessonType\": \"ARTICLE\",\n                        \"durationSeconds\": 300,\n                        \"isPreview\": true,\n                        \"documents\": [\n                            {\n                                \"id\": 2,\n                                \"title\": \"Lesson handout v2\",\n                                \"position\": 2,\n                                \"file\": {\n                                    \"id\": 23,\n                                    \"storageProvider\": \"MINIO\",\n                                    \"bucket\": \"lms-files\",\n                                    \"objectKey\": \"other/2cec2994b4044dd5a1c322fb7957000d.pdf\",\n                                    \"originalName\": \"Chapter 2.1. Archimate.pdf\",\n                                    \"contentType\": \"application/pdf\",\n                                    \"sizeBytes\": 1703258,\n                                    \"checksumSha256\": \"90fbfa48a1ea0a021cb33429ae41beadc6101ff2fb48724d5236fb58c869fa81\",\n                                    \"isPublic\": false,\n                                    \"accessUrl\": null,\n                                    \"status\": \"ATTACHED\",\n                                    \"purpose\": \"DOCUMENT\",\n                                    \"courseId\": 6,\n                                    \"lessonId\": 7\n                                }\n                            }\n                        ]\n                    }\n                ]\n            }\n        ],\n        \"courseDocuments\": [\n            {\n                \"id\": 2,\n                \"title\": \"Syllabus v2\",\n                \"position\": 2,\n                \"file\": {\n                    \"id\": 20,\n                    \"storageProvider\": \"MINIO\",\n                    \"bucket\": \"lms-files\",\n                    \"objectKey\": \"other/51c1be8e14fe4bdf87c7adf870d3440e.pdf\",\n                    \"originalName\": \"Chapter 1. Introduction.pdf\",\n                    \"contentType\": \"application/pdf\",\n                    \"sizeBytes\": 1662675,\n                    \"checksumSha256\": \"19be92df27edfb7983d5d5fa8fa8a93c85a5ff9c625774264848e3fd252a4d77\",\n                    \"isPublic\": false,\n                    \"accessUrl\": null,\n                    \"status\": \"ATTACHED\",\n                    \"purpose\": \"DOCUMENT\",\n                    \"courseId\": 6,\n                    \"lessonId\": null\n                }\n            }\n        ]\n    }\n}"
+								}
+							]
+						},
+						{
+							"name": "Delete",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{authToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/instructor/courses/:courseId/lessons/:lessonId/documents/:documentId",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"instructor",
+										"courses",
+										":courseId",
+										"lessons",
+										":lessonId",
+										"documents",
+										":documentId"
+									],
+									"variable": [
+										{
+											"key": "courseId",
+											"value": ""
+										},
+										{
+											"key": "lessonId",
+											"value": ""
+										},
+										{
+											"key": "documentId",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},

@@ -8,10 +8,13 @@ import RootLayout from "@/layouts/RootLayout";
 import StudentLayout from "@/layouts/StudentLayout";
 import AdminHome from "@/pages/admin/AdminHome";
 import AdminCategories from "@/pages/admin/AdminCategories";
+import AdminCourses from "@/pages/admin/AdminCourses";
+import AdminCurriculum from "@/pages/admin/AdminCurriculum";
 import AdminTags from "@/pages/admin/AdminTags";
 import LoginPage from "@/pages/auth/login";
 import RegisterPage from "@/pages/auth/register";
 import InstructorCourses from "@/pages/instructor/InstructorCourses";
+import InstructorCurriculum from "@/pages/instructor/InstructorCurriculum";
 import InstructorHome from "@/pages/instructor/InstructorHome";
 import CourseDetail from "@/pages/public/CourseDetail";
 import Home from "@/pages/public/Home";
@@ -80,6 +83,10 @@ export const router = createBrowserRouter([
         children: [
           { index: true, element: <InstructorHome /> },
           { path: "courses", element: <InstructorCourses /> },
+          {
+            path: "courses/:courseId/curriculum",
+            element: <InstructorCurriculum />,
+          },
         ],
       },
       {
@@ -93,6 +100,8 @@ export const router = createBrowserRouter([
         ),
         children: [
           { index: true, element: <AdminHome /> },
+          { path: "courses", element: <AdminCourses /> },
+          { path: "courses/:courseId/curriculum", element: <AdminCurriculum /> },
           { path: "categories", element: <AdminCategories /> },
           { path: "tags", element: <AdminTags /> },
         ],

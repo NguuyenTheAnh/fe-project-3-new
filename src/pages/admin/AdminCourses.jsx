@@ -118,7 +118,7 @@ const formatPrice = (priceCents, isFree) => {
   return "-";
 };
 
-export default function InstructorCourses() {
+export default function AdminCourses() {
   const { authUser } = useAuth();
   const [courses, setCourses] = useState([]);
   const [pageInfo, setPageInfo] = useState({
@@ -527,10 +527,10 @@ export default function InstructorCourses() {
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight text-slate-900">
-            Khóa học của tôi
+            Quản trị khóa học
           </h1>
           <p className="mt-1 text-sm text-slate-600">
-            Quản lý nội dung và trạng thái xuất bản khóa học.
+            Theo dõi, chỉnh sửa nội dung và trạng thái khóa học.
           </p>
         </div>
         <Button onClick={handleOpenCreate}>+ Tạo khóa học</Button>
@@ -630,7 +630,7 @@ export default function InstructorCourses() {
                     <td className="px-4 py-3 text-slate-700 whitespace-nowrap">{priceLabel}</td>
                     <td className="sticky right-0 z-10 bg-white px-4 py-3 text-right whitespace-nowrap group-hover:bg-slate-50">
                       <Link
-                        to={`/instructor/courses/${course.id}/curriculum`}
+                        to={`/admin/courses/${course.id}/curriculum`}
                         className="text-slate-700 hover:text-slate-900 hover:underline underline-offset-4"
                       >
                         Giáo trình

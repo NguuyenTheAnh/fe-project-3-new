@@ -1,4 +1,4 @@
-const DEFAULT_MESSAGE = "Có lỗi xảy ra, vui lòng thử lại.";
+﻿const DEFAULT_MESSAGE = "Có lỗi xảy ra, vui lòng thử lại.";
 
 export const unwrapResponse = (response) => {
   const payload = response?.data;

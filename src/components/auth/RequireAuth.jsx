@@ -8,7 +8,7 @@ export default function RequireAuth({ children }) {
   if (initializing) {
     return (
       <div className="p-6 text-sm text-slate-500">
-        Đang tải phiên đăng nhập...
+        Đang kiểm tra đăng nhập...
       </div>
     );
   }
