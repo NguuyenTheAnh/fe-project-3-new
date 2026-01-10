@@ -13,6 +13,7 @@ import {
   deleteLessonDocument,
   deleteSection,
   getLessonDetail,
+  reorderLessons,
   updateCourseDocument,
   updateLesson,
   updateLessonDocument,
@@ -93,6 +94,11 @@ export default function CourseCurriculum({ backTo, title }) {
   const [lessonDetailError, setLessonDetailError] = useState("");
   const [lessonDetail, setLessonDetail] = useState(null);
   const [lessonVideoUrl, setLessonVideoUrl] = useState("");
+  const [reorderModalOpen, setReorderModalOpen] = useState(false);
+  const [reorderSection, setReorderSection] = useState(null);
+  const [reorderItems, setReorderItems] = useState([]);
+  const [reorderError, setReorderError] = useState("");
+  const [reorderSaving, setReorderSaving] = useState(false);
 
   const loadCourse = useCallback(async () => {
     if (!courseId) return;
@@ -629,6 +635,76 @@ export default function CourseCurriculum({ backTo, title }) {
     setLessonVideoUrl("");
   };
 
+  const openReorderLessons = (section) => {
+    const lessons = Array.isArray(section?.lessons)
+      ? [...section.lessons].sort((a, b) => (a.position ?? 0) - (b.position ?? 0))
+      : [];
+    setReorderSection(section || null);
+    setReorderItems(
+      lessons.map((lesson, index) => ({
+        id: lesson.id,
+        title: lesson.title || `Bài học ${index + 1}`,
+        position: lesson.position ?? index + 1,
+      }))
+    );
+    setReorderError("");
+    setReorderModalOpen(true);
+  };
+
+  const closeReorderModal = () => {
+    setReorderModalOpen(false);
+    setReorderSection(null);
+    setReorderItems([]);
+    setReorderError("");
+    setReorderSaving(false);
+  };
+
+  const handleReorderChange = (lessonId, value) => {
+    setReorderItems((prev) =>
+      prev.map((item) =>
+        item.id === lessonId ? { ...item, position: value } : item
+      )
+    );
+  };
+
+  const handleReorderSubmit = async (event) => {
+    event.preventDefault();
+    if (!courseId || !reorderItems.length) {
+      closeReorderModal();
+      return;
+    }
+
+    const normalized = reorderItems.map((item) => ({
+      id: item.id,
+      position: Number(item.position),
+    }));
+
+    if (normalized.some((item) => !item.id || !Number.isFinite(item.position))) {
+      setReorderError("Vui lòng nhập vị trí hợp lệ.");
+      return;
+    }
+
+    const positions = normalized.map((item) => item.position);
+    const uniquePositions = new Set(positions);
+    if (uniquePositions.size !== positions.length) {
+      setReorderError("Vị trí bị trùng, vui lòng kiểm tra lại.");
+      return;
+    }
+
+    setReorderSaving(true);
+    setReorderError("");
+    try {
+      await reorderLessons(courseId, normalized);
+      setNotice({ type: "success", message: "Cập nhật thứ tự bài học thành công." });
+      closeReorderModal();
+      await loadCourse();
+    } catch (err) {
+      setReorderError(err?.message || "Không thể cập nhật thứ tự bài học.");
+    } finally {
+      setReorderSaving(false);
+    }
+  };
+
 
   return (
     <div className="mx-auto w-full max-w-[1200px] px-4 py-6">
@@ -783,6 +859,13 @@ export default function CourseCurriculum({ backTo, title }) {
                     >
                       + Thêm bài
                     </Button>
+                    <button
+                      type="button"
+                      onClick={() => openReorderLessons(section)}
+                      className="text-sm text-slate-700 hover:text-slate-900 hover:underline underline-offset-4"
+                    >
+                      Chỉnh thứ tự
+                    </button>
                     <button
                       type="button"
                       onClick={() => openEditSection(section)}
@@ -1525,6 +1608,73 @@ export default function CourseCurriculum({ backTo, title }) {
                 Đóng
               </button>
             </div>
+          </div>
+        </>
+      ) : null}
+
+      {reorderModalOpen ? (
+        <>
+          <div
+            className="fixed inset-0 z-50 bg-black/40"
+            onClick={closeReorderModal}
+          />
+          <div className="fixed left-1/2 top-1/2 z-50 w-[92vw] max-w-lg -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white p-6 shadow-xl">
+            <h2 className="text-lg font-semibold text-slate-900">
+              Chỉnh thứ tự bài học
+            </h2>
+            <p className="mt-1 text-sm text-slate-500">
+              {reorderSection?.title
+                ? `Chương: ${reorderSection.title}`
+                : "Cập nhật thứ tự bài học trong chương."}
+            </p>
+
+            <form className="mt-4 space-y-4" onSubmit={handleReorderSubmit}>
+              <div className="rounded-lg border border-slate-200 bg-slate-50/60 p-3">
+                {reorderItems.length ? (
+                  <div className="space-y-2">
+                    {reorderItems.map((item) => (
+                      <div
+                        key={item.id}
+                        className="flex items-center gap-3 rounded-lg border border-slate-200 bg-white px-3 py-2"
+                      >
+                        <div className="flex-1 text-sm text-slate-700 line-clamp-1">
+                          {item.title}
+                        </div>
+                        <Input
+                          type="number"
+                          value={item.position}
+                          onChange={(event) =>
+                            handleReorderChange(item.id, event.target.value)
+                          }
+                          className="h-9 w-20 rounded-lg px-2 text-sm"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-sm text-slate-500">
+                    Chưa có bài học để sắp xếp.
+                  </div>
+                )}
+              </div>
+
+              {reorderError ? (
+                <div className="text-sm text-red-600">{reorderError}</div>
+              ) : null}
+
+              <div className="mt-6 flex items-center justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={closeReorderModal}
+                  className="h-10 rounded-lg border border-slate-200 bg-white px-4 text-sm font-medium hover:bg-slate-50 transition inline-flex items-center justify-center"
+                >
+                  Hủy
+                </button>
+                <Button type="submit" disabled={reorderSaving}>
+                  {reorderSaving ? "Đang lưu..." : "Lưu thứ tự"}
+                </Button>
+              </div>
+            </form>
           </div>
         </>
       ) : null}
