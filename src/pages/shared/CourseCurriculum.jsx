@@ -1078,7 +1078,7 @@ export default function CourseCurriculum({ backTo, title }) {
             className="fixed inset-0 z-50 bg-black/40"
             onClick={closeSectionModal}
           />
-          <div className="fixed left-1/2 top-1/2 z-50 w-[92vw] max-w-lg -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white p-6 shadow-xl">
+          <div className="fixed left-1/2 top-1/2 z-50 w-[92vw] max-w-lg -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto">
             <h2 className="text-lg font-semibold text-slate-900">
               {sectionMode === "edit" ? "Sửa chương" : "Tạo chương"}
             </h2>
@@ -1136,7 +1136,7 @@ export default function CourseCurriculum({ backTo, title }) {
             className="fixed inset-0 z-50 bg-black/40"
             onClick={closeLessonModal}
           />
-          <div className="fixed left-1/2 top-1/2 z-50 w-[92vw] max-w-2xl -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white p-6 shadow-xl">
+          <div className="fixed left-1/2 top-1/2 z-50 w-[92vw] max-w-2xl -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto">
             <h2 className="text-lg font-semibold text-slate-900">
               {lessonMode === "edit" ? "Sửa bài học" : "Tạo bài học"}
             </h2>
@@ -1353,7 +1353,7 @@ export default function CourseCurriculum({ backTo, title }) {
             className="fixed inset-0 z-50 bg-black/40"
             onClick={closeDocumentModal}
           />
-          <div className="fixed left-1/2 top-1/2 z-50 w-[92vw] max-w-2xl -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white p-6 shadow-xl">
+          <div className="fixed left-1/2 top-1/2 z-50 w-[92vw] max-w-2xl -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto">
             <h2 className="text-lg font-semibold text-slate-900">
               {documentMode === "edit"
                 ? documentScope === "course"
@@ -1479,7 +1479,7 @@ export default function CourseCurriculum({ backTo, title }) {
             className="fixed inset-0 z-50 bg-black/40"
             onClick={handleCloseLessonDetail}
           />
-          <div className="fixed left-1/2 top-1/2 z-50 w-[92vw] max-w-5xl -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white p-6 shadow-xl">
+          <div className="fixed left-1/2 top-1/2 z-50 w-[92vw] max-w-5xl -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto">
             <h2 className="text-lg font-semibold text-slate-900">
               Chi tiết bài học
             </h2>
@@ -1618,7 +1618,7 @@ export default function CourseCurriculum({ backTo, title }) {
             className="fixed inset-0 z-50 bg-black/40"
             onClick={closeReorderModal}
           />
-          <div className="fixed left-1/2 top-1/2 z-50 w-[92vw] max-w-lg -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white p-6 shadow-xl">
+          <div className="fixed left-1/2 top-1/2 z-50 w-[92vw] max-w-lg -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto">
             <h2 className="text-lg font-semibold text-slate-900">
               Chỉnh thứ tự bài học
             </h2>

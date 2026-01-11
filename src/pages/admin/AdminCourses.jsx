@@ -745,7 +745,7 @@ export default function AdminCourses() {
             className="fixed inset-0 z-50 bg-black/40"
             onClick={handleCloseEdit}
           />
-          <div className="fixed left-1/2 top-1/2 z-50 w-[92vw] max-w-3xl -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white p-6 shadow-xl">
+          <div className="fixed left-1/2 top-1/2 z-50 w-[92vw] max-w-3xl -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto">
             <h2 className="text-lg font-semibold text-slate-900">
               {isEdit ? "Sửa khóa học" : "Tạo khóa học"}
             </h2>
@@ -1035,7 +1035,7 @@ export default function AdminCourses() {
             className="fixed inset-0 z-50 bg-black/40"
             onClick={handleCloseDetail}
           />
-          <div className="fixed left-1/2 top-1/2 z-50 w-[92vw] max-w-5xl -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white p-6 shadow-xl">
+          <div className="fixed left-1/2 top-1/2 z-50 w-[92vw] max-w-5xl -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto">
             <h2 className="text-lg font-semibold text-slate-900">
               Chi tiết khóa học
             </h2>
