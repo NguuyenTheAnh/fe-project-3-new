@@ -20,6 +20,7 @@ import {
   updateSection,
 } from "@/services/curriculum.service";
 import { getFileAccessUrl, uploadFileWithPresign } from "@/services/file.service";
+import LessonQuizManager from "@/pages/shared/LessonQuizManager";
 
 const SECTION_FORM_DEFAULT = {
   title: "",
@@ -89,6 +90,8 @@ export default function CourseCurriculum({ backTo, title }) {
   const [documentUploadMessage, setDocumentUploadMessage] = useState("");
   const [openingDocumentId, setOpeningDocumentId] = useState(null);
   const [openDocumentLessonIds, setOpenDocumentLessonIds] = useState([]);
+  const [quizModalOpen, setQuizModalOpen] = useState(false);
+  const [quizLesson, setQuizLesson] = useState(null);
   const [lessonDetailOpen, setLessonDetailOpen] = useState(false);
   const [lessonDetailLoading, setLessonDetailLoading] = useState(false);
   const [lessonDetailError, setLessonDetailError] = useState("");
@@ -601,6 +604,16 @@ export default function CourseCurriculum({ backTo, title }) {
     );
   };
 
+  const openQuizModal = (lesson) => {
+    setQuizLesson(lesson);
+    setQuizModalOpen(true);
+  };
+
+  const closeQuizModal = () => {
+    setQuizModalOpen(false);
+    setQuizLesson(null);
+  };
+
   const handleOpenLessonDetail = async (lesson) => {
     if (!courseId || !lesson?.id) return;
     setLessonDetailOpen(true);
@@ -943,6 +956,14 @@ export default function CourseCurriculum({ backTo, title }) {
                                     className="text-slate-700 hover:text-slate-900 hover:underline underline-offset-4"
                                   >
                                     Tài liệu
+                                  </button>
+                                  <span className="mx-2 text-slate-300">|</span>
+                                  <button
+                                    type="button"
+                                    onClick={() => openQuizModal(lesson)}
+                                    className="text-slate-700 hover:text-slate-900 hover:underline underline-offset-4"
+                                  >
+                                    Quiz
                                   </button>
                                   <span className="mx-2 text-slate-300">|</span>
                                   <button
@@ -1678,6 +1699,11 @@ export default function CourseCurriculum({ backTo, title }) {
           </div>
         </>
       ) : null}
+      <LessonQuizManager
+        open={quizModalOpen}
+        onClose={closeQuizModal}
+        lesson={quizLesson}
+      />
     </div>
   );
 }

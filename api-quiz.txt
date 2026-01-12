@@ -1,0 +1,1709 @@
+{
+    "name": "Quiz",
+    "item": [
+        {
+            "name": "Quiz authoring",
+            "item": [
+                {
+                    "name": "Create",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{ADMIN_TOKEN}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"lessonId\": 6,\n    \"title\": \"Lesson 2 Quiz\",\n    \"timeLimitSeconds\": 900,\n    \"passScore\": 70,\n    \"maxAttempts\": 3,\n    \"shuffleQuestions\": true\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{baseURL}}/instructor/lessons/:lessonId/quiz",
+                            "host": [
+                                "{{baseURL}}"
+                            ],
+                            "path": [
+                                "instructor",
+                                "lessons",
+                                ":lessonId",
+                                "quiz"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "lessonId",
+                                    "value": "6"
+                                }
+                            ]
+                        }
+                    },
+                    "response": [
+                        {
+                            "name": "Create",
+                            "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"lessonId\": 6,\n    \"title\": \"Lesson 2 Quiz\",\n    \"timeLimitSeconds\": 900,\n    \"passScore\": 70,\n    \"maxAttempts\": 3,\n    \"shuffleQuestions\": true\n}",
+                                    "options": {
+                                        "raw": {
+                                            "language": "json"
+                                        }
+                                    }
+                                },
+                                "url": {
+                                    "raw": "{{baseURL}}/instructor/lessons/:lessonId/quiz",
+                                    "host": [
+                                        "{{baseURL}}"
+                                    ],
+                                    "path": [
+                                        "instructor",
+                                        "lessons",
+                                        ":lessonId",
+                                        "quiz"
+                                    ],
+                                    "variable": [
+                                        {
+                                            "key": "lessonId",
+                                            "value": "6"
+                                        }
+                                    ]
+                                }
+                            },
+                            "status": "OK",
+                            "code": 200,
+                            "_postman_previewlanguage": null,
+                            "header": [
+                                {
+                                    "key": "Vary",
+                                    "value": "Origin"
+                                },
+                                {
+                                    "key": "Vary",
+                                    "value": "Access-Control-Request-Method"
+                                },
+                                {
+                                    "key": "Vary",
+                                    "value": "Access-Control-Request-Headers"
+                                },
+                                {
+                                    "key": "X-Content-Type-Options",
+                                    "value": "nosniff"
+                                },
+                                {
+                                    "key": "X-XSS-Protection",
+                                    "value": "0"
+                                },
+                                {
+                                    "key": "Cache-Control",
+                                    "value": "no-cache, no-store, max-age=0, must-revalidate"
+                                },
+                                {
+                                    "key": "Pragma",
+                                    "value": "no-cache"
+                                },
+                                {
+                                    "key": "Expires",
+                                    "value": "0"
+                                },
+                                {
+                                    "key": "X-Frame-Options",
+                                    "value": "DENY"
+                                },
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                },
+                                {
+                                    "key": "Transfer-Encoding",
+                                    "value": "chunked"
+                                },
+                                {
+                                    "key": "Date",
+                                    "value": "Wed, 07 Jan 2026 16:12:53 GMT"
+                                },
+                                {
+                                    "key": "Keep-Alive",
+                                    "value": "timeout=60"
+                                },
+                                {
+                                    "key": "Connection",
+                                    "value": "keep-alive"
+                                }
+                            ],
+                            "cookie": [],
+                            "body": "{\n    \"code\": \"00\",\n    \"message\": null,\n    \"data\": {\n        \"id\": 2,\n        \"lessonId\": 6,\n        \"title\": \"Lesson 2 Quiz\",\n        \"timeLimitSeconds\": 900,\n        \"passScore\": 70,\n        \"maxAttempts\": 3,\n        \"shuffleQuestions\": true\n    }\n}"
+                        }
+                    ]
+                },
+                {
+                    "name": "Update",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{ADMIN_TOKEN}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"lessonId\":6,\n    \"title\": \"Lesson 2 Quiz - updated\",\n    \"timeLimitSeconds\": 1200,\n    \"passScore\": 75,\n    \"maxAttempts\": 2,\n    \"shuffleQuestions\": false\n  }",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{baseURL}}/instructor/quizzes/:quizId",
+                            "host": [
+                                "{{baseURL}}"
+                            ],
+                            "path": [
+                                "instructor",
+                                "quizzes",
+                                ":quizId"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "quizId",
+                                    "value": "2"
+                                }
+                            ]
+                        }
+                    },
+                    "response": [
+                        {
+                            "name": "Update",
+                            "originalRequest": {
+                                "method": "PUT",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"lessonId\":6,\n    \"title\": \"Lesson 2 Quiz - updated\",\n    \"timeLimitSeconds\": 1200,\n    \"passScore\": 75,\n    \"maxAttempts\": 2,\n    \"shuffleQuestions\": false\n  }",
+                                    "options": {
+                                        "raw": {
+                                            "language": "json"
+                                        }
+                                    }
+                                },
+                                "url": {
+                                    "raw": "{{baseURL}}/instructor/quizzes/:quizId",
+                                    "host": [
+                                        "{{baseURL}}"
+                                    ],
+                                    "path": [
+                                        "instructor",
+                                        "quizzes",
+                                        ":quizId"
+                                    ],
+                                    "variable": [
+                                        {
+                                            "key": "quizId",
+                                            "value": "2"
+                                        }
+                                    ]
+                                }
+                            },
+                            "status": "OK",
+                            "code": 200,
+                            "_postman_previewlanguage": null,
+                            "header": [
+                                {
+                                    "key": "Vary",
+                                    "value": "Origin"
+                                },
+                                {
+                                    "key": "Vary",
+                                    "value": "Access-Control-Request-Method"
+                                },
+                                {
+                                    "key": "Vary",
+                                    "value": "Access-Control-Request-Headers"
+                                },
+                                {
+                                    "key": "X-Content-Type-Options",
+                                    "value": "nosniff"
+                                },
+                                {
+                                    "key": "X-XSS-Protection",
+                                    "value": "0"
+                                },
+                                {
+                                    "key": "Cache-Control",
+                                    "value": "no-cache, no-store, max-age=0, must-revalidate"
+                                },
+                                {
+                                    "key": "Pragma",
+                                    "value": "no-cache"
+                                },
+                                {
+                                    "key": "Expires",
+                                    "value": "0"
+                                },
+                                {
+                                    "key": "X-Frame-Options",
+                                    "value": "DENY"
+                                },
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                },
+                                {
+                                    "key": "Transfer-Encoding",
+                                    "value": "chunked"
+                                },
+                                {
+                                    "key": "Date",
+                                    "value": "Wed, 07 Jan 2026 16:13:28 GMT"
+                                },
+                                {
+                                    "key": "Keep-Alive",
+                                    "value": "timeout=60"
+                                },
+                                {
+                                    "key": "Connection",
+                                    "value": "keep-alive"
+                                }
+                            ],
+                            "cookie": [],
+                            "body": "{\n    \"code\": \"00\",\n    \"message\": null,\n    \"data\": {\n        \"id\": 2,\n        \"lessonId\": 6,\n        \"title\": \"Lesson 2 Quiz - updated\",\n        \"timeLimitSeconds\": 1200,\n        \"passScore\": 75,\n        \"maxAttempts\": 2,\n        \"shuffleQuestions\": false\n    }\n}"
+                        }
+                    ]
+                },
+                {
+                    "name": "Delete",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{authToken}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseURL}}/instructor/quizzes/:quizId",
+                            "host": [
+                                "{{baseURL}}"
+                            ],
+                            "path": [
+                                "instructor",
+                                "quizzes",
+                                ":quizId"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "quizId",
+                                    "value": "1"
+                                }
+                            ]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Question authoring",
+            "item": [
+                {
+                    "name": "Create",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{ADMIN_TOKEN}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"questionText\": \"What is Spring Boot?\",\n    \"questionType\": \"SINGLE\",\n    \"position\": 1,\n    \"points\": 5,\n    \"explanation\": \"Spring Boot is an open-source Java framework\"\n  }",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{baseURL}}/instructor/quizzes/:quizId/questions",
+                            "host": [
+                                "{{baseURL}}"
+                            ],
+                            "path": [
+                                "instructor",
+                                "quizzes",
+                                ":quizId",
+                                "questions"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "quizId",
+                                    "value": "2"
+                                }
+                            ]
+                        }
+                    },
+                    "response": [
+                        {
+                            "name": "Create",
+                            "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"questionText\": \"What is Spring Boot?\",\n    \"questionType\": \"SINGLE\",\n    \"position\": 1,\n    \"points\": 5,\n    \"explanation\": \"Spring Boot is an open-source Java framework\"\n  }",
+                                    "options": {
+                                        "raw": {
+                                            "language": "json"
+                                        }
+                                    }
+                                },
+                                "url": {
+                                    "raw": "{{baseURL}}/instructor/quizzes/:quizId/questions",
+                                    "host": [
+                                        "{{baseURL}}"
+                                    ],
+                                    "path": [
+                                        "instructor",
+                                        "quizzes",
+                                        ":quizId",
+                                        "questions"
+                                    ],
+                                    "variable": [
+                                        {
+                                            "key": "quizId",
+                                            "value": "2"
+                                        }
+                                    ]
+                                }
+                            },
+                            "status": "OK",
+                            "code": 200,
+                            "_postman_previewlanguage": null,
+                            "header": [
+                                {
+                                    "key": "Vary",
+                                    "value": "Origin"
+                                },
+                                {
+                                    "key": "Vary",
+                                    "value": "Access-Control-Request-Method"
+                                },
+                                {
+                                    "key": "Vary",
+                                    "value": "Access-Control-Request-Headers"
+                                },
+                                {
+                                    "key": "X-Content-Type-Options",
+                                    "value": "nosniff"
+                                },
+                                {
+                                    "key": "X-XSS-Protection",
+                                    "value": "0"
+                                },
+                                {
+                                    "key": "Cache-Control",
+                                    "value": "no-cache, no-store, max-age=0, must-revalidate"
+                                },
+                                {
+                                    "key": "Pragma",
+                                    "value": "no-cache"
+                                },
+                                {
+                                    "key": "Expires",
+                                    "value": "0"
+                                },
+                                {
+                                    "key": "X-Frame-Options",
+                                    "value": "DENY"
+                                },
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                },
+                                {
+                                    "key": "Transfer-Encoding",
+                                    "value": "chunked"
+                                },
+                                {
+                                    "key": "Date",
+                                    "value": "Wed, 07 Jan 2026 16:13:50 GMT"
+                                },
+                                {
+                                    "key": "Keep-Alive",
+                                    "value": "timeout=60"
+                                },
+                                {
+                                    "key": "Connection",
+                                    "value": "keep-alive"
+                                }
+                            ],
+                            "cookie": [],
+                            "body": "{\n    \"code\": \"00\",\n    \"message\": null,\n    \"data\": {\n        \"id\": 2,\n        \"quizId\": 2,\n        \"questionText\": \"What is Spring Boot?\",\n        \"questionType\": \"SINGLE\",\n        \"position\": 1,\n        \"points\": 5,\n        \"explanation\": \"Spring Boot is an open-source Java framework\"\n    }\n}"
+                        }
+                    ]
+                },
+                {
+                    "name": "Update",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{ADMIN_TOKEN}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"questionText\": \"Updated question?\",\n    \"questionType\": \"MULTI\",\n    \"position\": 2,\n    \"points\": 10\n  }",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{baseURL}}/instructor/questions/:questionId",
+                            "host": [
+                                "{{baseURL}}"
+                            ],
+                            "path": [
+                                "instructor",
+                                "questions",
+                                ":questionId"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "questionId",
+                                    "value": "2"
+                                }
+                            ]
+                        }
+                    },
+                    "response": [
+                        {
+                            "name": "Update",
+                            "originalRequest": {
+                                "method": "PUT",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"questionText\": \"Updated question?\",\n    \"questionType\": \"MULTI\",\n    \"position\": 2,\n    \"points\": 10\n  }",
+                                    "options": {
+                                        "raw": {
+                                            "language": "json"
+                                        }
+                                    }
+                                },
+                                "url": {
+                                    "raw": "{{baseURL}}/instructor/questions/:questionId",
+                                    "host": [
+                                        "{{baseURL}}"
+                                    ],
+                                    "path": [
+                                        "instructor",
+                                        "questions",
+                                        ":questionId"
+                                    ],
+                                    "variable": [
+                                        {
+                                            "key": "questionId",
+                                            "value": "2"
+                                        }
+                                    ]
+                                }
+                            },
+                            "status": "OK",
+                            "code": 200,
+                            "_postman_previewlanguage": null,
+                            "header": [
+                                {
+                                    "key": "Vary",
+                                    "value": "Origin"
+                                },
+                                {
+                                    "key": "Vary",
+                                    "value": "Access-Control-Request-Method"
+                                },
+                                {
+                                    "key": "Vary",
+                                    "value": "Access-Control-Request-Headers"
+                                },
+                                {
+                                    "key": "X-Content-Type-Options",
+                                    "value": "nosniff"
+                                },
+                                {
+                                    "key": "X-XSS-Protection",
+                                    "value": "0"
+                                },
+                                {
+                                    "key": "Cache-Control",
+                                    "value": "no-cache, no-store, max-age=0, must-revalidate"
+                                },
+                                {
+                                    "key": "Pragma",
+                                    "value": "no-cache"
+                                },
+                                {
+                                    "key": "Expires",
+                                    "value": "0"
+                                },
+                                {
+                                    "key": "X-Frame-Options",
+                                    "value": "DENY"
+                                },
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                },
+                                {
+                                    "key": "Transfer-Encoding",
+                                    "value": "chunked"
+                                },
+                                {
+                                    "key": "Date",
+                                    "value": "Wed, 07 Jan 2026 16:14:06 GMT"
+                                },
+                                {
+                                    "key": "Keep-Alive",
+                                    "value": "timeout=60"
+                                },
+                                {
+                                    "key": "Connection",
+                                    "value": "keep-alive"
+                                }
+                            ],
+                            "cookie": [],
+                            "body": "{\n    \"code\": \"00\",\n    \"message\": null,\n    \"data\": {\n        \"id\": 2,\n        \"quizId\": 2,\n        \"questionText\": \"Updated question?\",\n        \"questionType\": \"MULTI\",\n        \"position\": 2,\n        \"points\": 10,\n        \"explanation\": \"Spring Boot is an open-source Java framework\"\n    }\n}"
+                        }
+                    ]
+                },
+                {
+                    "name": "Delete",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{authToken}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseURL}}/instructor/questions/:questionId",
+                            "host": [
+                                "{{baseURL}}"
+                            ],
+                            "path": [
+                                "instructor",
+                                "questions",
+                                ":questionId"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "questionId",
+                                    "value": "1"
+                                }
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "View quiz by lesson",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{ADMIN_TOKEN}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseURL}}/instructor/lessons/:lessonId/quiz",
+                            "host": [
+                                "{{baseURL}}"
+                            ],
+                            "path": [
+                                "instructor",
+                                "lessons",
+                                ":lessonId",
+                                "quiz"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "lessonId",
+                                    "value": "6"
+                                }
+                            ]
+                        }
+                    },
+                    "response": [
+                        {
+                            "name": "View quiz by lesson",
+                            "originalRequest": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{baseURL}}/instructor/lessons/:lessonId/quiz",
+                                    "host": [
+                                        "{{baseURL}}"
+                                    ],
+                                    "path": [
+                                        "instructor",
+                                        "lessons",
+                                        ":lessonId",
+                                        "quiz"
+                                    ],
+                                    "variable": [
+                                        {
+                                            "key": "lessonId",
+                                            "value": "6"
+                                        }
+                                    ]
+                                }
+                            },
+                            "status": "OK",
+                            "code": 200,
+                            "_postman_previewlanguage": "",
+                            "header": [
+                                {
+                                    "key": "Vary",
+                                    "value": "Origin"
+                                },
+                                {
+                                    "key": "Vary",
+                                    "value": "Access-Control-Request-Method"
+                                },
+                                {
+                                    "key": "Vary",
+                                    "value": "Access-Control-Request-Headers"
+                                },
+                                {
+                                    "key": "X-Content-Type-Options",
+                                    "value": "nosniff"
+                                },
+                                {
+                                    "key": "X-XSS-Protection",
+                                    "value": "0"
+                                },
+                                {
+                                    "key": "Cache-Control",
+                                    "value": "no-cache, no-store, max-age=0, must-revalidate"
+                                },
+                                {
+                                    "key": "Pragma",
+                                    "value": "no-cache"
+                                },
+                                {
+                                    "key": "Expires",
+                                    "value": "0"
+                                },
+                                {
+                                    "key": "X-Frame-Options",
+                                    "value": "DENY"
+                                },
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                },
+                                {
+                                    "key": "Transfer-Encoding",
+                                    "value": "chunked"
+                                },
+                                {
+                                    "key": "Date",
+                                    "value": "Mon, 12 Jan 2026 16:24:36 GMT"
+                                },
+                                {
+                                    "key": "Keep-Alive",
+                                    "value": "timeout=60"
+                                },
+                                {
+                                    "key": "Connection",
+                                    "value": "keep-alive"
+                                }
+                            ],
+                            "cookie": [],
+                            "body": "{\n    \"code\": \"00\",\n    \"message\": null,\n    \"data\": {\n        \"id\": 2,\n        \"lessonId\": 6,\n        \"title\": \"Lesson 2 Quiz - updated\",\n        \"timeLimitSeconds\": 1200,\n        \"passScore\": 75,\n        \"maxAttempts\": 2,\n        \"shuffleQuestions\": false,\n        \"questions\": [\n            {\n                \"id\": 2,\n                \"questionText\": \"Updated question?\",\n                \"questionType\": \"MULTI\",\n                \"position\": 2,\n                \"points\": 10,\n                \"explanation\": \"Spring Boot is an open-source Java framework\",\n                \"answers\": [\n                    {\n                        \"id\": 3,\n                        \"answerText\": \"Option B\",\n                        \"isCorrect\": false,\n                        \"position\": 2\n                    }\n                ]\n            }\n        ]\n    }\n}"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Answer authoring",
+            "item": [
+                {
+                    "name": "Create",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{ADMIN_TOKEN}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"answerText\": \"Incorrect choice\",\n    \"isCorrect\": false,\n    \"position\": 2\n  }",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{baseURL}}/instructor/questions/:questionId/answers",
+                            "host": [
+                                "{{baseURL}}"
+                            ],
+                            "path": [
+                                "instructor",
+                                "questions",
+                                ":questionId",
+                                "answers"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "questionId",
+                                    "value": "2"
+                                }
+                            ]
+                        }
+                    },
+                    "response": [
+                        {
+                            "name": "Create",
+                            "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"answerText\": \"Incorrect choice\",\n    \"isCorrect\": false,\n    \"position\": 2\n  }",
+                                    "options": {
+                                        "raw": {
+                                            "language": "json"
+                                        }
+                                    }
+                                },
+                                "url": {
+                                    "raw": "{{baseURL}}/instructor/questions/:questionId/answers",
+                                    "host": [
+                                        "{{baseURL}}"
+                                    ],
+                                    "path": [
+                                        "instructor",
+                                        "questions",
+                                        ":questionId",
+                                        "answers"
+                                    ],
+                                    "variable": [
+                                        {
+                                            "key": "questionId",
+                                            "value": "2"
+                                        }
+                                    ]
+                                }
+                            },
+                            "status": "OK",
+                            "code": 200,
+                            "_postman_previewlanguage": null,
+                            "header": [
+                                {
+                                    "key": "Vary",
+                                    "value": "Origin"
+                                },
+                                {
+                                    "key": "Vary",
+                                    "value": "Access-Control-Request-Method"
+                                },
+                                {
+                                    "key": "Vary",
+                                    "value": "Access-Control-Request-Headers"
+                                },
+                                {
+                                    "key": "X-Content-Type-Options",
+                                    "value": "nosniff"
+                                },
+                                {
+                                    "key": "X-XSS-Protection",
+                                    "value": "0"
+                                },
+                                {
+                                    "key": "Cache-Control",
+                                    "value": "no-cache, no-store, max-age=0, must-revalidate"
+                                },
+                                {
+                                    "key": "Pragma",
+                                    "value": "no-cache"
+                                },
+                                {
+                                    "key": "Expires",
+                                    "value": "0"
+                                },
+                                {
+                                    "key": "X-Frame-Options",
+                                    "value": "DENY"
+                                },
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                },
+                                {
+                                    "key": "Transfer-Encoding",
+                                    "value": "chunked"
+                                },
+                                {
+                                    "key": "Date",
+                                    "value": "Wed, 07 Jan 2026 16:15:29 GMT"
+                                },
+                                {
+                                    "key": "Keep-Alive",
+                                    "value": "timeout=60"
+                                },
+                                {
+                                    "key": "Connection",
+                                    "value": "keep-alive"
+                                }
+                            ],
+                            "cookie": [],
+                            "body": "{\n    \"code\": \"00\",\n    \"message\": null,\n    \"data\": {\n        \"id\": 3,\n        \"questionId\": 2,\n        \"answerText\": \"Incorrect choice\",\n        \"isCorrect\": false,\n        \"position\": 2\n    }\n}"
+                        }
+                    ]
+                },
+                {
+                    "name": "Update",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{ADMIN_TOKEN}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"answerText\": \"Option B\",\n    \"isCorrect\": false,\n    \"position\": 2\n  }",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{baseURL}}/instructor/answers/:answerId",
+                            "host": [
+                                "{{baseURL}}"
+                            ],
+                            "path": [
+                                "instructor",
+                                "answers",
+                                ":answerId"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "answerId",
+                                    "value": "3"
+                                }
+                            ]
+                        }
+                    },
+                    "response": [
+                        {
+                            "name": "Update",
+                            "originalRequest": {
+                                "method": "PUT",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"answerText\": \"Option B\",\n    \"isCorrect\": false,\n    \"position\": 2\n  }",
+                                    "options": {
+                                        "raw": {
+                                            "language": "json"
+                                        }
+                                    }
+                                },
+                                "url": {
+                                    "raw": "{{baseURL}}/instructor/answers/:answerId",
+                                    "host": [
+                                        "{{baseURL}}"
+                                    ],
+                                    "path": [
+                                        "instructor",
+                                        "answers",
+                                        ":answerId"
+                                    ],
+                                    "variable": [
+                                        {
+                                            "key": "answerId",
+                                            "value": "3"
+                                        }
+                                    ]
+                                }
+                            },
+                            "status": "OK",
+                            "code": 200,
+                            "_postman_previewlanguage": null,
+                            "header": [
+                                {
+                                    "key": "Vary",
+                                    "value": "Origin"
+                                },
+                                {
+                                    "key": "Vary",
+                                    "value": "Access-Control-Request-Method"
+                                },
+                                {
+                                    "key": "Vary",
+                                    "value": "Access-Control-Request-Headers"
+                                },
+                                {
+                                    "key": "X-Content-Type-Options",
+                                    "value": "nosniff"
+                                },
+                                {
+                                    "key": "X-XSS-Protection",
+                                    "value": "0"
+                                },
+                                {
+                                    "key": "Cache-Control",
+                                    "value": "no-cache, no-store, max-age=0, must-revalidate"
+                                },
+                                {
+                                    "key": "Pragma",
+                                    "value": "no-cache"
+                                },
+                                {
+                                    "key": "Expires",
+                                    "value": "0"
+                                },
+                                {
+                                    "key": "X-Frame-Options",
+                                    "value": "DENY"
+                                },
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                },
+                                {
+                                    "key": "Transfer-Encoding",
+                                    "value": "chunked"
+                                },
+                                {
+                                    "key": "Date",
+                                    "value": "Wed, 07 Jan 2026 16:15:56 GMT"
+                                },
+                                {
+                                    "key": "Keep-Alive",
+                                    "value": "timeout=60"
+                                },
+                                {
+                                    "key": "Connection",
+                                    "value": "keep-alive"
+                                }
+                            ],
+                            "cookie": [],
+                            "body": "{\n    \"code\": \"00\",\n    \"message\": null,\n    \"data\": {\n        \"id\": 3,\n        \"questionId\": 2,\n        \"answerText\": \"Option B\",\n        \"isCorrect\": false,\n        \"position\": 2\n    }\n}"
+                        }
+                    ]
+                },
+                {
+                    "name": "Delete",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{authToken}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseURL}}/instructor/answers/:answerId",
+                            "host": [
+                                "{{baseURL}}"
+                            ],
+                            "path": [
+                                "instructor",
+                                "answers",
+                                ":answerId"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "answerId",
+                                    "value": "2"
+                                }
+                            ]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Attempts (student)",
+            "item": [
+                {
+                    "name": "Create quiz attempt",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{STUDENT_TOKEN}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseURL}}/quizzes/:quizId/attempts",
+                            "host": [
+                                "{{baseURL}}"
+                            ],
+                            "path": [
+                                "quizzes",
+                                ":quizId",
+                                "attempts"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "quizId",
+                                    "value": "2"
+                                }
+                            ]
+                        }
+                    },
+                    "response": [
+                        {
+                            "name": "Create quiz attempt",
+                            "originalRequest": {
+                                "method": "POST",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{baseURL}}/quizzes/:quizId/attempts",
+                                    "host": [
+                                        "{{baseURL}}"
+                                    ],
+                                    "path": [
+                                        "quizzes",
+                                        ":quizId",
+                                        "attempts"
+                                    ],
+                                    "variable": [
+                                        {
+                                            "key": "quizId",
+                                            "value": "2"
+                                        }
+                                    ]
+                                }
+                            },
+                            "status": "OK",
+                            "code": 200,
+                            "_postman_previewlanguage": null,
+                            "header": [
+                                {
+                                    "key": "Vary",
+                                    "value": "Origin"
+                                },
+                                {
+                                    "key": "Vary",
+                                    "value": "Access-Control-Request-Method"
+                                },
+                                {
+                                    "key": "Vary",
+                                    "value": "Access-Control-Request-Headers"
+                                },
+                                {
+                                    "key": "X-Content-Type-Options",
+                                    "value": "nosniff"
+                                },
+                                {
+                                    "key": "X-XSS-Protection",
+                                    "value": "0"
+                                },
+                                {
+                                    "key": "Cache-Control",
+                                    "value": "no-cache, no-store, max-age=0, must-revalidate"
+                                },
+                                {
+                                    "key": "Pragma",
+                                    "value": "no-cache"
+                                },
+                                {
+                                    "key": "Expires",
+                                    "value": "0"
+                                },
+                                {
+                                    "key": "X-Frame-Options",
+                                    "value": "DENY"
+                                },
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                },
+                                {
+                                    "key": "Transfer-Encoding",
+                                    "value": "chunked"
+                                },
+                                {
+                                    "key": "Date",
+                                    "value": "Thu, 08 Jan 2026 08:10:14 GMT"
+                                },
+                                {
+                                    "key": "Keep-Alive",
+                                    "value": "timeout=60"
+                                },
+                                {
+                                    "key": "Connection",
+                                    "value": "keep-alive"
+                                }
+                            ],
+                            "cookie": [],
+                            "body": "{\n    \"code\": \"00\",\n    \"message\": null,\n    \"data\": {\n        \"id\": 2,\n        \"quizId\": 2,\n        \"userId\": 8,\n        \"startedAt\": \"2026-01-08T15:10:13.9519047\",\n        \"submittedAt\": null,\n        \"score\": null,\n        \"status\": \"IN_PROGRESS\"\n    }\n}"
+                        }
+                    ]
+                },
+                {
+                    "name": "Submit attempt",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{STUDENT_TOKEN}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"quizId\": 2,\n    \"answers\": [\n      {\"questionId\": 2, \"answerId\": 3}\n    ]\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{baseURL}}/quizzes/:quizId/attempts/:attemptId/submit",
+                            "host": [
+                                "{{baseURL}}"
+                            ],
+                            "path": [
+                                "quizzes",
+                                ":quizId",
+                                "attempts",
+                                ":attemptId",
+                                "submit"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "quizId",
+                                    "value": "2"
+                                },
+                                {
+                                    "key": "attemptId",
+                                    "value": "2"
+                                }
+                            ]
+                        }
+                    },
+                    "response": [
+                        {
+                            "name": "Submit attempt",
+                            "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"quizId\": 2,\n    \"answers\": [\n      {\"questionId\": 2, \"answerId\": 3}\n    ]\n}",
+                                    "options": {
+                                        "raw": {
+                                            "language": "json"
+                                        }
+                                    }
+                                },
+                                "url": {
+                                    "raw": "{{baseURL}}/quizzes/:quizId/attempts/:attemptId/submit",
+                                    "host": [
+                                        "{{baseURL}}"
+                                    ],
+                                    "path": [
+                                        "quizzes",
+                                        ":quizId",
+                                        "attempts",
+                                        ":attemptId",
+                                        "submit"
+                                    ],
+                                    "variable": [
+                                        {
+                                            "key": "quizId",
+                                            "value": "2"
+                                        },
+                                        {
+                                            "key": "attemptId",
+                                            "value": "2"
+                                        }
+                                    ]
+                                }
+                            },
+                            "status": "OK",
+                            "code": 200,
+                            "_postman_previewlanguage": null,
+                            "header": [
+                                {
+                                    "key": "Vary",
+                                    "value": "Origin"
+                                },
+                                {
+                                    "key": "Vary",
+                                    "value": "Access-Control-Request-Method"
+                                },
+                                {
+                                    "key": "Vary",
+                                    "value": "Access-Control-Request-Headers"
+                                },
+                                {
+                                    "key": "X-Content-Type-Options",
+                                    "value": "nosniff"
+                                },
+                                {
+                                    "key": "X-XSS-Protection",
+                                    "value": "0"
+                                },
+                                {
+                                    "key": "Cache-Control",
+                                    "value": "no-cache, no-store, max-age=0, must-revalidate"
+                                },
+                                {
+                                    "key": "Pragma",
+                                    "value": "no-cache"
+                                },
+                                {
+                                    "key": "Expires",
+                                    "value": "0"
+                                },
+                                {
+                                    "key": "X-Frame-Options",
+                                    "value": "DENY"
+                                },
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                },
+                                {
+                                    "key": "Transfer-Encoding",
+                                    "value": "chunked"
+                                },
+                                {
+                                    "key": "Date",
+                                    "value": "Thu, 08 Jan 2026 08:31:49 GMT"
+                                },
+                                {
+                                    "key": "Keep-Alive",
+                                    "value": "timeout=60"
+                                },
+                                {
+                                    "key": "Connection",
+                                    "value": "keep-alive"
+                                }
+                            ],
+                            "cookie": [],
+                            "body": "{\n    \"code\": \"00\",\n    \"message\": null,\n    \"data\": {\n        \"id\": 2,\n        \"quizId\": 2,\n        \"userId\": 8,\n        \"startedAt\": \"2026-01-08T15:10:14\",\n        \"submittedAt\": \"2026-01-08T15:31:49.82298\",\n        \"score\": 0,\n        \"status\": \"SUBMITTED\"\n    }\n}"
+                        }
+                    ]
+                },
+                {
+                    "name": "Get attempt",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{STUDENT_TOKEN}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseURL}}/quizzes/:quizId/attempts/:attemptId",
+                            "host": [
+                                "{{baseURL}}"
+                            ],
+                            "path": [
+                                "quizzes",
+                                ":quizId",
+                                "attempts",
+                                ":attemptId"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "quizId",
+                                    "value": "2"
+                                },
+                                {
+                                    "key": "attemptId",
+                                    "value": "2"
+                                }
+                            ]
+                        }
+                    },
+                    "response": [
+                        {
+                            "name": "Get attempt",
+                            "originalRequest": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{baseURL}}/quizzes/:quizId/attempts/:attemptId",
+                                    "host": [
+                                        "{{baseURL}}"
+                                    ],
+                                    "path": [
+                                        "quizzes",
+                                        ":quizId",
+                                        "attempts",
+                                        ":attemptId"
+                                    ],
+                                    "variable": [
+                                        {
+                                            "key": "quizId",
+                                            "value": "2"
+                                        },
+                                        {
+                                            "key": "attemptId",
+                                            "value": "2"
+                                        }
+                                    ]
+                                }
+                            },
+                            "status": "OK",
+                            "code": 200,
+                            "_postman_previewlanguage": null,
+                            "header": [
+                                {
+                                    "key": "Vary",
+                                    "value": "Origin"
+                                },
+                                {
+                                    "key": "Vary",
+                                    "value": "Access-Control-Request-Method"
+                                },
+                                {
+                                    "key": "Vary",
+                                    "value": "Access-Control-Request-Headers"
+                                },
+                                {
+                                    "key": "X-Content-Type-Options",
+                                    "value": "nosniff"
+                                },
+                                {
+                                    "key": "X-XSS-Protection",
+                                    "value": "0"
+                                },
+                                {
+                                    "key": "Cache-Control",
+                                    "value": "no-cache, no-store, max-age=0, must-revalidate"
+                                },
+                                {
+                                    "key": "Pragma",
+                                    "value": "no-cache"
+                                },
+                                {
+                                    "key": "Expires",
+                                    "value": "0"
+                                },
+                                {
+                                    "key": "X-Frame-Options",
+                                    "value": "DENY"
+                                },
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                },
+                                {
+                                    "key": "Transfer-Encoding",
+                                    "value": "chunked"
+                                },
+                                {
+                                    "key": "Date",
+                                    "value": "Thu, 08 Jan 2026 08:32:19 GMT"
+                                },
+                                {
+                                    "key": "Keep-Alive",
+                                    "value": "timeout=60"
+                                },
+                                {
+                                    "key": "Connection",
+                                    "value": "keep-alive"
+                                }
+                            ],
+                            "cookie": [],
+                            "body": "{\n    \"code\": \"00\",\n    \"message\": null,\n    \"data\": {\n        \"id\": 2,\n        \"quizId\": 2,\n        \"userId\": 8,\n        \"startedAt\": \"2026-01-08T15:10:14\",\n        \"submittedAt\": \"2026-01-08T15:31:50\",\n        \"score\": 0,\n        \"status\": \"SUBMITTED\"\n    }\n}"
+                        }
+                    ]
+                },
+                {
+                    "name": "Get all",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{STUDENT_TOKEN}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseURL}}/quizzes/:quizId/attempts",
+                            "host": [
+                                "{{baseURL}}"
+                            ],
+                            "path": [
+                                "quizzes",
+                                ":quizId",
+                                "attempts"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "quizId",
+                                    "value": "2"
+                                }
+                            ]
+                        }
+                    },
+                    "response": [
+                        {
+                            "name": "Get all",
+                            "originalRequest": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{baseURL}}/quizzes/:quizId/attempts",
+                                    "host": [
+                                        "{{baseURL}}"
+                                    ],
+                                    "path": [
+                                        "quizzes",
+                                        ":quizId",
+                                        "attempts"
+                                    ],
+                                    "variable": [
+                                        {
+                                            "key": "quizId",
+                                            "value": "2"
+                                        }
+                                    ]
+                                }
+                            },
+                            "status": "OK",
+                            "code": 200,
+                            "_postman_previewlanguage": null,
+                            "header": [
+                                {
+                                    "key": "Vary",
+                                    "value": "Origin"
+                                },
+                                {
+                                    "key": "Vary",
+                                    "value": "Access-Control-Request-Method"
+                                },
+                                {
+                                    "key": "Vary",
+                                    "value": "Access-Control-Request-Headers"
+                                },
+                                {
+                                    "key": "X-Content-Type-Options",
+                                    "value": "nosniff"
+                                },
+                                {
+                                    "key": "X-XSS-Protection",
+                                    "value": "0"
+                                },
+                                {
+                                    "key": "Cache-Control",
+                                    "value": "no-cache, no-store, max-age=0, must-revalidate"
+                                },
+                                {
+                                    "key": "Pragma",
+                                    "value": "no-cache"
+                                },
+                                {
+                                    "key": "Expires",
+                                    "value": "0"
+                                },
+                                {
+                                    "key": "X-Frame-Options",
+                                    "value": "DENY"
+                                },
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                },
+                                {
+                                    "key": "Transfer-Encoding",
+                                    "value": "chunked"
+                                },
+                                {
+                                    "key": "Date",
+                                    "value": "Thu, 08 Jan 2026 08:32:45 GMT"
+                                },
+                                {
+                                    "key": "Keep-Alive",
+                                    "value": "timeout=60"
+                                },
+                                {
+                                    "key": "Connection",
+                                    "value": "keep-alive"
+                                }
+                            ],
+                            "cookie": [],
+                            "body": "{\n    \"code\": \"00\",\n    \"message\": null,\n    \"data\": [\n        {\n            \"id\": 2,\n            \"quizId\": 2,\n            \"userId\": 8,\n            \"startedAt\": \"2026-01-08T15:10:14\",\n            \"submittedAt\": \"2026-01-08T15:31:50\",\n            \"score\": 0,\n            \"status\": \"SUBMITTED\"\n        }\n    ]\n}"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
