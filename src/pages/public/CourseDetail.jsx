@@ -1,12 +1,14 @@
-﻿import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { fetchCourseDetail } from "@/api/catalog.api";
 import { useAuth } from "@/contexts/AuthContext";
+import { useCart } from "@/contexts/CartContext";
 import useFileUrl from "@/hooks/useFileUrl";
 import useEnrollmentStatus from "@/hooks/useEnrollmentStatus";
 import { enrollCourse } from "@/services/enrollment.service";
+import { checkoutCart, payOrderVnpay } from "@/services/order.service";
 
 const LEVEL_MAP = {
   BEGINNER: "Cơ bản",
@@ -43,6 +45,7 @@ export default function CourseDetail() {
   const { courseId } = useParams();
   const navigate = useNavigate();
   const { isAuthenticated, hasRole } = useAuth();
+  const { addToCart } = useCart();
   const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -50,6 +53,8 @@ export default function CourseDetail() {
   const [enrollLoading, setEnrollLoading] = useState(false);
   const [actionMessage, setActionMessage] = useState("");
   const [actionError, setActionError] = useState("");
+  const [cartLoading, setCartLoading] = useState(false);
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [enrolled, setEnrolled] = useState(null);
 
   const { url: thumbnailUrl } = useFileUrl(course?.thumbnail);
@@ -59,6 +64,13 @@ export default function CourseDetail() {
     error: statusError,
   } = useEnrollmentStatus(courseId);
   const isStudent = isAuthenticated && hasRole("ROLE_STUDENT");
+  const priceValue = useMemo(() => {
+    if (!course) return 0;
+    if (typeof course.priceCents === "number") return course.priceCents;
+    const raw = Number(course.price ?? 0);
+    return Number.isFinite(raw) ? raw : 0;
+  }, [course]);
+  const isPaidCourse = priceValue > 0;
 
   useEffect(() => {
     const loadDetail = async () => {
@@ -120,6 +132,54 @@ export default function CourseDetail() {
       );
     } finally {
       setEnrollLoading(false);
+    }
+  };
+
+  const handleAddToCart = async () => {
+    if (!courseId) return;
+    setCartLoading(true);
+    setActionMessage("");
+    setActionError("");
+    try {
+      await addToCart(Number(courseId));
+      setActionMessage("Đã thêm khóa học vào giỏ hàng.");
+    } catch (err) {
+      setActionError(err?.message || "Không thể thêm vào giỏ hàng.");
+    } finally {
+      setCartLoading(false);
+    }
+  };
+
+  const handleCheckoutNow = async () => {
+    if (!courseId) return;
+    setCheckoutLoading(true);
+    setActionMessage("");
+    setActionError("");
+    try {
+      const cart = await addToCart(Number(courseId));
+      if (!cart?.id) {
+        throw new Error("Không tạo được giỏ hàng.");
+      }
+      const order = await checkoutCart(cart.id);
+      if (!order?.id) {
+        throw new Error("Không tạo được đơn hàng.");
+      }
+      if (order.status === "PAID" || order.totalAmountCents === 0) {
+        setActionMessage("Thanh toán thành công. Đang cập nhật khóa học.");
+        navigate("/me/learning");
+        return;
+      }
+      const payment = await payOrderVnpay(order.id);
+      const paymentUrl =
+        payment?.paymentUrl || payment?.url || payment?.paymentURL;
+      if (!paymentUrl) {
+        throw new Error("Không lấy được đường dẫn thanh toán.");
+      }
+      window.location.href = paymentUrl;
+    } catch (err) {
+      setActionError(err?.message || "Không thể thanh toán ngay.");
+    } finally {
+      setCheckoutLoading(false);
     }
   };
 
@@ -238,7 +298,7 @@ export default function CourseDetail() {
         <div className="mt-6 space-y-3">
           {!isAuthenticated ? (
             <Button size="lg" onClick={handleLoginRedirect}>
-              Đăng nhập để học
+              {isPaidCourse ? "Đăng nhập để mua" : "Đăng nhập để học"}
             </Button>
           ) : !isStudent ? (
             <p className="text-sm text-slate-500">
@@ -252,6 +312,26 @@ export default function CourseDetail() {
             <Button size="lg" onClick={handleStartLearning}>
               Học ngay
             </Button>
+          ) : isPaidCourse ? (
+            <div className="flex flex-col gap-2 sm:flex-row">
+              <Button
+                size="lg"
+                variant="outline"
+                className="w-full sm:w-auto"
+                onClick={handleAddToCart}
+                disabled={cartLoading || checkoutLoading}
+              >
+                {cartLoading ? "Đang thêm..." : "Thêm vào giỏ"}
+              </Button>
+              <Button
+                size="lg"
+                className="w-full sm:w-auto"
+                onClick={handleCheckoutNow}
+                disabled={checkoutLoading || cartLoading}
+              >
+                {checkoutLoading ? "Đang thanh toán..." : "Thanh toán ngay"}
+              </Button>
+            </div>
           ) : (
             <Button size="lg" onClick={handleEnroll} disabled={enrollLoading}>
               {enrollLoading ? "Đang xử lý..." : "Đăng ký học"}

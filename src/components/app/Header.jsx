@@ -1,4 +1,4 @@
-﻿import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/contexts/AuthContext";
+import { useCart } from "@/contexts/CartContext";
 import Logo from "@/components/app/Logo";
 
 export default function Header() {
@@ -14,6 +15,7 @@ export default function Header() {
   const [searchParams] = useSearchParams();
   const defaultQuery = searchParams.get("q") ?? "";
   const { isAuthenticated, authUser, logout, hasRole } = useAuth();
+  const { itemCount } = useCart();
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -43,6 +45,14 @@ export default function Header() {
     : "U";
   const isStudent = isAuthenticated && hasRole("ROLE_STUDENT");
 
+  const handleCartClick = () => {
+    if (!isAuthenticated) {
+      navigate("/login", { state: { returnTo: "/cart" } });
+      return;
+    }
+    navigate("/cart");
+  };
+
   return (
     <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/80 backdrop-blur">
       <div className="relative w-full px-4 sm:px-6 lg:px-10 py-3">
@@ -60,6 +70,34 @@ export default function Header() {
           </div>
 
           <div className="flex items-center justify-end gap-2">
+            <button
+              type="button"
+              onClick={handleCartClick}
+              className="relative h-9 w-9 inline-flex items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 transition"
+              aria-label="Giỏ hàng"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                className="h-5 w-5"
+                aria-hidden="true"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M3 4h2l2.4 10.4a2 2 0 0 0 2 1.6h7.2a2 2 0 0 0 2-1.6L20 7H6"
+                />
+                <circle cx="10" cy="20" r="1.5" />
+                <circle cx="17" cy="20" r="1.5" />
+              </svg>
+              {itemCount > 0 ? (
+                <span className="absolute -top-1 -right-1 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-[#E11D48] px-1 text-[11px] font-semibold text-white">
+                  {itemCount}
+                </span>
+              ) : null}
+            </button>
             {!isAuthenticated ? (
               <>
                 <Link

@@ -19,8 +19,10 @@ import InstructorHome from "@/pages/instructor/InstructorHome";
 import CourseDetail from "@/pages/public/CourseDetail";
 import Home from "@/pages/public/Home";
 import Search from "@/pages/public/Search";
+import Cart from "@/pages/student/Cart";
 import Learn from "@/pages/student/Learn";
 import MyLearning from "@/pages/student/MyLearning";
+import PaymentReturn from "@/pages/student/PaymentReturn";
 
 function NotFound() {
   return (
@@ -70,6 +72,28 @@ export const router = createBrowserRouter([
           </RequireAuth>
         ),
         children: [{ index: true, element: <Learn /> }],
+      },
+      {
+        path: "cart",
+        element: (
+          <RequireAuth>
+            <RequireRole allowedRoles={["ROLE_STUDENT"]}>
+              <StudentLayout />
+            </RequireRole>
+          </RequireAuth>
+        ),
+        children: [{ index: true, element: <Cart /> }],
+      },
+      {
+        path: "payment",
+        element: (
+          <RequireAuth>
+            <RequireRole allowedRoles={["ROLE_STUDENT"]}>
+              <StudentLayout />
+            </RequireRole>
+          </RequireAuth>
+        ),
+        children: [{ path: "return", element: <PaymentReturn /> }],
       },
       {
         path: "instructor",

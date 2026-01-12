@@ -1,0 +1,77 @@
+########################################################################
+# VNPay FE integration guide (aligned with current BE APIs)
+########################################################################
+
+Base URLs
+- BE baseURL: http://localhost:8080/api/v1
+- FE public return: https://<public-fe>/payment/return
+- BE public IPN: https://<public-be>/api/v1/payments/vnpay/ipn
+
+VNPay config in BE (env)
+- VNPAY_RETURN_URL=https://<public-fe>/payment/return
+- VNPAY_IPN_URL=https://<public-be>/api/v1/payments/vnpay/ipn
+- Restart BE after updating env
+
+Important rules
+- vnp_Amount = totalAmount * 100 (VNPay requires VND x 100)
+- vnp_TxnRef = orderId (numeric only)
+- vnp_IpnUrl is NOT included in payment URL; set it in VNPay portal
+- IPN is source of truth (order status updated by BE)
+
+########################################################################
+# FE Flow (Cart checkout)
+########################################################################
+
+1) Get cart
+- GET /cart
+- If none exists, BE auto-creates an ACTIVE cart
+
+2) Add items
+- POST /cart/items with { courseId }
+- Repeat to add multiple courses
+
+3) Checkout cart
+- POST /orders/checkout with { cartId }
+- BE creates order + order_items (snapshot pricing)
+
+4) Generate payment URL
+- POST /orders/{orderId}/pay/vnpay
+- Receive paymentUrl
+
+5) Redirect to VNPay
+- window.location.href = paymentUrl
+
+6) Return handler on FE (/payment/return)
+- Parse query params (vnp_ResponseCode, vnp_TxnRef, vnp_SecureHash, ...)
+- Show UI state:
+  - vnp_ResponseCode == "00": "Thanh toán thành công (đang xác nhận)"
+  - else: "Thanh toán thất bại/đã hủy"
+- Extract orderId from vnp_TxnRef (numeric)
+- Call BE to confirm:
+  - GET /orders/{orderId}
+  - Expect status = PAID after IPN processed
+
+7) Verify enrollment
+- GET /me/enrollments?page=0&size=10
+
+########################################################################
+# FE Flow (Single course)
+########################################################################
+
+1) Create order (single course)
+- POST /orders with { courseId }
+
+2) Generate payment URL
+- POST /orders/{orderId}/pay/vnpay
+
+3) Redirect + return handling same as above
+
+########################################################################
+# FE Notes
+########################################################################
+- VNPay IPN requires BE public URL (ngrok/domain) and must be set in VNPay portal
+- Return URL must be public and match FE route
+- If order total = 0, BE auto sets PAID and enrolls (skip VNPay)
+- CORS: BE is open (allowed origins = *) in current config
+- If VNPay shows error page:
+  - Check amount (VND x 100), return/ipn URLs, hashSecret, tmnCode
