@@ -57,7 +57,9 @@ export default function CourseDetail() {
   const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [enrolled, setEnrolled] = useState(null);
 
-  const { url: thumbnailUrl } = useFileUrl(course?.thumbnail);
+  const { url: thumbnailUrl } = useFileUrl(
+    course?.thumbnail || course?.thumbnailFileId || course?.thumbnailId
+  );
   const {
     enrolled: enrolledStatus,
     loading: statusLoading,

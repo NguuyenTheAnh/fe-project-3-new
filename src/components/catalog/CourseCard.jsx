@@ -44,7 +44,12 @@ const resolveInstructorNames = (course) => {
 export default function CourseCard({ course }) {
   const id = course?.id ?? course?.courseId ?? course?.slug;
   const href = id ? `/courses/${id}` : "#";
-  const { url: thumbnailUrl } = useFileUrl(course?.thumbnail || course?.image);
+  const { url: thumbnailUrl } = useFileUrl(
+    course?.thumbnail ||
+      course?.thumbnailFileId ||
+      course?.thumbnailId ||
+      course?.image
+  );
   const instructors = resolveInstructorNames(course);
   const rating = course?.ratingAvg ?? course?.rating;
   const reviewCount = course?.ratingCount ?? course?.reviewCount;

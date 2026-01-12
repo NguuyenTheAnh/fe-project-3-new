@@ -16,14 +16,14 @@ export async function getFileAccessUrl({ fileId, isPublic }) {
   if (cached) return cached;
 
   try {
-    if (isPublic) {
-      const response = await axiosInstance.get(
-        `/files/meta/public/${fileId}`
-      );
-      const data = unwrapResponse(response);
-      const url = data?.accessUrl || null;
-      if (url) setCachedFileUrl(fileId, url);
-      return url;
+    const publicResponse = await axiosInstance.get(
+      `/files/meta/public/${fileId}`
+    );
+    const publicData = unwrapResponse(publicResponse);
+    const publicUrl = publicData?.accessUrl || null;
+    if (publicUrl) {
+      setCachedFileUrl(fileId, publicUrl);
+      return publicUrl;
     }
 
     try {

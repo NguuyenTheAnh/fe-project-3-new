@@ -41,7 +41,16 @@ export async function getFileUrl(fileId) {
 
 export async function resolveFileAccessUrl(file, isAuthenticated) {
   if (!file) return null;
-  if (typeof file === "string") return file;
+  if (typeof file === "number") {
+    file = { id: file };
+  }
+  if (typeof file === "string") {
+    const trimmed = file.trim();
+    if (trimmed.startsWith("http") || trimmed.startsWith("data:")) {
+      return file;
+    }
+    file = { id: trimmed };
+  }
   if (file.accessUrl) {
     setCachedFileUrl(file.id || file.fileId, file.accessUrl);
     return file.accessUrl;
@@ -52,18 +61,14 @@ export async function resolveFileAccessUrl(file, isAuthenticated) {
   const cached = getCachedFileUrl(fileId);
   if (cached) return cached;
 
-  const isPublic = file.isPublic === true;
-
-  if (isPublic || file.isPublic === undefined) {
-    try {
-      const publicMeta = await getFileMetaPublic(fileId);
-      if (publicMeta?.accessUrl) {
-        setCachedFileUrl(fileId, publicMeta.accessUrl);
-        return publicMeta.accessUrl;
-      }
-    } catch (error) {
-      // Public access failed, fallback below if authenticated.
+  try {
+    const publicMeta = await getFileMetaPublic(fileId);
+    if (publicMeta?.accessUrl) {
+      setCachedFileUrl(fileId, publicMeta.accessUrl);
+      return publicMeta.accessUrl;
     }
+  } catch (error) {
+    // Public access failed, fallback below if authenticated.
   }
 
   if (!isAuthenticated) return null;
