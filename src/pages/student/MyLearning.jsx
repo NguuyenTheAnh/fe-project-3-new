@@ -30,7 +30,7 @@ const formatPrice = (priceCents, currency, isFree) => {
     style: "currency",
     currency: currency || "VND",
     maximumFractionDigits: 0,
-  }).format(priceCents / 100);
+  }).format(priceCents);
 };
 
 const mapLevel = (level) =>

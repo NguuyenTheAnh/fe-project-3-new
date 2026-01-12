@@ -110,7 +110,7 @@ const normalizeList = (payload) => {
 const formatPrice = (priceCents, isFree) => {
   if (isFree || priceCents === 0) return "Miễn phí";
   if (typeof priceCents === "number") {
-    return (priceCents / 100).toLocaleString("vi-VN", {
+    return (priceCents).toLocaleString("vi-VN", {
       style: "currency",
       currency: "VND",
       maximumFractionDigits: 0,

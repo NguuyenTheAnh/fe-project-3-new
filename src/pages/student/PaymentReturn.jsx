@@ -69,7 +69,7 @@ export default function PaymentReturn() {
             </div>
             <div>
               <span className="font-medium text-slate-900">Tổng tiền: </span>
-              {(order.totalAmountCents / 100).toLocaleString("vi-VN", {
+              {(order.totalAmountCents).toLocaleString("vi-VN", {
                 style: "currency",
                 currency: "VND",
                 maximumFractionDigits: 0,

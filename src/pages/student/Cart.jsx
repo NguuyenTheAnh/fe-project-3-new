@@ -7,7 +7,7 @@ import { checkoutCart, payOrderVnpay } from "@/services/order.service";
 
 const formatMoney = (amountCents) => {
   if (typeof amountCents !== "number") return "-";
-  return (amountCents / 100).toLocaleString("vi-VN", {
+  return (amountCents).toLocaleString("vi-VN", {
     style: "currency",
     currency: "VND",
     maximumFractionDigits: 0,
