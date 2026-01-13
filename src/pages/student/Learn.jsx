@@ -15,6 +15,12 @@ import {
   listCompletedLessons,
   updateLessonProgress,
 } from "@/services/progress.service";
+import {
+  createCourseQuestion,
+  createQuestionAnswer,
+  listCourseQuestions,
+  listQuestionAnswers,
+} from "@/services/qna.service";
 
 const LESSON_TYPE_LABELS = {
   VIDEO: "Video",
@@ -94,6 +100,27 @@ export default function Learn() {
   const lastProgressRef = useRef(0);
   const progressSavingRef = useRef(false);
 
+  const [questionScope, setQuestionScope] = useState("lesson");
+  const [questionPage, setQuestionPage] = useState(0);
+  const [questionMeta, setQuestionMeta] = useState({
+    pageNumber: 0,
+    pageSize: 10,
+    totalElements: 0,
+    totalPages: 1,
+  });
+  const [questions, setQuestions] = useState([]);
+  const [questionsLoading, setQuestionsLoading] = useState(false);
+  const [questionsError, setQuestionsError] = useState("");
+  const [questionForm, setQuestionForm] = useState({
+    title: "",
+    content: "",
+  });
+  const [questionSubmitting, setQuestionSubmitting] = useState(false);
+  const [answersOpen, setAnswersOpen] = useState({});
+  const [answersMap, setAnswersMap] = useState({});
+  const [answerDrafts, setAnswerDrafts] = useState({});
+  const [answerSubmittingId, setAnswerSubmittingId] = useState(null);
+
   const queryLessonId = useMemo(() => {
     const raw = searchParams.get("lessonId");
     const parsed = Number(raw);
@@ -149,6 +176,17 @@ export default function Learn() {
     return Math.round((completed / total) * 100);
   }, [courseProgress, totalLessonsCount, completedLessonIds]);
   const progressDegree = Math.min(360, Math.max(0, progressPercent * 3.6));
+  const lessonTitleMap = useMemo(() => {
+    const map = new Map();
+    sections.forEach((section) => {
+      section.lessons?.forEach((lesson) => {
+        if (lesson?.id) {
+          map.set(lesson.id, lesson.title || "Bài học");
+        }
+      });
+    });
+    return map;
+  }, [sections]);
 
   useEffect(() => {
     let active = true;
@@ -412,6 +450,41 @@ export default function Learn() {
     };
   }, [quizId]);
 
+  useEffect(() => {
+    let active = true;
+    const loadQuestions = async () => {
+      if (!courseId) return;
+      if (questionScope === "lesson" && !activeLessonId) return;
+      setQuestionsLoading(true);
+      setQuestionsError("");
+      try {
+        const data = await listCourseQuestions({
+          courseId,
+          lessonId: questionScope === "lesson" ? activeLessonId : undefined,
+          page: questionPage,
+          size: questionMeta.pageSize,
+        });
+        if (!active) return;
+        setQuestions(data.items || []);
+        setQuestionMeta({
+          pageNumber: data.pageNumber ?? questionPage,
+          pageSize: data.pageSize ?? questionMeta.pageSize,
+          totalElements: data.totalElements ?? 0,
+          totalPages: data.totalPages ?? 1,
+        });
+      } catch (err) {
+        if (!active) return;
+        setQuestionsError(err?.message || "Không thể tải hỏi đáp.");
+      } finally {
+        if (active) setQuestionsLoading(false);
+      }
+    };
+    loadQuestions();
+    return () => {
+      active = false;
+    };
+  }, [courseId, activeLessonId, questionScope, questionPage, questionMeta.pageSize]);
+
   const persistProgress = async (payload, lessonIdOverride) => {
     const targetLessonId = lessonIdOverride ?? activeLessonId;
     if (!courseId || !targetLessonId) return;
@@ -500,6 +573,105 @@ export default function Learn() {
         ? prev.filter((id) => id !== sectionId)
         : [...prev, sectionId]
     );
+  };
+
+  const handleQuestionScopeChange = (event) => {
+    setQuestionScope(event.target.value);
+    setQuestionPage(0);
+  };
+
+  const handleSubmitQuestion = async (event) => {
+    event.preventDefault();
+    if (!courseId) return;
+    if (!questionForm.title.trim() || !questionForm.content.trim()) {
+      setQuestionsError("Vui lòng nhập tiêu đề và nội dung câu hỏi.");
+      return;
+    }
+    setQuestionSubmitting(true);
+    setQuestionsError("");
+    try {
+      await createCourseQuestion(courseId, {
+        courseId: Number(courseId),
+        lessonId: questionScope === "lesson" ? activeLessonId : null,
+        title: questionForm.title.trim(),
+        content: questionForm.content.trim(),
+      });
+      setQuestionForm({ title: "", content: "" });
+      setQuestionPage(0);
+      const data = await listCourseQuestions({
+        courseId,
+        lessonId: questionScope === "lesson" ? activeLessonId : undefined,
+        page: 0,
+        size: questionMeta.pageSize,
+      });
+      setQuestions(data.items || []);
+      setQuestionMeta({
+        pageNumber: data.pageNumber ?? 0,
+        pageSize: data.pageSize ?? questionMeta.pageSize,
+        totalElements: data.totalElements ?? 0,
+        totalPages: data.totalPages ?? 1,
+      });
+    } catch (err) {
+      setQuestionsError(err?.message || "Không thể gửi câu hỏi.");
+    } finally {
+      setQuestionSubmitting(false);
+    }
+  };
+
+  const handleToggleAnswers = async (questionId) => {
+    if (!questionId) return;
+    setAnswersOpen((prev) => ({
+      ...prev,
+      [questionId]: !prev[questionId],
+    }));
+    if (answersMap[questionId]) return;
+    setAnswersMap((prev) => ({
+      ...prev,
+      [questionId]: { items: [], loading: true, error: "" },
+    }));
+    try {
+      const items = await listQuestionAnswers(questionId);
+      setAnswersMap((prev) => ({
+        ...prev,
+        [questionId]: { items: items || [], loading: false, error: "" },
+      }));
+    } catch (err) {
+      setAnswersMap((prev) => ({
+        ...prev,
+        [questionId]: {
+          items: [],
+          loading: false,
+          error: err?.message || "Không thể tải câu trả lời.",
+        },
+      }));
+    }
+  };
+
+  const handleSubmitAnswer = async (questionId) => {
+    if (!questionId) return;
+    const content = (answerDrafts[questionId] || "").trim();
+    if (!content) return;
+    setAnswerSubmittingId(questionId);
+    try {
+      await createQuestionAnswer(questionId, { content });
+      const items = await listQuestionAnswers(questionId);
+      setAnswersMap((prev) => ({
+        ...prev,
+        [questionId]: { items: items || [], loading: false, error: "" },
+      }));
+      setAnswerDrafts((prev) => ({ ...prev, [questionId]: "" }));
+    } catch (err) {
+      setAnswersMap((prev) => ({
+        ...prev,
+        [questionId]: {
+          items: prev[questionId]?.items || [],
+          loading: false,
+          error: err?.message || "Không thể gửi trả lời.",
+        },
+      }));
+    } finally {
+      setAnswerSubmittingId(null);
+    }
   };
 
   const handleSelectLesson = (lessonId, sectionId) => {
@@ -1009,7 +1181,233 @@ export default function Learn() {
           </div>
         </aside>
 
-        <main>{renderLessonContent()}</main>
+        <main className="space-y-6">
+          {renderLessonContent()}
+
+          <section className="rounded-xl border border-slate-200 bg-white p-6">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <h2 className="text-lg font-semibold text-slate-900">Hỏi đáp</h2>
+                <p className="mt-1 text-sm text-slate-600">
+                  Trao đổi với giảng viên và học viên khác.
+                </p>
+              </div>
+              <select
+                value={questionScope}
+                onChange={handleQuestionScopeChange}
+                className="h-10 rounded-lg border border-slate-200 bg-white px-3 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#E11D48]/20 focus:border-[#F43F5E]"
+              >
+                <option value="lesson">Theo bài học hiện tại</option>
+                <option value="course">Theo toàn khóa học</option>
+              </select>
+            </div>
+
+            <form onSubmit={handleSubmitQuestion} className="mt-4 space-y-3">
+              <div>
+                <label className="text-sm font-medium text-slate-700">
+                  Tiêu đề câu hỏi
+                </label>
+                <input
+                  type="text"
+                  value={questionForm.title}
+                  onChange={(event) =>
+                    setQuestionForm((prev) => ({
+                      ...prev,
+                      title: event.target.value,
+                    }))
+                  }
+                  className="mt-1 h-10 w-full rounded-lg border border-slate-200 bg-white px-3 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#E11D48]/20 focus:border-[#F43F5E]"
+                  placeholder="Nhập tiêu đề"
+                />
+              </div>
+              <div>
+                <label className="text-sm font-medium text-slate-700">
+                  Nội dung câu hỏi
+                </label>
+                <textarea
+                  rows="3"
+                  value={questionForm.content}
+                  onChange={(event) =>
+                    setQuestionForm((prev) => ({
+                      ...prev,
+                      content: event.target.value,
+                    }))
+                  }
+                  className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#E11D48]/20 focus:border-[#F43F5E]"
+                  placeholder="Mô tả chi tiết câu hỏi..."
+                />
+              </div>
+              <div className="flex items-center justify-between gap-3">
+                {questionsError ? (
+                  <p className="text-sm text-red-600">{questionsError}</p>
+                ) : (
+                  <span className="text-xs text-slate-500">
+                    {questionScope === "lesson"
+                      ? activeLessonMeta?.lesson?.title
+                        ? `Bài học: ${activeLessonMeta.lesson.title}`
+                        : "Đang xem theo bài học hiện tại"
+                      : "Đang xem theo toàn khóa học"}
+                  </span>
+                )}
+                <button
+                  type="submit"
+                  disabled={questionSubmitting}
+                  className="inline-flex h-10 items-center justify-center rounded-lg bg-[#E11D48] px-4 text-sm font-semibold text-white hover:bg-[#BE123C] transition disabled:opacity-60"
+                >
+                  {questionSubmitting ? "Đang gửi..." : "Gửi câu hỏi"}
+                </button>
+              </div>
+            </form>
+
+            {questionsLoading ? (
+              <div className="mt-6 text-sm text-slate-500">Đang tải câu hỏi...</div>
+            ) : questions.length ? (
+              <div className="mt-6 space-y-4">
+                {questions.map((question) => {
+                  const answers = answersMap[question.id] || {
+                    items: [],
+                    loading: false,
+                    error: "",
+                  };
+                  const isOpen = Boolean(answersOpen[question.id]);
+                  const lessonTitle = question.lessonId
+                    ? lessonTitleMap.get(question.lessonId)
+                    : null;
+                  return (
+                    <div
+                      key={question.id}
+                      className="rounded-xl border border-slate-200 bg-white p-4"
+                    >
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <h3 className="text-sm font-semibold text-slate-900">
+                            {question.title || "Câu hỏi"}
+                          </h3>
+                          <p className="mt-2 text-sm text-slate-700">
+                            {question.content}
+                          </p>
+                          <div className="mt-2 text-xs text-slate-500">
+                            {lessonTitle
+                              ? `Bài học: ${lessonTitle}`
+                              : "Theo toàn khóa học"}
+                          </div>
+                        </div>
+                        <span className="text-xs text-slate-500">
+                          {question.status || "OPEN"}
+                        </span>
+                      </div>
+
+                      <div className="mt-3 flex items-center gap-3">
+                        <button
+                          type="button"
+                          onClick={() => handleToggleAnswers(question.id)}
+                          className="text-sm text-[#2563EB] hover:underline underline-offset-4"
+                        >
+                          {isOpen ? "Ẩn trả lời" : "Xem trả lời"}
+                        </button>
+                      </div>
+
+                      {isOpen ? (
+                        <div className="mt-4 rounded-lg border border-slate-200 bg-slate-50 p-4">
+                          {answers.loading ? (
+                            <p className="text-sm text-slate-500">
+                              Đang tải câu trả lời...
+                            </p>
+                          ) : answers.error ? (
+                            <p className="text-sm text-red-600">
+                              {answers.error}
+                            </p>
+                          ) : answers.items.length ? (
+                            <div className="space-y-3">
+                              {answers.items.map((answer) => (
+                                <div
+                                  key={answer.id}
+                                  className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700"
+                                >
+                                  <p>{answer.content}</p>
+                                  {answer.isAccepted ? (
+                                    <span className="mt-1 inline-flex rounded-full bg-emerald-50 px-2 py-0.5 text-xs font-medium text-emerald-700">
+                                      Đã được chấp nhận
+                                    </span>
+                                  ) : null}
+                                </div>
+                              ))}
+                            </div>
+                          ) : (
+                            <p className="text-sm text-slate-500">
+                              Chưa có câu trả lời.
+                            </p>
+                          )}
+
+                          <div className="mt-4">
+                            <textarea
+                              rows="2"
+                              value={answerDrafts[question.id] || ""}
+                              onChange={(event) =>
+                                setAnswerDrafts((prev) => ({
+                                  ...prev,
+                                  [question.id]: event.target.value,
+                                }))
+                              }
+                              className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#E11D48]/20 focus:border-[#F43F5E]"
+                              placeholder="Nhập câu trả lời..."
+                            />
+                            <div className="mt-2 flex justify-end">
+                              <button
+                                type="button"
+                                onClick={() => handleSubmitAnswer(question.id)}
+                                disabled={answerSubmittingId === question.id}
+                                className="inline-flex h-9 items-center justify-center rounded-lg bg-[#E11D48] px-3 text-sm font-semibold text-white hover:bg-[#BE123C] transition disabled:opacity-60"
+                              >
+                                {answerSubmittingId === question.id
+                                  ? "Đang gửi..."
+                                  : "Gửi trả lời"}
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      ) : null}
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="mt-6 rounded-lg border border-slate-200 bg-slate-50 p-4 text-sm text-slate-600">
+                Chưa có câu hỏi nào.
+              </div>
+            )}
+
+            {questionMeta.totalPages > 1 ? (
+              <div className="mt-6 flex items-center justify-between">
+                <button
+                  type="button"
+                  onClick={() =>
+                    setQuestionPage((prev) => Math.max(0, prev - 1))
+                  }
+                  disabled={questionMeta.pageNumber <= 0}
+                  className="inline-flex h-9 items-center justify-center rounded-md border border-slate-200 bg-white px-3 text-sm font-medium text-slate-900 hover:bg-slate-50 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Trang trước
+                </button>
+                <span className="text-sm text-slate-500">
+                  Trang {questionMeta.pageNumber + 1} / {questionMeta.totalPages}
+                </span>
+                <button
+                  type="button"
+                  onClick={() =>
+                    setQuestionPage((prev) =>
+                      Math.min(questionMeta.totalPages - 1, prev + 1)
+                    )
+                  }
+                  disabled={questionMeta.pageNumber + 1 >= questionMeta.totalPages}
+                  className="inline-flex h-9 items-center justify-center rounded-md border border-slate-200 bg-white px-3 text-sm font-medium text-slate-900 hover:bg-slate-50 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Trang sau
+                </button>
+              </div>
+            ) : null}
+          </section>
+        </main>
       </div>
     </div>
   );
