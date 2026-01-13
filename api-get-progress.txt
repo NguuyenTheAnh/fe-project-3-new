@@ -1,0 +1,248 @@
+						{
+							"name": "Get my progress for a course",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{STUDENT_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/courses/:courseId/progress",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"courses",
+										":courseId",
+										"progress"
+									],
+									"variable": [
+										{
+											"key": "courseId",
+											"value": "7"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Get my progress for a course",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseURL}}/courses/:courseId/progress",
+											"host": [
+												"{{baseURL}}"
+											],
+											"path": [
+												"courses",
+												":courseId",
+												"progress"
+											],
+											"variable": [
+												{
+													"key": "courseId",
+													"value": "7"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "",
+									"header": [
+										{
+											"key": "Vary",
+											"value": "Origin"
+										},
+										{
+											"key": "Vary",
+											"value": "Access-Control-Request-Method"
+										},
+										{
+											"key": "Vary",
+											"value": "Access-Control-Request-Headers"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "0"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Tue, 13 Jan 2026 15:05:35 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"code\": \"00\",\n    \"message\": null,\n    \"data\": {\n        \"courseId\": 7,\n        \"totalLessons\": 5,\n        \"completedLessons\": 3,\n        \"progressPercent\": 60\n    }\n}"
+								}
+							]
+						},
+						{
+							"name": "Get list completed lessons",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{STUDENT_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/courses/:courseId/lessons/completed",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"courses",
+										":courseId",
+										"lessons",
+										"completed"
+									],
+									"variable": [
+										{
+											"key": "courseId",
+											"value": "7"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Get list completed lessons",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseURL}}/courses/:courseId/lessons/completed",
+											"host": [
+												"{{baseURL}}"
+											],
+											"path": [
+												"courses",
+												":courseId",
+												"lessons",
+												"completed"
+											],
+											"variable": [
+												{
+													"key": "courseId",
+													"value": "7"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "",
+									"header": [
+										{
+											"key": "Vary",
+											"value": "Origin"
+										},
+										{
+											"key": "Vary",
+											"value": "Access-Control-Request-Method"
+										},
+										{
+											"key": "Vary",
+											"value": "Access-Control-Request-Headers"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "0"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Tue, 13 Jan 2026 15:08:10 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"code\": \"00\",\n    \"message\": null,\n    \"data\": [\n        {\n            \"id\": 8,\n            \"title\": \"Bài 1\",\n            \"lessonType\": \"VIDEO\",\n            \"contentText\": null,\n            \"videoFileId\": 24,\n            \"durationSeconds\": 60,\n            \"isFreePreview\": false\n        },\n        {\n            \"id\": 11,\n            \"title\": \"Bài 1.1 (Kiểm tra)\",\n            \"lessonType\": \"QUIZ\",\n            \"contentText\": null,\n            \"videoFileId\": null,\n            \"durationSeconds\": 900,\n            \"isFreePreview\": false\n        },\n        {\n            \"id\": 9,\n            \"title\": \"Bài 2\",\n            \"lessonType\": \"VIDEO\",\n            \"contentText\": null,\n            \"videoFileId\": 27,\n            \"durationSeconds\": 60,\n            \"isFreePreview\": false\n        }\n    ]\n}"
+								}
+							]
+						}

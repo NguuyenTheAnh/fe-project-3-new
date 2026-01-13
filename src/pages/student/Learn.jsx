@@ -11,6 +11,8 @@ import {
 import { getQuizByLesson } from "@/services/quiz.student.service";
 import {
   getLessonProgress,
+  getCourseProgress,
+  listCompletedLessons,
   updateLessonProgress,
 } from "@/services/progress.service";
 
@@ -81,6 +83,12 @@ export default function Learn() {
   const [quizSubmitting, setQuizSubmitting] = useState(false);
   const [quizError, setQuizError] = useState("");
 
+  const [courseProgress, setCourseProgress] = useState({
+    totalLessons: 0,
+    completedLessons: 0,
+    progressPercent: 0,
+  });
+  const [completedLessonIds, setCompletedLessonIds] = useState(new Set());
   const [progressMap, setProgressMap] = useState({});
   const [progressError, setProgressError] = useState("");
   const lastProgressRef = useRef(0);
@@ -125,6 +133,22 @@ export default function Learn() {
   const canDoQuiz = quizAttempt?.status === "IN_PROGRESS";
   const activeProgress = activeLessonId ? progressMap[activeLessonId] : null;
   const isLessonCompleted = Boolean(activeProgress?.completed);
+  const totalLessonsCount = useMemo(() => {
+    return sections.reduce(
+      (total, section) => total + (section.lessons?.length || 0),
+      0
+    );
+  }, [sections]);
+  const progressPercent = useMemo(() => {
+    if (typeof courseProgress.progressPercent === "number") {
+      return courseProgress.progressPercent;
+    }
+    const total = courseProgress.totalLessons || totalLessonsCount || 0;
+    const completed = courseProgress.completedLessons || completedLessonIds.size;
+    if (!total) return 0;
+    return Math.round((completed / total) * 100);
+  }, [courseProgress, totalLessonsCount, completedLessonIds]);
+  const progressDegree = Math.min(360, Math.max(0, progressPercent * 3.6));
 
   useEffect(() => {
     let active = true;
@@ -150,6 +174,65 @@ export default function Learn() {
       }
     };
     loadCourse();
+    return () => {
+      active = false;
+    };
+  }, [courseId]);
+
+  useEffect(() => {
+    let active = true;
+    const loadCourseProgress = async () => {
+      if (!courseId) return;
+      try {
+        const data = await getCourseProgress(courseId);
+        if (!active || !data) return;
+        setCourseProgress({
+          totalLessons: data.totalLessons ?? 0,
+          completedLessons: data.completedLessons ?? 0,
+          progressPercent: data.progressPercent ?? 0,
+        });
+      } catch (err) {
+        if (!active) return;
+        if (err?.status !== 404) {
+          setProgressError(err?.message || "Không thể tải tiến độ khóa học.");
+        }
+      }
+    };
+    loadCourseProgress();
+    return () => {
+      active = false;
+    };
+  }, [courseId]);
+
+  useEffect(() => {
+    let active = true;
+    const loadCompletedLessons = async () => {
+      if (!courseId) return;
+      try {
+        const data = await listCompletedLessons(courseId);
+        if (!active) return;
+        const ids = new Set(
+          (Array.isArray(data) ? data : []).map((item) => item?.id).filter(Boolean)
+        );
+        setCompletedLessonIds(ids);
+        setProgressMap((prev) => {
+          const next = { ...prev };
+          ids.forEach((id) => {
+            next[id] = {
+              completed: true,
+              lastPositionSeconds: prev[id]?.lastPositionSeconds ?? 0,
+            };
+          });
+          return next;
+        });
+      } catch (err) {
+        if (!active) return;
+        if (err?.status !== 404) {
+          setProgressError(err?.message || "Không thể tải tiến độ bài học.");
+        }
+      }
+    };
+    loadCompletedLessons();
     return () => {
       active = false;
     };
@@ -329,22 +412,52 @@ export default function Learn() {
     };
   }, [quizId]);
 
-  const persistProgress = async (payload) => {
-    if (!courseId || !activeLessonId) return;
+  const persistProgress = async (payload, lessonIdOverride) => {
+    const targetLessonId = lessonIdOverride ?? activeLessonId;
+    if (!courseId || !targetLessonId) return;
     if (progressSavingRef.current) return;
     progressSavingRef.current = true;
     setProgressError("");
     try {
-      const data = await updateLessonProgress(courseId, activeLessonId, payload);
+      const data = await updateLessonProgress(courseId, targetLessonId, payload);
       if (data) {
+        if (typeof data.completed === "boolean") {
+          setCompletedLessonIds((prev) => {
+            const next = new Set(prev);
+            if (data.completed) {
+              next.add(targetLessonId);
+            } else {
+              next.delete(targetLessonId);
+            }
+            return next;
+          });
+        }
         setProgressMap((prev) => ({
           ...prev,
-          [activeLessonId]: {
+          [targetLessonId]: {
             completed: Boolean(data.completed),
             lastPositionSeconds:
               data.lastPositionSeconds ?? payload.lastPositionSeconds ?? 0,
           },
         }));
+        if (typeof payload.completed === "boolean") {
+          try {
+            const progress = await getCourseProgress(courseId);
+            if (progress) {
+              setCourseProgress({
+                totalLessons: progress.totalLessons ?? 0,
+                completedLessons: progress.completedLessons ?? 0,
+                progressPercent: progress.progressPercent ?? 0,
+              });
+            }
+          } catch (err) {
+            if (err?.status !== 404) {
+              setProgressError(
+                err?.message || "Không thể tải tiến độ khóa học."
+              );
+            }
+          }
+        }
       }
     } catch (err) {
       setProgressError(err?.message || "Không thể cập nhật tiến độ.");
@@ -366,6 +479,19 @@ export default function Learn() {
     const current = Math.floor(event.currentTarget.currentTime || 0);
     lastProgressRef.current = current;
     persistProgress({ lastPositionSeconds: current, completed: true });
+  };
+
+  const handleToggleLessonCompleted = async (event, lessonId) => {
+    event.stopPropagation();
+    const checked = event.target.checked;
+    const existing = progressMap[lessonId] || {};
+    await persistProgress(
+      {
+        completed: checked,
+        lastPositionSeconds: existing.lastPositionSeconds ?? 0,
+      },
+      lessonId
+    );
   };
 
   const handleToggleSection = (sectionId) => {
@@ -760,9 +886,23 @@ export default function Learn() {
 
       <div className="grid gap-6 lg:grid-cols-[320px_1fr]">
         <aside className="rounded-xl border border-slate-200 bg-white p-4 lg:sticky lg:top-24 lg:max-h-[calc(100vh-160px)] lg:overflow-y-auto">
-          <h2 className="text-sm font-semibold text-slate-900">
-            Nội dung khóa học
-          </h2>
+          <div className="flex items-center justify-between gap-3">
+            <h2 className="text-sm font-semibold text-slate-900">
+              Nội dung khóa học
+            </h2>
+            <div className="relative h-12 w-12">
+              <div
+                className="absolute inset-0 rounded-full"
+                style={{
+                  background: `conic-gradient(#E11D48 ${progressDegree}deg, #E2E8F0 0deg)`,
+                }}
+                aria-hidden="true"
+              />
+              <div className="absolute inset-1 flex items-center justify-center rounded-full bg-white text-xs font-semibold text-slate-700">
+                {progressPercent}%
+              </div>
+            </div>
+          </div>
           <div className="mt-4 space-y-3">
             {sections.length ? (
               sections.map((section, sectionIndex) => {
@@ -794,9 +934,9 @@ export default function Learn() {
                               const lessonType =
                                 lesson.lessonType || lesson.type;
                               const lessonProgress = progressMap[lesson.id];
-                              const isCompleted = Boolean(
-                                lessonProgress?.completed
-                              );
+                              const isCompleted =
+                                Boolean(lessonProgress?.completed) ||
+                                completedLessonIds.has(lesson.id);
                               return (
                                 <button
                                   key={lesson.id}
@@ -811,8 +951,25 @@ export default function Learn() {
                                       : "hover:bg-slate-50 text-slate-700",
                                   ].join(" ")}
                                 >
-                                  <div className="text-sm font-medium line-clamp-2">
-                                    {lesson.title || "Bài học"}
+                                  <div className="flex items-start justify-between gap-3">
+                                    <div className="text-sm font-medium line-clamp-2">
+                                      {lesson.title || "Bài học"}
+                                    </div>
+                                    <input
+                                      type="checkbox"
+                                      checked={isCompleted}
+                                      onChange={(event) =>
+                                        handleToggleLessonCompleted(
+                                          event,
+                                          lesson.id
+                                        )
+                                      }
+                                      onClick={(event) =>
+                                        event.stopPropagation()
+                                      }
+                                      className="mt-0.5 h-4 w-4 shrink-0 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500/20"
+                                      aria-label="Đánh dấu hoàn thành"
+                                    />
                                   </div>
                                   <div className="mt-1 flex items-center gap-2 text-xs text-slate-500">
                                     <span>

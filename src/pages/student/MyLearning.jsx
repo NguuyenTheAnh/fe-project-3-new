@@ -1,10 +1,11 @@
-﻿import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   getCourseDetail,
   getFileMetaSmart,
   listMyEnrollments,
 } from "@/services/learning.service";
+import { getCourseProgress } from "@/services/progress.service";
 
 const PAGE_SIZE = 10;
 
@@ -86,6 +87,7 @@ function SkeletonCard() {
       <div className="p-4 space-y-3">
         <div className="h-4 w-3/4 bg-slate-200 rounded" />
         <div className="h-3 w-1/2 bg-slate-200 rounded" />
+        <div className="h-2 w-full bg-slate-200 rounded-full" />
         <div className="h-9 w-full bg-slate-200 rounded-xl" />
       </div>
     </div>
@@ -127,6 +129,24 @@ export default function MyLearning() {
     return { results, errors };
   }, []);
 
+  const fetchProgress = useCallback(async (courseIds) => {
+    const results = new Map();
+    const limit = 6;
+    for (let i = 0; i < courseIds.length; i += limit) {
+      const chunk = courseIds.slice(i, i + limit);
+      const settled = await Promise.allSettled(
+        chunk.map((id) => getCourseProgress(id))
+      );
+      settled.forEach((result, index) => {
+        const courseId = chunk[index];
+        if (result.status === "fulfilled" && result.value) {
+          results.set(courseId, result.value);
+        }
+      });
+    }
+    return results;
+  }, []);
+
   const resolveThumbnailUrl = useCallback(async (thumbnail) => {
     if (!thumbnail?.id) return null;
     const accessUrl = thumbnail.accessUrl || null;
@@ -147,6 +167,7 @@ export default function MyLearning() {
       );
 
       const { results, errors } = await fetchCourseDetails(courseIds);
+      const progressMap = await fetchProgress(courseIds);
 
       const nextCards = await Promise.all(
         active.map(async (item) => {
@@ -165,6 +186,10 @@ export default function MyLearning() {
             course.ratingAvg,
             course.ratingCount
           );
+          const progress = progressMap.get(courseId);
+          const percent = typeof progress?.progressPercent === "number"
+            ? progress.progressPercent
+            : 0;
 
           return {
             courseId,
@@ -172,8 +197,6 @@ export default function MyLearning() {
             shortDescription:
               course.shortDescription || course.subtitle || course.summary || "",
             instructorNames: resolveInstructorNames(course),
-            levelLabel: mapLevel(course.level),
-            languageLabel: mapLanguage(course.language),
             ratingAvg: course.ratingAvg,
             ratingCount: course.ratingCount,
             ratingText,
@@ -185,13 +208,14 @@ export default function MyLearning() {
             ),
             thumbnailUrl,
             continueLessonId,
+            progressPercent: Math.max(0, Math.min(100, percent)),
           };
         })
       );
 
       setCards(nextCards);
     },
-    [fetchCourseDetails, resolveThumbnailUrl]
+    [fetchCourseDetails, fetchProgress, resolveThumbnailUrl]
   );
 
   const fetchEnrollments = useCallback(
@@ -339,6 +363,17 @@ export default function MyLearning() {
                       {card.priceLabel}
                     </p>
                   ) : null}
+                  <div className="mt-3">
+                    <div className="h-2 w-full overflow-hidden rounded-full bg-slate-100">
+                      <div
+                        className="h-full rounded-full bg-[#E11D48]"
+                        style={{ width: `${card.progressPercent}%` }}
+                      />
+                    </div>
+                    <div className="mt-1 text-xs text-slate-500">
+                      {card.progressPercent}% hoàn thành
+                    </div>
+                  </div>
                   <Link
                     to={`/learn/${card.courseId}${lessonQuery}`}
                     className="mt-4 w-full h-10 inline-flex items-center justify-center rounded-md bg-red-600 text-white font-medium hover:bg-red-700 active:bg-red-800 transition"
