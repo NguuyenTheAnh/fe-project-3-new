@@ -1,0 +1,209 @@
+###reorder section
+						{
+							"name": "Reorder sections",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ADMIN_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"items\": [\n      {\"id\": 8, \"position\": 2},\n      {\"id\": 9, \"position\": 1}\n    ]\n  }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/instructor/courses/:courseId/sections/reorder",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"instructor",
+										"courses",
+										":courseId",
+										"sections",
+										"reorder"
+									],
+									"variable": [
+										{
+											"key": "courseId",
+											"value": "6"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Reorder sections",
+									"originalRequest": {
+										"method": "PATCH",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"items\": [\n      {\"id\": 8, \"position\": 2},\n      {\"id\": 9, \"position\": 1}\n    ]\n  }",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseURL}}/instructor/courses/:courseId/sections/reorder",
+											"host": [
+												"{{baseURL}}"
+											],
+											"path": [
+												"instructor",
+												"courses",
+												":courseId",
+												"sections",
+												"reorder"
+											],
+											"variable": [
+												{
+													"key": "courseId",
+													"value": "6"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": null,
+									"header": [
+										{
+											"key": "Vary",
+											"value": "Origin"
+										},
+										{
+											"key": "Vary",
+											"value": "Access-Control-Request-Method"
+										},
+										{
+											"key": "Vary",
+											"value": "Access-Control-Request-Headers"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "0"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Tue, 06 Jan 2026 17:27:40 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"code\": \"00\",\n    \"message\": null,\n    \"data\": {\n        \"id\": 6,\n        \"title\": \"ReactJs Masterclass (Updated)\",\n        \"slug\": \"reactjs-masterclass\",\n        \"shortDescription\": \"Updated short desc\",\n        \"description\": \"Updated full desc\",\n        \"level\": \"INTERMEDIATE\",\n        \"language\": \"VI\",\n        \"status\": \"PUBLISHED\",\n        \"priceCents\": 0,\n        \"publishedAt\": \"2026-01-07T00:25:03\",\n        \"ratingAvg\": 0,\n        \"ratingCount\": 0,\n        \"category\": {\n            \"id\": 2,\n            \"name\": \"Development\",\n            \"slug\": \"development\",\n            \"parentId\": null,\n            \"description\": \"Software dev\",\n            \"position\": 1\n        },\n        \"tags\": [\n            {\n                \"id\": 1,\n                \"name\": \"Spring\",\n                \"slug\": \"spring\"\n            },\n            {\n                \"id\": 2,\n                \"name\": \"Java\",\n                \"slug\": \"java\"\n            }\n        ],\n        \"thumbnail\": {\n            \"id\": 22,\n            \"storageProvider\": \"MINIO\",\n            \"bucket\": \"lms-files\",\n            \"objectKey\": \"images/0f7e13ffee5845cc83ab5bff1e224c5d.jpg\",\n            \"originalName\": \"Nitro_Wallpaper_05_3840x2400.jpg\",\n            \"contentType\": \"image/jpeg\",\n            \"sizeBytes\": 3480308,\n            \"checksumSha256\": \"6749a5c70011ccf944ce4f12544abeebf7522e1895761c2e0a7ca237b590794a\",\n            \"isPublic\": false,\n            \"accessUrl\": null,\n            \"status\": \"ATTACHED\",\n            \"purpose\": \"THUMBNAIL\",\n            \"courseId\": 6,\n            \"lessonId\": null\n        },\n        \"introVideo\": {\n            \"id\": 21,\n            \"storageProvider\": \"MINIO\",\n            \"bucket\": \"lms-files\",\n            \"objectKey\": \"videos/9285a41662074c96a003426c29905d35.mp4\",\n            \"originalName\": \"test0601-1.mp4\",\n            \"contentType\": \"video/mp4\",\n            \"sizeBytes\": 58676323,\n            \"checksumSha256\": \"\\\"e413e579e3d8a57efe181b8d5be3934f\\\"\",\n            \"isPublic\": false,\n            \"accessUrl\": null,\n            \"status\": \"ATTACHED\",\n            \"purpose\": \"INTRO_VIDEO\",\n            \"courseId\": 6,\n            \"lessonId\": null\n        },\n        \"instructors\": [\n            {\n                \"id\": 4,\n                \"fullName\": \"My New Name\",\n                \"avatarFile\": {\n                    \"id\": 3,\n                    \"storageProvider\": \"MINIO\",\n                    \"bucket\": \"lms-files\",\n                    \"objectKey\": \"images/6b71b400bab84d90b1f188ea057d1e3c.jpg\",\n                    \"originalName\": \"Nitro_Wallpaper_01_3840x2400.jpg\",\n                    \"contentType\": \"image/jpeg\",\n                    \"sizeBytes\": 4114576,\n                    \"checksumSha256\": \"a7583fdee261ce58a2ec91b64d6bd715a810645e8550efdd8c3a5a1c12815268\",\n                    \"isPublic\": false,\n                    \"accessUrl\": null,\n                    \"status\": \"ATTACHED\",\n                    \"purpose\": \"DOCUMENT\",\n                    \"courseId\": null,\n                    \"lessonId\": null\n                }\n            }\n        ],\n        \"sections\": [\n            {\n                \"id\": 9,\n                \"title\": \"Section 2 - End\",\n                \"position\": 1,\n                \"lessons\": []\n            },\n            {\n                \"id\": 8,\n                \"title\": \"Section 1 - Intro Updated\",\n                \"position\": 2,\n                \"lessons\": []\n            }\n        ],\n        \"courseDocuments\": []\n    }\n}"
+								}
+							]
+						}
+
+###reorder lessons
+						{
+							"name": "Reorder lessons",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ADMIN_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"items\": [\n      {\"id\": 7, \"position\": 1}\n    ]\n  }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/instructor/courses/:courseId/lessons/reorder",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"instructor",
+										"courses",
+										":courseId",
+										"lessons",
+										"reorder"
+									],
+									"variable": [
+										{
+											"key": "courseId",
+											"value": "6"
+										}
+									]
+								}
+							},
+							"response": []
+						}

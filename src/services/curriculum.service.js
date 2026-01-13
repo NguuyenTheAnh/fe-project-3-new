@@ -94,6 +94,18 @@ export async function reorderLessons(courseId, items = []) {
   }
 }
 
+export async function reorderSections(courseId, items = []) {
+  try {
+    const response = await axiosInstance.patch(
+      `/instructor/courses/${courseId}/sections/reorder`,
+      { items }
+    );
+    return unwrapResponse(response);
+  } catch (error) {
+    handleApiError(error);
+  }
+}
+
 export async function createCourseDocument(courseId, payload) {
   try {
     const response = await axiosInstance.post(

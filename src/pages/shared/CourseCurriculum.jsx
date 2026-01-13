@@ -14,12 +14,17 @@ import {
   deleteSection,
   getLessonDetail,
   reorderLessons,
+  reorderSections,
   updateCourseDocument,
   updateLesson,
   updateLessonDocument,
   updateSection,
 } from "@/services/curriculum.service";
-import { getFileAccessUrl, uploadFileWithPresign } from "@/services/file.service";
+import {
+  getFileAccessUrl,
+  getFileAccessUrlPrivate,
+  uploadFileWithPresign,
+} from "@/services/file.service";
 import LessonQuizManager from "@/pages/shared/LessonQuizManager";
 
 const SECTION_FORM_DEFAULT = {
@@ -49,6 +54,7 @@ const DOCUMENT_FORM_DEFAULT = {
 const LESSON_TYPE_OPTIONS = [
   { value: "VIDEO", label: "Video" },
   { value: "ARTICLE", label: "Bài viết" },
+  { value: "QUIZ", label: "Quiz" },
 ];
 
 const formatDuration = (seconds) => {
@@ -102,6 +108,12 @@ export default function CourseCurriculum({ backTo, title }) {
   const [reorderItems, setReorderItems] = useState([]);
   const [reorderError, setReorderError] = useState("");
   const [reorderSaving, setReorderSaving] = useState(false);
+  const [sectionReorderOpen, setSectionReorderOpen] = useState(false);
+  const [sectionReorderItems, setSectionReorderItems] = useState([]);
+  const [sectionReorderError, setSectionReorderError] = useState("");
+  const [sectionReorderSaving, setSectionReorderSaving] = useState(false);
+  const [draggingLessonId, setDraggingLessonId] = useState(null);
+  const [draggingSectionId, setDraggingSectionId] = useState(null);
 
   const loadCourse = useCallback(async () => {
     if (!courseId) return;
@@ -580,10 +592,7 @@ export default function CourseCurriculum({ backTo, title }) {
 
     setOpeningDocumentId(document.id);
     try {
-      const url = file?.accessUrl || (await getFileAccessUrl({
-        fileId,
-        isPublic: file?.isPublic,
-      }));
+      const url = file?.accessUrl || (await getFileAccessUrlPrivate(fileId));
       if (!url) {
         throw new Error("Không thể mở tệp tài liệu.");
       }
@@ -628,10 +637,7 @@ export default function CourseCurriculum({ backTo, title }) {
       if (videoFile?.accessUrl) {
         setLessonVideoUrl(videoFile.accessUrl);
       } else if (videoFile?.id) {
-        const url = await getFileAccessUrl({
-          fileId: videoFile.id,
-          isPublic: videoFile.isPublic,
-        });
+        const url = await getFileAccessUrlPrivate(videoFile.id);
         setLessonVideoUrl(url || "");
       }
     } catch (err) {
@@ -648,6 +654,17 @@ export default function CourseCurriculum({ backTo, title }) {
     setLessonVideoUrl("");
   };
 
+  const moveItem = (items, fromId, toId) => {
+    if (!fromId || !toId || fromId === toId) return items;
+    const fromIndex = items.findIndex((item) => item.id === fromId);
+    const toIndex = items.findIndex((item) => item.id === toId);
+    if (fromIndex < 0 || toIndex < 0) return items;
+    const updated = [...items];
+    const [moved] = updated.splice(fromIndex, 1);
+    updated.splice(toIndex, 0, moved);
+    return updated;
+  };
+
   const openReorderLessons = (section) => {
     const lessons = Array.isArray(section?.lessons)
       ? [...section.lessons].sort((a, b) => (a.position ?? 0) - (b.position ?? 0))
@@ -661,6 +678,7 @@ export default function CourseCurriculum({ backTo, title }) {
       }))
     );
     setReorderError("");
+    setDraggingLessonId(null);
     setReorderModalOpen(true);
   };
 
@@ -670,14 +688,57 @@ export default function CourseCurriculum({ backTo, title }) {
     setReorderItems([]);
     setReorderError("");
     setReorderSaving(false);
+    setDraggingLessonId(null);
   };
 
-  const handleReorderChange = (lessonId, value) => {
-    setReorderItems((prev) =>
-      prev.map((item) =>
-        item.id === lessonId ? { ...item, position: value } : item
-      )
+  const handleLessonDragStart = (lessonId) => {
+    setDraggingLessonId(lessonId);
+  };
+
+  const handleLessonDragEnter = (event, lessonId) => {
+    event.preventDefault();
+    if (!draggingLessonId || draggingLessonId === lessonId) return;
+    setReorderItems((prev) => moveItem(prev, draggingLessonId, lessonId));
+  };
+
+  const handleLessonDragEnd = () => {
+    setDraggingLessonId(null);
+  };
+
+  const openReorderSections = () => {
+    const list = [...sections].sort((a, b) => (a.position ?? 0) - (b.position ?? 0));
+    setSectionReorderItems(
+      list.map((section, index) => ({
+        id: section.id,
+        title: section.title || `Chương ${index + 1}`,
+        position: section.position ?? index + 1,
+      }))
     );
+    setSectionReorderError("");
+    setDraggingSectionId(null);
+    setSectionReorderOpen(true);
+  };
+
+  const closeSectionReorder = () => {
+    setSectionReorderOpen(false);
+    setSectionReorderItems([]);
+    setSectionReorderError("");
+    setSectionReorderSaving(false);
+    setDraggingSectionId(null);
+  };
+
+  const handleSectionDragStart = (sectionId) => {
+    setDraggingSectionId(sectionId);
+  };
+
+  const handleSectionDragEnter = (event, sectionId) => {
+    event.preventDefault();
+    if (!draggingSectionId || draggingSectionId === sectionId) return;
+    setSectionReorderItems((prev) => moveItem(prev, draggingSectionId, sectionId));
+  };
+
+  const handleSectionDragEnd = () => {
+    setDraggingSectionId(null);
   };
 
   const handleReorderSubmit = async (event) => {
@@ -687,22 +748,10 @@ export default function CourseCurriculum({ backTo, title }) {
       return;
     }
 
-    const normalized = reorderItems.map((item) => ({
+    const normalized = reorderItems.map((item, index) => ({
       id: item.id,
-      position: Number(item.position),
+      position: index + 1,
     }));
-
-    if (normalized.some((item) => !item.id || !Number.isFinite(item.position))) {
-      setReorderError("Vui lòng nhập vị trí hợp lệ.");
-      return;
-    }
-
-    const positions = normalized.map((item) => item.position);
-    const uniquePositions = new Set(positions);
-    if (uniquePositions.size !== positions.length) {
-      setReorderError("Vị trí bị trùng, vui lòng kiểm tra lại.");
-      return;
-    }
 
     setReorderSaving(true);
     setReorderError("");
@@ -715,6 +764,32 @@ export default function CourseCurriculum({ backTo, title }) {
       setReorderError(err?.message || "Không thể cập nhật thứ tự bài học.");
     } finally {
       setReorderSaving(false);
+    }
+  };
+
+  const handleSectionReorderSubmit = async (event) => {
+    event.preventDefault();
+    if (!courseId || !sectionReorderItems.length) {
+      closeSectionReorder();
+      return;
+    }
+
+    const normalized = sectionReorderItems.map((item, index) => ({
+      id: item.id,
+      position: index + 1,
+    }));
+
+    setSectionReorderSaving(true);
+    setSectionReorderError("");
+    try {
+      await reorderSections(courseId, normalized);
+      setNotice({ type: "success", message: "Cập nhật thứ tự chương thành công." });
+      closeSectionReorder();
+      await loadCourse();
+    } catch (err) {
+      setSectionReorderError(err?.message || "Không thể cập nhật thứ tự chương.");
+    } finally {
+      setSectionReorderSaving(false);
     }
   };
 
@@ -736,7 +811,12 @@ export default function CourseCurriculum({ backTo, title }) {
             {course?.title ? `Khóa học: ${course.title}` : "Đang tải khóa học..."}
           </p>
         </div>
-        <Button onClick={openCreateSection}>+ Thêm chương</Button>
+        <div className="flex flex-wrap items-center gap-2">
+          <Button variant="outline" onClick={openReorderSections}>
+            Chỉnh thứ tự chương
+          </Button>
+          <Button onClick={openCreateSection}>+ Thêm chương</Button>
+        </div>
       </div>
 
       {notice ? (
@@ -958,13 +1038,17 @@ export default function CourseCurriculum({ backTo, title }) {
                                     Tài liệu
                                   </button>
                                   <span className="mx-2 text-slate-300">|</span>
-                                  <button
-                                    type="button"
-                                    onClick={() => openQuizModal(lesson)}
-                                    className="text-slate-700 hover:text-slate-900 hover:underline underline-offset-4"
-                                  >
-                                    Quiz
-                                  </button>
+                                  {lesson.lessonType === "QUIZ" ? (
+                                    <button
+                                      type="button"
+                                      onClick={() => openQuizModal(lesson)}
+                                      className="text-slate-700 hover:text-slate-900 hover:underline underline-offset-4"
+                                    >
+                                      Quiz
+                                    </button>
+                                  ) : (
+                                    <span className="text-slate-300">——</span>
+                                  )}
                                   <span className="mx-2 text-slate-300">|</span>
                                   <button
                                     type="button"
@@ -1633,6 +1717,78 @@ export default function CourseCurriculum({ backTo, title }) {
         </>
       ) : null}
 
+      {sectionReorderOpen ? (
+        <>
+          <div
+            className="fixed inset-0 z-50 bg-black/40"
+            onClick={closeSectionReorder}
+          />
+          <div className="fixed left-1/2 top-1/2 z-50 w-[92vw] max-w-lg -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto">
+            <h2 className="text-lg font-semibold text-slate-900">
+              Chỉnh thứ tự chương
+            </h2>
+            <p className="mt-1 text-sm text-slate-500">
+              Kéo thả để sắp xếp thứ tự các chương trong khóa học.
+            </p>
+
+            <form className="mt-4 space-y-4" onSubmit={handleSectionReorderSubmit}>
+              <div className="rounded-lg border border-slate-200 bg-slate-50/60 p-3">
+                {sectionReorderItems.length ? (
+                  <div className="space-y-2">
+                    {sectionReorderItems.map((item, index) => (
+                      <div
+                        key={item.id}
+                        draggable
+                        onDragStart={() => handleSectionDragStart(item.id)}
+                        onDragEnter={(event) =>
+                          handleSectionDragEnter(event, item.id)
+                        }
+                        onDragOver={(event) => event.preventDefault()}
+                        onDragEnd={handleSectionDragEnd}
+                        className={`flex items-center gap-3 rounded-lg border px-3 py-2 text-sm cursor-grab active:cursor-grabbing ${
+                          draggingSectionId === item.id
+                            ? "border-red-200 bg-red-50/60"
+                            : "border-slate-200 bg-white"
+                        }`}
+                      >
+                        <span className="w-6 text-xs text-slate-400">
+                          {index + 1}
+                        </span>
+                        <span className="flex-1 text-slate-700 line-clamp-1">
+                          {item.title}
+                        </span>
+                        <span className="text-base text-slate-400">⋮⋮</span>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-sm text-slate-500">
+                    Chưa có chương để sắp xếp.
+                  </div>
+                )}
+              </div>
+
+              {sectionReorderError ? (
+                <div className="text-sm text-red-600">{sectionReorderError}</div>
+              ) : null}
+
+              <div className="mt-6 flex items-center justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={closeSectionReorder}
+                  className="h-10 rounded-lg border border-slate-200 bg-white px-4 text-sm font-medium hover:bg-slate-50 transition inline-flex items-center justify-center"
+                >
+                  Hủy
+                </button>
+                <Button type="submit" disabled={sectionReorderSaving}>
+                  {sectionReorderSaving ? "Đang lưu..." : "Lưu thứ tự"}
+                </Button>
+              </div>
+            </form>
+          </div>
+        </>
+      ) : null}
+
       {reorderModalOpen ? (
         <>
           <div
@@ -1652,26 +1808,38 @@ export default function CourseCurriculum({ backTo, title }) {
             <form className="mt-4 space-y-4" onSubmit={handleReorderSubmit}>
               <div className="rounded-lg border border-slate-200 bg-slate-50/60 p-3">
                 {reorderItems.length ? (
-                  <div className="space-y-2">
-                    {reorderItems.map((item) => (
-                      <div
-                        key={item.id}
-                        className="flex items-center gap-3 rounded-lg border border-slate-200 bg-white px-3 py-2"
-                      >
-                        <div className="flex-1 text-sm text-slate-700 line-clamp-1">
-                          {item.title}
-                        </div>
-                        <Input
-                          type="number"
-                          value={item.position}
-                          onChange={(event) =>
-                            handleReorderChange(item.id, event.target.value)
+                  <>
+                    <p className="text-xs text-slate-500">
+                      Kéo thả để sắp xếp thứ tự bài học.
+                    </p>
+                    <div className="mt-3 space-y-2">
+                      {reorderItems.map((item, index) => (
+                        <div
+                          key={item.id}
+                          draggable
+                          onDragStart={() => handleLessonDragStart(item.id)}
+                          onDragEnter={(event) =>
+                            handleLessonDragEnter(event, item.id)
                           }
-                          className="h-9 w-20 rounded-lg px-2 text-sm"
-                        />
-                      </div>
-                    ))}
-                  </div>
+                          onDragOver={(event) => event.preventDefault()}
+                          onDragEnd={handleLessonDragEnd}
+                        className={`flex items-center gap-3 rounded-lg border px-3 py-2 text-sm cursor-grab active:cursor-grabbing ${
+                          draggingLessonId === item.id
+                            ? "border-red-200 bg-red-50/60"
+                            : "border-slate-200 bg-white"
+                        }`}
+                        >
+                          <span className="w-6 text-xs text-slate-400">
+                            {index + 1}
+                          </span>
+                          <span className="flex-1 text-slate-700 line-clamp-1">
+                            {item.title}
+                          </span>
+                          <span className="text-base text-slate-400">⋮⋮</span>
+                        </div>
+                      ))}
+                    </div>
+                  </>
                 ) : (
                   <div className="text-sm text-slate-500">
                     Chưa có bài học để sắp xếp.

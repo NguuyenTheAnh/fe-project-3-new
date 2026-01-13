@@ -53,6 +53,24 @@ export async function getFileAccessUrl({ fileId, isPublic }) {
   return null;
 }
 
+export async function getFileAccessUrlPrivate(fileId) {
+  if (!fileId) return null;
+  const cached = getCachedFileUrl(fileId);
+  if (cached) return cached;
+  try {
+    const metaResponse = await axiosInstance.get(`/files/meta/${fileId}`);
+    const meta = unwrapResponse(metaResponse);
+    const metaUrl = meta?.accessUrl || null;
+    if (metaUrl) {
+      setCachedFileUrl(fileId, metaUrl);
+      return metaUrl;
+    }
+  } catch (error) {
+    handleApiError(error);
+  }
+  return null;
+}
+
 export async function uploadFileDirect({
   file,
   isPublic = false,
