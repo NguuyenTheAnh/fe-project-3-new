@@ -1,0 +1,547 @@
+				{
+					"name": "Attempts (student)",
+					"item": [
+						{
+							"name": "Create quiz attempt",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{STUDENT_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/quizzes/:quizId/attempts",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"quizzes",
+										":quizId",
+										"attempts"
+									],
+									"variable": [
+										{
+											"key": "quizId",
+											"value": "2"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Create quiz attempt",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"url": {
+											"raw": "{{baseURL}}/quizzes/:quizId/attempts",
+											"host": [
+												"{{baseURL}}"
+											],
+											"path": [
+												"quizzes",
+												":quizId",
+												"attempts"
+											],
+											"variable": [
+												{
+													"key": "quizId",
+													"value": "2"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": null,
+									"header": [
+										{
+											"key": "Vary",
+											"value": "Origin"
+										},
+										{
+											"key": "Vary",
+											"value": "Access-Control-Request-Method"
+										},
+										{
+											"key": "Vary",
+											"value": "Access-Control-Request-Headers"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "0"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Thu, 08 Jan 2026 08:10:14 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"code\": \"00\",\n    \"message\": null,\n    \"data\": {\n        \"id\": 2,\n        \"quizId\": 2,\n        \"userId\": 8,\n        \"startedAt\": \"2026-01-08T15:10:13.9519047\",\n        \"submittedAt\": null,\n        \"score\": null,\n        \"status\": \"IN_PROGRESS\"\n    }\n}"
+								}
+							]
+						},
+						{
+							"name": "Submit attempt",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{STUDENT_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"quizId\": 2,\n    \"answers\": [\n      {\"questionId\": 2, \"answerId\": 3}\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/quizzes/:quizId/attempts/:attemptId/submit",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"quizzes",
+										":quizId",
+										"attempts",
+										":attemptId",
+										"submit"
+									],
+									"variable": [
+										{
+											"key": "quizId",
+											"value": "2"
+										},
+										{
+											"key": "attemptId",
+											"value": "2"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Submit attempt",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"quizId\": 2,\n    \"answers\": [\n      {\"questionId\": 2, \"answerId\": 3}\n    ]\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseURL}}/quizzes/:quizId/attempts/:attemptId/submit",
+											"host": [
+												"{{baseURL}}"
+											],
+											"path": [
+												"quizzes",
+												":quizId",
+												"attempts",
+												":attemptId",
+												"submit"
+											],
+											"variable": [
+												{
+													"key": "quizId",
+													"value": "2"
+												},
+												{
+													"key": "attemptId",
+													"value": "2"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": null,
+									"header": [
+										{
+											"key": "Vary",
+											"value": "Origin"
+										},
+										{
+											"key": "Vary",
+											"value": "Access-Control-Request-Method"
+										},
+										{
+											"key": "Vary",
+											"value": "Access-Control-Request-Headers"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "0"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Thu, 08 Jan 2026 08:31:49 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"code\": \"00\",\n    \"message\": null,\n    \"data\": {\n        \"id\": 2,\n        \"quizId\": 2,\n        \"userId\": 8,\n        \"startedAt\": \"2026-01-08T15:10:14\",\n        \"submittedAt\": \"2026-01-08T15:31:49.82298\",\n        \"score\": 0,\n        \"status\": \"SUBMITTED\"\n    }\n}"
+								}
+							]
+						},
+						{
+							"name": "Get attempt",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{STUDENT_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/quizzes/:quizId/attempts/:attemptId",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"quizzes",
+										":quizId",
+										"attempts",
+										":attemptId"
+									],
+									"variable": [
+										{
+											"key": "quizId",
+											"value": "2"
+										},
+										{
+											"key": "attemptId",
+											"value": "2"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Get attempt",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseURL}}/quizzes/:quizId/attempts/:attemptId",
+											"host": [
+												"{{baseURL}}"
+											],
+											"path": [
+												"quizzes",
+												":quizId",
+												"attempts",
+												":attemptId"
+											],
+											"variable": [
+												{
+													"key": "quizId",
+													"value": "2"
+												},
+												{
+													"key": "attemptId",
+													"value": "2"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": null,
+									"header": [
+										{
+											"key": "Vary",
+											"value": "Origin"
+										},
+										{
+											"key": "Vary",
+											"value": "Access-Control-Request-Method"
+										},
+										{
+											"key": "Vary",
+											"value": "Access-Control-Request-Headers"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "0"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Thu, 08 Jan 2026 08:32:19 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"code\": \"00\",\n    \"message\": null,\n    \"data\": {\n        \"id\": 2,\n        \"quizId\": 2,\n        \"userId\": 8,\n        \"startedAt\": \"2026-01-08T15:10:14\",\n        \"submittedAt\": \"2026-01-08T15:31:50\",\n        \"score\": 0,\n        \"status\": \"SUBMITTED\"\n    }\n}"
+								}
+							]
+						},
+						{
+							"name": "Get all",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{STUDENT_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/quizzes/:quizId/attempts",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"quizzes",
+										":quizId",
+										"attempts"
+									],
+									"variable": [
+										{
+											"key": "quizId",
+											"value": "2"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Get all",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseURL}}/quizzes/:quizId/attempts",
+											"host": [
+												"{{baseURL}}"
+											],
+											"path": [
+												"quizzes",
+												":quizId",
+												"attempts"
+											],
+											"variable": [
+												{
+													"key": "quizId",
+													"value": "2"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": null,
+									"header": [
+										{
+											"key": "Vary",
+											"value": "Origin"
+										},
+										{
+											"key": "Vary",
+											"value": "Access-Control-Request-Method"
+										},
+										{
+											"key": "Vary",
+											"value": "Access-Control-Request-Headers"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "0"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Thu, 08 Jan 2026 08:32:45 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"code\": \"00\",\n    \"message\": null,\n    \"data\": [\n        {\n            \"id\": 2,\n            \"quizId\": 2,\n            \"userId\": 8,\n            \"startedAt\": \"2026-01-08T15:10:14\",\n            \"submittedAt\": \"2026-01-08T15:31:50\",\n            \"score\": 0,\n            \"status\": \"SUBMITTED\"\n        }\n    ]\n}"
+								}
+							]
+						}
+					]
+				}

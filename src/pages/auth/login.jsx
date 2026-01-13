@@ -1,4 +1,4 @@
-﻿import { useState } from "react";
+import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
@@ -54,11 +54,15 @@ export default function LoginPage() {
       setLoading(true);
       const user = await login(email.trim(), password.trim());
       const roles = resolveUserRoles(user);
-      let target = returnTo || "/";
+      let target = "/";
       if (roles.has("ROLE_ADMIN")) {
         target = "/admin";
       } else if (roles.has("ROLE_INSTRUCTOR")) {
         target = "/instructor";
+      } else if (roles.has("ROLE_STUDENT")) {
+        target = "/";
+      } else if (returnTo) {
+        target = returnTo;
       }
       navigate(target, { replace: true });
     } catch (err) {
@@ -73,9 +77,7 @@ export default function LoginPage() {
       <Card>
         <CardHeader>
           <CardTitle>Đăng nhập</CardTitle>
-          <CardDescription>
-            Chào mừng bạn trở lại với HUSTemy.
-          </CardDescription>
+          <CardDescription>Chào mừng bạn trở lại với HUSTemy.</CardDescription>
         </CardHeader>
         <CardContent>
           <form className="space-y-4" onSubmit={handleSubmit}>
@@ -87,7 +89,7 @@ export default function LoginPage() {
                 type="email"
                 placeholder="you@example.com"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(event) => setEmail(event.target.value)}
               />
             </div>
             <div className="space-y-2">
@@ -98,7 +100,7 @@ export default function LoginPage() {
                 type="password"
                 placeholder="••••••••"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(event) => setPassword(event.target.value)}
               />
             </div>
             {error ? <p className="text-sm text-red-600">{error}</p> : null}

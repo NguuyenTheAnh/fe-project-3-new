@@ -66,6 +66,19 @@ export default function LessonQuizManager({ open, onClose, lesson }) {
     return [...list].sort((a, b) => (a.position ?? 0) - (b.position ?? 0));
   }, [quiz]);
 
+  const isSingleAnswerQuestion =
+    (answerQuestion?.questionType || "").toUpperCase() === "SINGLE";
+  const hasCorrectAnswer = useMemo(() => {
+    const answers = Array.isArray(answerQuestion?.answers)
+      ? answerQuestion.answers
+      : [];
+    return answers.some(
+      (answer) => answer?.isCorrect && answer?.id !== activeAnswer?.id
+    );
+  }, [answerQuestion, activeAnswer]);
+  const lockCorrectToggle =
+    isSingleAnswerQuestion && hasCorrectAnswer && !activeAnswer?.isCorrect;
+
   const resetQuestionForm = () => {
     setQuestionForm(QUESTION_FORM_DEFAULT);
     setQuestionMode("create");
@@ -748,8 +761,9 @@ export default function LessonQuizManager({ open, onClose, lesson }) {
                 <div className="flex items-center gap-2 pt-6">
                   <input
                     type="checkbox"
-                    className="h-4 w-4 rounded border-slate-300 text-red-600 focus:ring-red-500/20"
+                    className="h-4 w-4 rounded border-slate-300 text-red-600 focus:ring-red-500/20 disabled:cursor-not-allowed disabled:opacity-60"
                     checked={answerForm.isCorrect}
+                    disabled={lockCorrectToggle}
                     onChange={(event) =>
                       setAnswerForm((prev) => ({
                         ...prev,

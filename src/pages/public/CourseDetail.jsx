@@ -5,10 +5,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { fetchCourseDetail } from "@/api/catalog.api";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCart } from "@/contexts/CartContext";
-import useFileUrl from "@/hooks/useFileUrl";
 import useEnrollmentStatus from "@/hooks/useEnrollmentStatus";
 import { enrollCourse } from "@/services/enrollment.service";
 import { checkoutCart, payOrderVnpay } from "@/services/order.service";
+import { getFileAccessUrl } from "@/services/file.service";
 
 const LEVEL_MAP = {
   BEGINNER: "Cơ bản",
@@ -24,7 +24,7 @@ const LANGUAGE_MAP = {
 const formatPrice = (priceCents, price) => {
   if (priceCents === 0) return "Miễn phí";
   if (typeof priceCents === "number") {
-    return (priceCents).toLocaleString("vi-VN", {
+    return priceCents.toLocaleString("vi-VN", {
       style: "currency",
       currency: "VND",
       maximumFractionDigits: 0,
@@ -56,10 +56,10 @@ export default function CourseDetail() {
   const [cartLoading, setCartLoading] = useState(false);
   const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [enrolled, setEnrolled] = useState(null);
+  const [openSectionId, setOpenSectionId] = useState(null);
+  const [introVideoUrl, setIntroVideoUrl] = useState("");
+  const [introLoading, setIntroLoading] = useState(false);
 
-  const { url: thumbnailUrl } = useFileUrl(
-    course?.thumbnail || course?.thumbnailFileId || course?.thumbnailId
-  );
   const {
     enrolled: enrolledStatus,
     loading: statusLoading,
@@ -102,6 +102,12 @@ export default function CourseDetail() {
   }, [course]);
 
   useEffect(() => {
+    if (!openSectionId && sections.length) {
+      setOpenSectionId(sections[0]?.id ?? "section-0");
+    }
+  }, [sections, openSectionId]);
+
+  useEffect(() => {
     setEnrolled(enrolledStatus);
   }, [enrolledStatus]);
 
@@ -110,6 +116,44 @@ export default function CourseDetail() {
     setActionError("");
     setEnrolled(null);
   }, [courseId]);
+
+  useEffect(() => {
+    let active = true;
+    const resolveIntroVideo = async () => {
+      const introFile = course?.introVideo ?? course?.introVideoFileId ?? course?.introVideoId;
+      if (!introFile) {
+        setIntroVideoUrl("");
+        return;
+      }
+      const directUrl =
+        typeof introFile === "object" ? introFile.accessUrl : null;
+      if (directUrl) {
+        setIntroVideoUrl(directUrl);
+        return;
+      }
+      const fileId =
+        typeof introFile === "object" ? introFile.id || introFile.fileId : introFile;
+      if (!fileId) {
+        setIntroVideoUrl("");
+        return;
+      }
+      setIntroLoading(true);
+      try {
+        const url = await getFileAccessUrl({ fileId, isPublic: true });
+        if (active) {
+          setIntroVideoUrl(url || "");
+        }
+      } catch {
+        if (active) setIntroVideoUrl("");
+      } finally {
+        if (active) setIntroLoading(false);
+      }
+    };
+    resolveIntroVideo();
+    return () => {
+      active = false;
+    };
+  }, [course]);
 
   const handleLoginRedirect = () => {
     navigate("/login", { state: { returnTo: `/courses/${courseId}` } });
@@ -185,6 +229,10 @@ export default function CourseDetail() {
     }
   };
 
+  const toggleSection = (sectionId) => {
+    setOpenSectionId((prev) => (prev === sectionId ? null : sectionId));
+  };
+
   if (loading) {
     return <div className="p-6 text-sm text-slate-500">Đang tải...</div>;
   }
@@ -226,132 +274,65 @@ export default function CourseDetail() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-        {thumbnailUrl ? (
-          <div className="mb-6 aspect-video w-full overflow-hidden rounded-lg bg-slate-100">
-            <img
-              src={thumbnailUrl}
-              alt={course.title}
-              className="h-full w-full object-cover"
-            />
-          </div>
-        ) : (
-          <div className="mb-6 aspect-video w-full rounded-lg bg-gradient-to-r from-slate-100 to-slate-200" />
-        )}
-        <p className="text-sm text-slate-500">
-          {course.category?.name || course.categoryName || "Khóa học"}
-        </p>
-        <h1 className="mt-2 text-2xl font-semibold tracking-tight">
-          {course.title}
-        </h1>
-        <p className="mt-3 text-sm text-slate-600">
-          {course.shortDescription || course.subtitle || "Khóa học trực tuyến"}
-        </p>
-
-        {course.instructors?.length ? (
+    <div className="grid gap-6 lg:grid-cols-[1.6fr_1fr]">
+      <div className="space-y-6">
+        <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+          <p className="text-sm text-slate-500">
+            {course.category?.name || course.categoryName || "Khóa học"}
+          </p>
+          <h1 className="mt-2 text-2xl font-semibold tracking-tight">
+            {course.title}
+          </h1>
           <p className="mt-3 text-sm text-slate-600">
-            Giảng viên:{" "}
-            {course.instructors
-              .map((ins) => ins.fullName || ins.name || ins)
-              .join(", ")}
+            {course.shortDescription || course.subtitle || "Khóa học trực tuyến"}
           </p>
-        ) : null}
 
-        <div className="mt-4 flex flex-wrap gap-2 text-sm">
-          {course.language ? (
-            <span className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-slate-600">
-              {LANGUAGE_MAP[course.language] || course.language}
-            </span>
+          {course.instructors?.length ? (
+            <p className="mt-3 text-sm text-slate-600">
+              Giảng viên:{" "}
+              {course.instructors
+                .map((ins) => ins.fullName || ins.name || ins)
+                .join(", ")}
+            </p>
           ) : null}
-          {course.level ? (
-            <span className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-slate-600">
-              {LEVEL_MAP[course.level] || course.level}
-            </span>
-          ) : null}
-          {course.tags?.length
-            ? course.tags.map((tag) => (
-                <span
-                  key={tag.id || tag.name}
-                  className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-slate-600"
-                >
-                  {tag.name || tag.title}
-                </span>
-              ))
-            : null}
-        </div>
 
-        <div className="mt-4 flex flex-wrap items-center gap-4">
-          <p className="text-2xl font-semibold text-[#BE123C]">
-            {formatPrice(course.priceCents, course.price)}
-          </p>
+          <div className="mt-4 flex flex-wrap gap-2 text-sm">
+            {course.language ? (
+              <span className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-slate-600">
+                {LANGUAGE_MAP[course.language] || course.language}
+              </span>
+            ) : null}
+            {course.level ? (
+              <span className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-slate-600">
+                {LEVEL_MAP[course.level] || course.level}
+              </span>
+            ) : null}
+            {course.tags?.length
+              ? course.tags.map((tag) => (
+                  <span
+                    key={tag.id || tag.name}
+                    className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-slate-600"
+                  >
+                    {tag.name || tag.title}
+                  </span>
+                ))
+              : null}
+          </div>
+
           {course.ratingAvg ? (
-            <p className="text-sm text-slate-900">
-              {course.ratingAvg}{" "}
+            <div className="mt-4 flex items-center gap-2 text-sm text-slate-700">
+              <span className="font-semibold text-slate-900">
+                {course.ratingAvg}
+              </span>
               {course.ratingCount ? (
                 <span className="text-slate-500">
                   ({course.ratingCount} đánh giá)
                 </span>
               ) : null}
-            </p>
-          ) : null}
-        </div>
-
-        <div className="mt-6 space-y-3">
-          {!isAuthenticated ? (
-            <Button size="lg" onClick={handleLoginRedirect}>
-              {isPaidCourse ? "Đăng nhập để mua" : "Đăng nhập để học"}
-            </Button>
-          ) : !isStudent ? (
-            <p className="text-sm text-slate-500">
-              Tài khoản này không có quyền ghi danh.
-            </p>
-          ) : statusLoading || (enrolled === null && !statusError) ? (
-            <Button size="lg" disabled>
-              Đang kiểm tra...
-            </Button>
-          ) : enrolled ? (
-            <Button size="lg" onClick={handleStartLearning}>
-              Học ngay
-            </Button>
-          ) : isPaidCourse ? (
-            <div className="flex flex-col gap-2 sm:flex-row">
-              <Button
-                size="lg"
-                variant="outline"
-                className="w-full sm:w-auto"
-                onClick={handleAddToCart}
-                disabled={cartLoading || checkoutLoading}
-              >
-                {cartLoading ? "Đang thêm..." : "Thêm vào giỏ"}
-              </Button>
-              <Button
-                size="lg"
-                className="w-full sm:w-auto"
-                onClick={handleCheckoutNow}
-                disabled={checkoutLoading || cartLoading}
-              >
-                {checkoutLoading ? "Đang thanh toán..." : "Thanh toán ngay"}
-              </Button>
             </div>
-          ) : (
-            <Button size="lg" onClick={handleEnroll} disabled={enrollLoading}>
-              {enrollLoading ? "Đang xử lý..." : "Đăng ký học"}
-            </Button>
-          )}
-          {statusError && isStudent ? (
-            <p className="text-sm text-slate-500">{statusError}</p>
-          ) : null}
-          {actionMessage ? (
-            <p className="text-sm text-green-600">{actionMessage}</p>
-          ) : null}
-          {actionError ? (
-            <p className="text-sm text-red-600">{actionError}</p>
           ) : null}
         </div>
-      </div>
 
-      <div className="grid gap-4 lg:grid-cols-[2fr,1fr]">
         <Card>
           <CardHeader>
             <CardTitle>Giới thiệu</CardTitle>
@@ -363,7 +344,167 @@ export default function CourseDetail() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Thông tin</CardTitle>
+            <CardTitle>Yêu cầu</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {Array.isArray(course.requirements) && course.requirements.length ? (
+              <ul className="list-disc space-y-1 pl-5 text-sm text-slate-600">
+                {course.requirements.map((req, idx) => (
+                  <li key={idx}>{req}</li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-sm text-slate-500">
+                Yêu cầu khóa học sẽ được cập nhật sau.
+              </p>
+            )}
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Nội dung khóa học</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {sections.length ? (
+              <div className="space-y-3">
+                {sections.map((section, idx) => {
+                  const sectionId = section.id ?? `section-${idx}`;
+                  const isOpen = openSectionId === sectionId;
+                  return (
+                    <div
+                      key={sectionId}
+                      className="rounded-lg border border-slate-200 bg-white"
+                    >
+                      <button
+                        type="button"
+                        onClick={() => toggleSection(sectionId)}
+                        className="flex w-full items-center justify-between gap-3 px-4 py-3 text-left"
+                      >
+                        <div className="text-sm font-medium text-slate-900">
+                          {section.title || section.name || `Phần ${idx + 1}`}
+                        </div>
+                        <span className="text-xs text-slate-500">
+                          {isOpen ? "Thu gọn" : "Xem bài học"}
+                        </span>
+                      </button>
+                      {isOpen ? (
+                        <div className="border-t border-slate-200 px-4 py-3">
+                          {section.lessons?.length ? (
+                            <ul className="list-disc space-y-1 pl-5 text-sm text-slate-600">
+                              {section.lessons.map((lesson, lIdx) => (
+                                <li key={lesson.id || lIdx}>
+                                  {lesson.title ||
+                                    lesson.name ||
+                                    `Bài ${lIdx + 1}`}
+                                </li>
+                              ))}
+                            </ul>
+                          ) : (
+                            <p className="text-sm text-slate-500">
+                              Chưa có bài học trong phần này.
+                            </p>
+                          )}
+                        </div>
+                      ) : null}
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <p className="text-sm text-slate-500">
+                Nội dung khóa học sẽ được hiển thị sau.
+              </p>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="space-y-4 lg:sticky lg:top-24 self-start">
+        <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+          <div className="aspect-video w-full overflow-hidden rounded-lg bg-slate-100">
+            {introLoading ? (
+              <div className="flex h-full w-full items-center justify-center text-xs text-slate-500">
+                Đang tải video giới thiệu...
+              </div>
+            ) : introVideoUrl ? (
+              <video controls className="h-full w-full rounded-lg bg-black">
+                <source src={introVideoUrl} type="video/mp4" />
+              </video>
+            ) : (
+              <div className="flex h-full w-full items-center justify-center text-xs text-slate-500">
+                Chưa có video giới thiệu
+              </div>
+            )}
+          </div>
+
+          <div className="mt-4 space-y-3">
+            <div className="text-2xl font-semibold text-[#BE123C]">
+              {formatPrice(course.priceCents, course.price)}
+            </div>
+
+            {!isAuthenticated ? (
+              <Button size="lg" className="w-full" onClick={handleLoginRedirect}>
+                {isPaidCourse ? "Đăng nhập để mua" : "Đăng nhập để học"}
+              </Button>
+            ) : !isStudent ? (
+              <p className="text-sm text-slate-500">
+                Tài khoản này không có quyền ghi danh.
+              </p>
+            ) : statusLoading || (enrolled === null && !statusError) ? (
+              <Button size="lg" className="w-full" disabled>
+                Đang kiểm tra...
+              </Button>
+            ) : enrolled ? (
+              <Button size="lg" className="w-full" onClick={handleStartLearning}>
+                Học ngay
+              </Button>
+            ) : isPaidCourse ? (
+              <div className="grid gap-2">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="w-full"
+                  onClick={handleAddToCart}
+                  disabled={cartLoading || checkoutLoading}
+                >
+                  {cartLoading ? "Đang thêm..." : "Thêm vào giỏ"}
+                </Button>
+                <Button
+                  size="lg"
+                  className="w-full"
+                  onClick={handleCheckoutNow}
+                  disabled={checkoutLoading || cartLoading}
+                >
+                  {checkoutLoading ? "Đang thanh toán..." : "Thanh toán ngay"}
+                </Button>
+              </div>
+            ) : (
+              <Button
+                size="lg"
+                className="w-full"
+                onClick={handleEnroll}
+                disabled={enrollLoading}
+              >
+                {enrollLoading ? "Đang xử lý..." : "Đăng ký học"}
+              </Button>
+            )}
+
+            {statusError && isStudent ? (
+              <p className="text-sm text-slate-500">{statusError}</p>
+            ) : null}
+            {actionMessage ? (
+              <p className="text-sm text-green-600">{actionMessage}</p>
+            ) : null}
+            {actionError ? (
+              <p className="text-sm text-red-600">{actionError}</p>
+            ) : null}
+          </div>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Thông tin nhanh</CardTitle>
           </CardHeader>
           <CardContent className="space-y-2 text-sm text-slate-600">
             <p>
@@ -383,60 +524,6 @@ export default function CourseDetail() {
           </CardContent>
         </Card>
       </div>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Yêu cầu</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {Array.isArray(course.requirements) && course.requirements.length ? (
-            <ul className="list-disc space-y-1 pl-5 text-sm text-slate-600">
-              {course.requirements.map((req, idx) => (
-                <li key={idx}>{req}</li>
-              ))}
-            </ul>
-          ) : (
-            <p className="text-sm text-slate-500">
-              Yêu cầu khóa học sẽ được cập nhật sau.
-            </p>
-          )}
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Nội dung khóa học</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {sections.length ? (
-            <div className="space-y-3">
-              {sections.map((section, idx) => (
-                <div
-                  key={section.id || idx}
-                  className="rounded-lg border border-slate-200 p-3"
-                >
-                  <p className="font-medium text-slate-900">
-                    {section.title || section.name || `Phần ${idx + 1}`}
-                  </p>
-                  {section.lessons?.length ? (
-                    <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-slate-600">
-                      {section.lessons.map((lesson, lIdx) => (
-                        <li key={lesson.id || lIdx}>
-                          {lesson.title || lesson.name || `Bài ${lIdx + 1}`}
-                        </li>
-                      ))}
-                    </ul>
-                  ) : null}
-                </div>
-              ))}
-            </div>
-          ) : (
-            <p className="text-sm text-slate-500">
-              Nội dung khóa học sẽ được hiển thị sau.
-            </p>
-          )}
-        </CardContent>
-      </Card>
     </div>
   );
 }

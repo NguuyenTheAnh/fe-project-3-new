@@ -1,0 +1,372 @@
+				{
+					"name": "Progress",
+					"item": [
+						{
+							"name": "Update progress for a lesson",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{STUDENT_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"lastPositionSeconds\": 320,\n    \"completed\": false\n  }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/courses/:courseId/lessons/:lessonId/progress",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"courses",
+										":courseId",
+										"lessons",
+										":lessonId",
+										"progress"
+									],
+									"variable": [
+										{
+											"key": "courseId",
+											"value": "4"
+										},
+										{
+											"key": "lessonId",
+											"value": "6"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Update progress for a lesson",
+									"originalRequest": {
+										"method": "PATCH",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"lastPositionSeconds\": 320,\n    \"completed\": false\n  }",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseURL}}/courses/:courseId/lessons/:lessonId/progress",
+											"host": [
+												"{{baseURL}}"
+											],
+											"path": [
+												"courses",
+												":courseId",
+												"lessons",
+												":lessonId",
+												"progress"
+											],
+											"variable": [
+												{
+													"key": "courseId",
+													"value": "4"
+												},
+												{
+													"key": "lessonId",
+													"value": "6"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": null,
+									"header": [
+										{
+											"key": "Vary",
+											"value": "Origin"
+										},
+										{
+											"key": "Vary",
+											"value": "Access-Control-Request-Method"
+										},
+										{
+											"key": "Vary",
+											"value": "Access-Control-Request-Headers"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "0"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Wed, 07 Jan 2026 16:11:05 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"code\": \"00\",\n    \"message\": null,\n    \"data\": {\n        \"id\": 2,\n        \"enrollmentId\": 3,\n        \"lessonId\": 6,\n        \"completed\": false,\n        \"completedAt\": null,\n        \"lastPositionSeconds\": 320,\n        \"lastAccessedAt\": \"2026-01-07T23:11:05.0195838\"\n    }\n}"
+								}
+							]
+						},
+						{
+							"name": "Mark lesson completed",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{STUDENT_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"completed\": true\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/courses/:courseId/lessons/:lessonId/progress",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"courses",
+										":courseId",
+										"lessons",
+										":lessonId",
+										"progress"
+									],
+									"variable": [
+										{
+											"key": "courseId",
+											"value": "4"
+										},
+										{
+											"key": "lessonId",
+											"value": "6"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Mark lesson completed",
+									"originalRequest": {
+										"method": "PATCH",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"completed\": true\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseURL}}/courses/:courseId/lessons/:lessonId/progress",
+											"host": [
+												"{{baseURL}}"
+											],
+											"path": [
+												"courses",
+												":courseId",
+												"lessons",
+												":lessonId",
+												"progress"
+											],
+											"variable": [
+												{
+													"key": "courseId",
+													"value": "4"
+												},
+												{
+													"key": "lessonId",
+													"value": "6"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": null,
+									"header": [
+										{
+											"key": "Vary",
+											"value": "Origin"
+										},
+										{
+											"key": "Vary",
+											"value": "Access-Control-Request-Method"
+										},
+										{
+											"key": "Vary",
+											"value": "Access-Control-Request-Headers"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "0"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Wed, 07 Jan 2026 16:11:38 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"code\": \"00\",\n    \"message\": null,\n    \"data\": {\n        \"id\": 2,\n        \"enrollmentId\": 3,\n        \"lessonId\": 6,\n        \"completed\": true,\n        \"completedAt\": \"2026-01-07T23:11:38.5028433\",\n        \"lastPositionSeconds\": 320,\n        \"lastAccessedAt\": \"2026-01-07T23:11:38.5028433\"\n    }\n}"
+								}
+							]
+						},
+						{
+							"name": "Get my progress for a lesson",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{STUDENT_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/courses/:courseId/lessons/:lessonId/progress",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"courses",
+										":courseId",
+										"lessons",
+										":lessonId",
+										"progress"
+									],
+									"variable": [
+										{
+											"key": "courseId",
+											"value": "4"
+										},
+										{
+											"key": "lessonId",
+											"value": "6"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
