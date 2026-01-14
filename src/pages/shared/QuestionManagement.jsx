@@ -637,7 +637,7 @@ export default function QuestionManagement({ scope = "admin" }) {
                               {answer.content || "-"}
                             </td>
                             <td className="px-4 py-3">
-                              {answer.userId ? `#${answer.createdUser}` : "-"}
+                              {answer.userId ? `${answer.createdUser}` : "-"}
                             </td>
                             <td className="px-4 py-3">
                               {answer.isAccepted ? "Đã duyệt" : "Chờ duyệt"}

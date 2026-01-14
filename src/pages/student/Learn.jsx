@@ -36,6 +36,18 @@ const QUESTION_TYPE_LABELS = {
   MULTI: "Nhiều đáp án",
 };
 
+const LEVEL_LABELS = {
+  BEGINNER: "Cơ bản",
+  INTERMEDIATE: "Trung cấp",
+  ADVANCED: "Nâng cao",
+};
+
+const LANGUAGE_LABELS = {
+  VI: "Tiếng Việt",
+  EN: "Tiếng Anh",
+};
+
+
 const formatDuration = (seconds) => {
   if (!Number.isFinite(seconds)) return "";
   if (seconds < 60) return `${seconds} giây`;
@@ -83,6 +95,10 @@ export default function Learn() {
   const [lessonError, setLessonError] = useState("");
   const [videoUrl, setVideoUrl] = useState("");
   const [videoLoading, setVideoLoading] = useState(false);
+  const [openingDocumentId, setOpeningDocumentId] = useState(null);
+  const [courseDocNotice, setCourseDocNotice] = useState("");
+  const [lessonDocNotice, setLessonDocNotice] = useState("");
+  const [activeTab, setActiveTab] = useState("overview");
 
   const [lessonQuiz, setLessonQuiz] = useState(null);
   const [quizDetailLoading, setQuizDetailLoading] = useState(false);
@@ -183,6 +199,20 @@ export default function Learn() {
       0
     );
   }, [sections]);
+
+  const courseDocuments = useMemo(() => {
+    const list = Array.isArray(course?.courseDocuments)
+      ? course.courseDocuments
+      : [];
+    return [...list].sort((a, b) => (a.position ?? 0) - (b.position ?? 0));
+  }, [course]);
+
+  const lessonDocuments = useMemo(() => {
+    const list = Array.isArray(lessonDetail?.documents)
+      ? lessonDetail.documents
+      : [];
+    return [...list].sort((a, b) => (a.position ?? 0) - (b.position ?? 0));
+  }, [lessonDetail]);
   const progressPercent = useMemo(() => {
     if (typeof courseProgress.progressPercent === "number") {
       return courseProgress.progressPercent;
@@ -233,6 +263,14 @@ export default function Learn() {
       active = false;
     };
   }, [courseId]);
+
+  useEffect(() => {
+    setCourseDocNotice("");
+  }, [courseId]);
+
+  useEffect(() => {
+    setLessonDocNotice("");
+  }, [activeLessonId]);
 
   useEffect(() => {
     let active = true;
@@ -502,10 +540,39 @@ export default function Learn() {
     };
   }, [courseId, activeLessonId, questionScope, questionPage, questionMeta.pageSize]);
 
-  const persistProgress = async (payload, lessonIdOverride) => {
+  const persistProgress = async (
+    payload,
+    lessonIdOverride,
+    options = { force: false, optimistic: false }
+  ) => {
     const targetLessonId = lessonIdOverride ?? activeLessonId;
     if (!courseId || !targetLessonId) return;
-    if (progressSavingRef.current) return;
+    if (progressSavingRef.current && !options.force) return;
+    let prevCompletedSet = null;
+    let prevProgress = null;
+    if (options.optimistic && typeof payload.completed === "boolean") {
+      prevCompletedSet = new Set(completedLessonIds);
+      prevProgress = progressMap[targetLessonId] || null;
+      setCompletedLessonIds((prev) => {
+        const next = new Set(prev);
+        if (payload.completed) {
+          next.add(targetLessonId);
+        } else {
+          next.delete(targetLessonId);
+        }
+        return next;
+      });
+      setProgressMap((prev) => ({
+        ...prev,
+        [targetLessonId]: {
+          completed: payload.completed,
+          lastPositionSeconds:
+            payload.lastPositionSeconds ??
+            prev[targetLessonId]?.lastPositionSeconds ??
+            0,
+        },
+      }));
+    }
     progressSavingRef.current = true;
     setProgressError("");
     try {
@@ -550,6 +617,15 @@ export default function Learn() {
         }
       }
     } catch (err) {
+      if (options.optimistic && typeof payload.completed === "boolean") {
+        if (prevCompletedSet) {
+          setCompletedLessonIds(prevCompletedSet);
+        }
+        setProgressMap((prev) => ({
+          ...prev,
+          [targetLessonId]: prevProgress || prev[targetLessonId],
+        }));
+      }
       setProgressError(err?.message || "Không thể cập nhật tiến độ.");
     } finally {
       progressSavingRef.current = false;
@@ -571,6 +647,30 @@ export default function Learn() {
     persistProgress({ lastPositionSeconds: current, completed: true });
   };
 
+  const handleOpenDocumentFile = async (document, scope) => {
+    const file = document?.file;
+    const fileId = file?.id || document?.fileId || null;
+    const setNotice = scope === "course" ? setCourseDocNotice : setLessonDocNotice;
+    if (!fileId) {
+      setNotice("Không tìm thấy tệp đính kèm.");
+      return;
+    }
+
+    setNotice("");
+    setOpeningDocumentId(document.id);
+    try {
+      const url = file?.accessUrl || (await getFileAccessUrlPrivate(fileId));
+      if (!url) {
+        throw new Error("Không thể mở tệp tài liệu.");
+      }
+      window.open(url, "_blank", "noopener,noreferrer");
+    } catch (err) {
+      setNotice(err?.message || "Không thể mở tệp tài liệu.");
+    } finally {
+      setOpeningDocumentId(null);
+    }
+  };
+
   const handleToggleLessonCompleted = async (event, lessonId, isCompleted) => {
     event.stopPropagation();
     const checked = !isCompleted;
@@ -580,7 +680,8 @@ export default function Learn() {
         completed: checked,
         lastPositionSeconds: existing.lastPositionSeconds ?? 0,
       },
-      lessonId
+      lessonId,
+      { force: true, optimistic: true }
     );
   };
 
@@ -1268,322 +1369,485 @@ export default function Learn() {
         <main className="space-y-6">
           {renderLessonContent()}
 
-          <section className="rounded-xl border border-slate-200 bg-white p-6">
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <div>
-                <h2 className="text-lg font-semibold text-slate-900">Hỏi đáp</h2>
-                <p className="mt-1 text-sm text-slate-600">
-                  Trao đổi với giảng viên và học viên khác.
-                </p>
+          <section className="rounded-xl border border-slate-200 bg-white">
+            <div className="border-b border-slate-200 px-4">
+              <div className="flex flex-wrap gap-2 -mb-px">
+                {[
+                  { id: "overview", label: "Tổng quan" },
+                  { id: "documents", label: "Tài liệu khóa học" },
+                  { id: "qa", label: "Hỏi đáp" },
+                ].map((tab) => (
+                  <button
+                    key={tab.id}
+                    type="button"
+                    onClick={() => setActiveTab(tab.id)}
+                    className={[
+                      "border-b-2 px-3 py-2 text-sm font-medium transition",
+                      activeTab === tab.id
+                        ? "border-[#E11D48] text-[#BE123C]"
+                        : "border-transparent text-slate-600 hover:text-slate-900",
+                    ].join(" ")}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
               </div>
-              <select
-                value={questionScope}
-                onChange={handleQuestionScopeChange}
-                className="h-10 rounded-lg border border-slate-200 bg-white px-3 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#E11D48]/20 focus:border-[#F43F5E]"
-              >
-                <option value="lesson">Theo bài học hiện tại</option>
-                <option value="course">Theo toàn khóa học</option>
-              </select>
             </div>
 
-            <form onSubmit={handleSubmitQuestion} className="mt-4 space-y-3">
-              <div>
-                <label className="text-sm font-medium text-slate-700">
-                  Tiêu đề câu hỏi
-                </label>
-                <input
-                  type="text"
-                  value={questionForm.title}
-                  onChange={(event) =>
-                    setQuestionForm((prev) => ({
-                      ...prev,
-                      title: event.target.value,
-                    }))
-                  }
-                  className="mt-1 h-10 w-full rounded-lg border border-slate-200 bg-white px-3 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#E11D48]/20 focus:border-[#F43F5E]"
-                  placeholder="Nhập tiêu đề"
-                />
-              </div>
-              <div>
-                <label className="text-sm font-medium text-slate-700">
-                  Nội dung câu hỏi
-                </label>
-                <textarea
-                  rows="3"
-                  value={questionForm.content}
-                  onChange={(event) =>
-                    setQuestionForm((prev) => ({
-                      ...prev,
-                      content: event.target.value,
-                    }))
-                  }
-                  className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#E11D48]/20 focus:border-[#F43F5E]"
-                  placeholder="Mô tả chi tiết câu hỏi..."
-                />
-              </div>
-              <div className="flex items-center justify-between gap-3">
-                {questionsError ? (
-                  <p className="text-sm text-red-600">{questionsError}</p>
-                ) : (
-                  <span className="text-xs text-slate-500">
-                    {questionScope === "lesson"
-                      ? activeLessonMeta?.lesson?.title
-                        ? `Bài học: ${activeLessonMeta.lesson.title}`
-                        : "Đang xem theo bài học hiện tại"
-                      : "Đang xem theo toàn khóa học"}
-                  </span>
-                )}
-                <button
-                  type="submit"
-                  disabled={questionSubmitting}
-                  className="inline-flex h-10 items-center justify-center rounded-lg bg-[#E11D48] px-4 text-sm font-semibold text-white hover:bg-[#BE123C] transition disabled:opacity-60"
-                >
-                  {questionSubmitting ? "Đang gửi..." : "Gửi câu hỏi"}
-                </button>
-              </div>
-            </form>
+            <div className="p-6">
+              {activeTab === "overview" ? (
+                <div className="space-y-6">
+                  <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+                    <p className="text-sm text-slate-700 leading-relaxed">
+                      {course?.shortDescription ||
+                        course?.headline ||
+                        course?.description ||
+                        "Chưa có mô tả khóa học."}
+                    </p>
+                  </div>
 
-            {questionsLoading ? (
-              <div className="mt-6 text-sm text-slate-500">
-                Đang tải câu hỏi...
-              </div>
-            ) : questions.length ? (
-              <div className="mt-6 space-y-4">
-                {questions.map((question) => {
-                  const answers = answersMap[question.id] || {
-                    items: [],
-                    loading: false,
-                    error: "",
-                  };
-                  const isOpen = Boolean(answersOpen[question.id]);
-                  const lessonTitle = question.lessonId
-                    ? lessonTitleMap.get(question.lessonId)
-                    : null;
-                  const isOwner =
-                    currentUserId &&
-                    Number(question.userId) === Number(currentUserId);
-                  const isEditing = editingQuestionId === question.id;
-                  const voteState = questionVotes[question.id];
-                  const voteButtonBase =
-                    "inline-flex h-8 items-center justify-center rounded-full border px-3 text-xs font-medium transition";
-                  return (
-                    <div
-                      key={question.id}
-                      className="rounded-xl border border-slate-200 bg-white p-4"
-                    >
-                      <div className="flex items-start justify-between gap-3">
-                        <div className="min-w-0">
-                          <h3 className="text-sm font-semibold text-slate-900">
-                            {question.title || "Câu hỏi"}
-                          </h3>
-                          {isEditing ? (
-                            <div className="mt-2 space-y-2">
-                              <input
-                                type="text"
-                                value={editQuestionForm.title}
-                                onChange={(event) =>
-                                  setEditQuestionForm((prev) => ({
-                                    ...prev,
-                                    title: event.target.value,
-                                  }))
-                                }
-                                className="h-9 w-full rounded-lg border border-slate-200 bg-white px-3 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#E11D48]/20 focus:border-[#F43F5E]"
-                                placeholder="Nhập tiêu đề"
-                              />
-                              <textarea
-                                rows="3"
-                                value={editQuestionForm.content}
-                                onChange={(event) =>
-                                  setEditQuestionForm((prev) => ({
-                                    ...prev,
-                                    content: event.target.value,
-                                  }))
-                                }
-                                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#E11D48]/20 focus:border-[#F43F5E]"
-                                placeholder="Mô tả chi tiết câu hỏi..."
-                              />
-                              <div className="flex items-center justify-end gap-2">
-                                <button
-                                  type="button"
-                                  onClick={handleCancelEditQuestion}
-                                  className="inline-flex h-9 items-center justify-center rounded-lg border border-slate-200 bg-white px-3 text-sm font-medium text-slate-700 hover:bg-slate-50 transition"
-                                >
-                                  Hủy
-                                </button>
-                                <button
-                                  type="button"
-                                  onClick={() => handleSaveQuestion(question)}
-                                  disabled={editSubmitting}
-                                  className="inline-flex h-9 items-center justify-center rounded-lg bg-[#E11D48] px-3 text-sm font-semibold text-white hover:bg-[#BE123C] transition disabled:opacity-60"
-                                >
-                                  {editSubmitting ? "Đang lưu..." : "Lưu"}
-                                </button>
+                  <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                    <div className="rounded-lg border border-slate-200 bg-white p-4">
+                      <div className="text-xs uppercase text-slate-500">Trình độ</div>
+                      <div className="mt-1 text-sm font-medium text-slate-900">
+                        {LEVEL_LABELS[course?.level] ||
+                          course?.level ||
+                          "Tất cả trình độ"}
+                      </div>
+                    </div>
+                    <div className="rounded-lg border border-slate-200 bg-white p-4">
+                      <div className="text-xs uppercase text-slate-500">Ngôn ngữ</div>
+                      <div className="mt-1 text-sm font-medium text-slate-900">
+                        {LANGUAGE_LABELS[course?.language] ||
+                          course?.language ||
+                          "Không rõ"}
+                      </div>
+                    </div>
+                    <div className="rounded-lg border border-slate-200 bg-white p-4">
+                      <div className="text-xs uppercase text-slate-500">Bài học</div>
+                      <div className="mt-1 text-sm font-medium text-slate-900">
+                        {totalLessonsCount || 0} bài
+                      </div>
+                    </div>
+                    <div className="rounded-lg border border-slate-200 bg-white p-4">
+                      <div className="text-xs uppercase text-slate-500">Chương</div>
+                      <div className="mt-1 text-sm font-medium text-slate-900">
+                        {sections.length || 0} chương
+                      </div>
+                    </div>
+                    <div className="rounded-lg border border-slate-200 bg-white p-4">
+                      <div className="text-xs uppercase text-slate-500">Tiến độ</div>
+                      <div className="mt-1 text-sm font-medium text-slate-900">
+                        {progressPercent}% hoàn thành
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : null}
+
+              {activeTab === "documents" ? (
+                <div className="grid gap-6 lg:grid-cols-2">
+                  <div className="rounded-xl border border-slate-200 bg-white p-4">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-sm font-semibold text-slate-900">
+                        Tài liệu khóa học
+                      </h3>
+                      <span className="text-xs text-slate-500">
+                        {courseDocuments.length} tài liệu
+                      </span>
+                    </div>
+
+                    {courseDocuments.length ? (
+                      <div className="mt-3 divide-y divide-slate-200">
+                        {courseDocuments.map((document) => (
+                          <div
+                            key={document.id}
+                            className="flex flex-wrap items-center justify-between gap-3 py-3"
+                          >
+                            <div className="min-w-0">
+                              <div className="text-sm font-medium text-slate-900 line-clamp-2">
+                                {document.title || "Tài liệu"}
+                              </div>
+                              <div className="text-xs text-slate-500 line-clamp-1">
+                                {document.file?.originalName || "Tệp đính kèm"}
                               </div>
                             </div>
-                          ) : (
-                            <p className="mt-2 text-sm text-slate-700">
-                              {question.content}
-                            </p>
-                          )}
-                          <div className="mt-2 text-xs text-slate-500">
-                            {lessonTitle
-                              ? `Bài học: ${lessonTitle}`
-                              : "Theo toàn khóa học"}
-                          </div>
-                        </div>
-                        <span className="text-xs text-slate-500">
-                          {question.status || "OPEN"}
-                        </span>
-                      </div>
-
-                      <div className="mt-3 flex flex-wrap items-center gap-2">
-                        <button
-                          type="button"
-                          onClick={() => handleToggleAnswers(question.id)}
-                          className="text-sm text-[#2563EB] hover:underline underline-offset-4"
-                        >
-                          {isOpen ? "Ẩn trả lời" : "Xem trả lời"}
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => handleVoteQuestion(question.id, "UP")}
-                          disabled={voteSubmittingId === question.id}
-                          className={[
-                            voteButtonBase,
-                            voteState === "UP"
-                              ? "bg-[#FFF1F2] text-[#BE123C] border-[#FFE4E6]"
-                              : "border-slate-200 text-slate-700 hover:bg-slate-50",
-                          ].join(" ")}
-                        >
-                          Hữu ích
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() =>
-                            handleVoteQuestion(question.id, "DOWN")
-                          }
-                          disabled={voteSubmittingId === question.id}
-                          className={[
-                            voteButtonBase,
-                            voteState === "DOWN"
-                              ? "bg-[#FFF1F2] text-[#BE123C] border-[#FFE4E6]"
-                              : "border-slate-200 text-slate-700 hover:bg-slate-50",
-                          ].join(" ")}
-                        >
-                          Không hữu ích
-                        </button>
-                        {isOwner && !isEditing ? (
-                          <button
-                            type="button"
-                            onClick={() => handleStartEditQuestion(question)}
-                            className="text-sm text-slate-600 hover:text-slate-900 hover:underline underline-offset-4"
-                          >
-                            Chỉnh sửa
-                          </button>
-                        ) : null}
-                      </div>
-
-                      {isOpen ? (
-                        <div className="mt-4 rounded-lg border border-slate-200 bg-slate-50 p-4">
-                          {answers.loading ? (
-                            <p className="text-sm text-slate-500">
-                              Đang tải câu trả lời...
-                            </p>
-                          ) : answers.error ? (
-                            <p className="text-sm text-red-600">
-                              {answers.error}
-                            </p>
-                          ) : answers.items.length ? (
-                            <div className="space-y-3">
-                              {answers.items.map((answer) => (
-                                <div
-                                  key={answer.id}
-                                  className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700"
-                                >
-                                  <p>{answer.content}</p>
-                                  <div className="mt-2 flex flex-wrap items-center gap-2">
-                                    {answer.isAccepted ? (
-                                      <span className="inline-flex rounded-full bg-emerald-50 px-2 py-0.5 text-xs font-medium text-emerald-700">
-                                        Đã được chấp nhận
-                                      </span>
-                                    ) : null}
-                                  </div>
-                                </div>
-                              ))}
-                            </div>
-                          ) : (
-                            <p className="text-sm text-slate-500">
-                              Chưa có câu trả lời.
-                            </p>
-                          )}
-
-                          <div className="mt-4">
-                            <textarea
-                              rows="2"
-                              value={answerDrafts[question.id] || ""}
-                              onChange={(event) =>
-                                setAnswerDrafts((prev) => ({
-                                  ...prev,
-                                  [question.id]: event.target.value,
-                                }))
+                            <button
+                              type="button"
+                              onClick={() =>
+                                handleOpenDocumentFile(document, "course")
                               }
-                              className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#E11D48]/20 focus:border-[#F43F5E]"
-                              placeholder="Nhập câu trả lời..."
-                            />
-                            <div className="mt-2 flex justify-end">
-                              <button
-                                type="button"
-                                onClick={() => handleSubmitAnswer(question.id)}
-                                disabled={answerSubmittingId === question.id}
-                                className="inline-flex h-9 items-center justify-center rounded-lg bg-[#E11D48] px-3 text-sm font-semibold text-white hover:bg-[#BE123C] transition disabled:opacity-60"
-                              >
-                                {answerSubmittingId === question.id
-                                  ? "Đang gửi..."
-                                  : "Gửi trả lời"}
-                              </button>
-                            </div>
+                              disabled={openingDocumentId === document.id}
+                              className="inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-50 transition disabled:opacity-60"
+                            >
+                              {openingDocumentId === document.id
+                                ? "Đang mở..."
+                                : "Mở"}
+                            </button>
                           </div>
-                        </div>
-                      ) : null}
-                    </div>
-                  );
-                })}
-              </div>
-            ) : (
-              <div className="mt-6 rounded-lg border border-slate-200 bg-slate-50 p-4 text-sm text-slate-600">
-                Chưa có câu hỏi nào.
-              </div>
-            )}
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="mt-3 text-sm text-slate-500">
+                        Chưa có tài liệu khóa học.
+                      </div>
+                    )}
 
-            {questionMeta.totalPages > 1 ? (
-              <div className="mt-6 flex items-center justify-between">
-                <button
-                  type="button"
-                  onClick={() =>
-                    setQuestionPage((prev) => Math.max(0, prev - 1))
-                  }
-                  disabled={questionMeta.pageNumber <= 0}
-                  className="inline-flex h-9 items-center justify-center rounded-md border border-slate-200 bg-white px-3 text-sm font-medium text-slate-900 hover:bg-slate-50 transition disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  Trang trước
-                </button>
-                <span className="text-sm text-slate-500">
-                  Trang {questionMeta.pageNumber + 1} / {questionMeta.totalPages}
-                </span>
-                <button
-                  type="button"
-                  onClick={() =>
-                    setQuestionPage((prev) =>
-                      Math.min(questionMeta.totalPages - 1, prev + 1)
-                    )
-                  }
-                  disabled={questionMeta.pageNumber + 1 >= questionMeta.totalPages}
-                  className="inline-flex h-9 items-center justify-center rounded-md border border-slate-200 bg-white px-3 text-sm font-medium text-slate-900 hover:bg-slate-50 transition disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  Trang sau
-                </button>
-              </div>
-            ) : null}
+                    {courseDocNotice ? (
+                      <div className="mt-3 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+                        {courseDocNotice}
+                      </div>
+                    ) : null}
+                  </div>
+
+                  <div className="rounded-xl border border-slate-200 bg-white p-4">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-sm font-semibold text-slate-900">
+                        Tài liệu bài học
+                      </h3>
+                      <span className="text-xs text-slate-500">
+                        {lessonDocuments.length} tài liệu
+                      </span>
+                    </div>
+                    <div className="mt-1 text-xs text-slate-500">
+                      {lessonDetail?.title
+                        ? `Bài học: ${lessonDetail.title}`
+                        : "Chưa chọn bài học."}
+                    </div>
+
+                    {lessonDocuments.length ? (
+                      <div className="mt-3 divide-y divide-slate-200">
+                        {lessonDocuments.map((document) => (
+                          <div
+                            key={document.id}
+                            className="flex flex-wrap items-center justify-between gap-3 py-3"
+                          >
+                            <div className="min-w-0">
+                              <div className="text-sm font-medium text-slate-900 line-clamp-2">
+                                {document.title || "Tài liệu"}
+                              </div>
+                              <div className="text-xs text-slate-500 line-clamp-1">
+                                {document.file?.originalName || "Tệp đính kèm"}
+                              </div>
+                            </div>
+                            <button
+                              type="button"
+                              onClick={() =>
+                                handleOpenDocumentFile(document, "lesson")
+                              }
+                              disabled={openingDocumentId === document.id}
+                              className="inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-50 transition disabled:opacity-60"
+                            >
+                              {openingDocumentId === document.id
+                                ? "Đang mở..."
+                                : "Mở"}
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="mt-3 text-sm text-slate-500">
+                        Chưa có tài liệu bài học.
+                      </div>
+                    )}
+
+                    {lessonDocNotice ? (
+                      <div className="mt-3 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+                        {lessonDocNotice}
+                      </div>
+                    ) : null}
+                  </div>
+                </div>
+              ) : null}
+
+              {activeTab === "qa" ? (
+                <div className="space-y-6">
+                  <div className="flex flex-wrap items-center justify-between gap-3">
+                    <div>
+                      <h2 className="text-lg font-semibold text-slate-900">Hỏi đáp</h2>
+                      <p className="mt-1 text-sm text-slate-600">
+                        Trao đổi với giảng viên và học viên khác.
+                      </p>
+                    </div>
+                    <select
+                      value={questionScope}
+                      onChange={handleQuestionScopeChange}
+                      className="h-10 rounded-lg border border-slate-200 bg-white px-3 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#E11D48]/20 focus:border-[#F43F5E]"
+                    >
+                      <option value="lesson">Theo bài học hiện tại</option>
+                      <option value="course">Theo toàn khóa học</option>
+                    </select>
+                  </div>
+
+                  <form onSubmit={handleSubmitQuestion} className="space-y-3">
+                    <div>
+                      <label className="text-sm font-medium text-slate-700">
+                        Tiêu đề câu hỏi
+                      </label>
+                      <input
+                        type="text"
+                        value={questionForm.title}
+                        onChange={(event) =>
+                          setQuestionForm((prev) => ({
+                            ...prev,
+                            title: event.target.value,
+                          }))
+                        }
+                        className="mt-1 h-10 w-full rounded-lg border border-slate-200 bg-white px-3 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#E11D48]/20 focus:border-[#F43F5E]"
+                        placeholder="Nhập tiêu đề"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-sm font-medium text-slate-700">
+                        Nội dung câu hỏi
+                      </label>
+                      <textarea
+                        rows="3"
+                        value={questionForm.content}
+                        onChange={(event) =>
+                          setQuestionForm((prev) => ({
+                            ...prev,
+                            content: event.target.value,
+                          }))
+                        }
+                        className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#E11D48]/20 focus:border-[#F43F5E]"
+                        placeholder="Mô tả chi tiết câu hỏi..."
+                      />
+                    </div>
+                    <div className="flex items-center justify-between gap-3">
+                      {questionsError ? (
+                        <p className="text-sm text-red-600">{questionsError}</p>
+                      ) : (
+                        <span className="text-xs text-slate-500">
+                          {questionScope === "lesson"
+                            ? activeLessonMeta?.lesson?.title
+                              ? `Bài học: ${activeLessonMeta.lesson.title}`
+                              : "Đang xem theo bài học hiện tại"
+                            : "Đang xem theo toàn khóa học"}
+                        </span>
+                      )}
+                      <button
+                        type="submit"
+                        disabled={questionSubmitting}
+                        className="inline-flex h-10 items-center justify-center rounded-lg bg-[#E11D48] px-4 text-sm font-semibold text-white hover:bg-[#BE123C] transition disabled:opacity-60"
+                      >
+                        {questionSubmitting ? "Đang gửi..." : "Gửi câu hỏi"}
+                      </button>
+                    </div>
+                  </form>
+
+                  {questionsLoading ? (
+                    <div className="text-sm text-slate-500">
+                      Đang tải câu hỏi...
+                    </div>
+                  ) : questions.length ? (
+                    <div className="space-y-4">
+                      {questions.map((question) => {
+                        const answers = answersMap[question.id] || {
+                          items: [],
+                          loading: false,
+                          error: "",
+                        };
+                        const isOpen = Boolean(answersOpen[question.id]);
+                        const lessonTitle = question.lessonId
+                          ? lessonTitleMap.get(question.lessonId)
+                          : null;
+                        const isOwner =
+                          currentUserId &&
+                          Number(question.userId) === Number(currentUserId);
+                        const isEditing = editingQuestionId === question.id;
+                        const voteState = questionVotes[question.id];
+                        const voteButtonBase =
+                          "inline-flex h-8 items-center justify-center rounded-full border px-3 text-xs font-medium transition";
+                        return (
+                          <div
+                            key={question.id}
+                            className="rounded-xl border border-slate-200 bg-white p-4"
+                          >
+                            <div className="flex items-start justify-between gap-3">
+                              <div className="min-w-0">
+                                <h3 className="text-sm font-semibold text-slate-900">
+                                  {question.title || "Câu hỏi"}
+                                </h3>
+                                {isEditing ? (
+                                  <div className="mt-2 space-y-2">
+                                    <input
+                                      type="text"
+                                      value={editQuestionForm.title}
+                                      onChange={(event) =>
+                                        setEditQuestionForm((prev) => ({
+                                          ...prev,
+                                          title: event.target.value,
+                                        }))
+                                      }
+                                      className="h-9 w-full rounded-lg border border-slate-200 bg-white px-3 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#E11D48]/20 focus:border-[#F43F5E]"
+                                      placeholder="Nhập tiêu đề"
+                                    />
+                                    <textarea
+                                      rows="3"
+                                      value={editQuestionForm.content}
+                                      onChange={(event) =>
+                                        setEditQuestionForm((prev) => ({
+                                          ...prev,
+                                          content: event.target.value,
+                                        }))
+                                      }
+                                      className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#E11D48]/20 focus:border-[#F43F5E]"
+                                      placeholder="Mô tả chi tiết câu hỏi..."
+                                    />
+                                  </div>
+                                ) : (
+                                  <p className="mt-2 text-sm text-slate-700">
+                                    {question.content || "Chưa có nội dung."}
+                                  </p>
+                                )}
+                              </div>
+                              <div className="flex flex-col items-end gap-2">
+                                <div className="flex items-center gap-2 text-xs text-slate-500">
+                                  {lessonTitle ? `Bài học: ${lessonTitle}` : null}
+                                  <span className="text-slate-400">•</span>
+                                  <span>{question.createdAt || question.createdTime || "-"}</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <button
+                                    type="button"
+                                    onClick={() => toggleAnswers(question.id)}
+                                    className="text-xs text-slate-600 hover:text-slate-900 hover:underline underline-offset-4"
+                                  >
+                                    {isOpen ? "Ẩn trả lời" : "Xem trả lời"}
+                                  </button>
+                                  {isOwner ? (
+                                    <button
+                                      type="button"
+                                      onClick={() => handleEditQuestion(question)}
+                                      className="text-xs text-slate-600 hover:text-slate-900 hover:underline underline-offset-4"
+                                    >
+                                      {isEditing ? "Hủy" : "Sửa"}
+                                    </button>
+                                  ) : null}
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
+                              <div className="flex items-center gap-2">
+                                <button
+                                  type="button"
+                                  onClick={() => handleVote(question, 1)}
+                                  disabled={voteSubmittingId === question.id}
+                                  className={[
+                                    voteButtonBase,
+                                    voteState === 1
+                                      ? "border-[#E11D48] bg-[#FFF1F2] text-[#BE123C]"
+                                      : "border-slate-200 text-slate-600 hover:text-slate-900",
+                                  ].join(" ")}
+                                >
+                                  Hữu ích
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => handleVote(question, -1)}
+                                  disabled={voteSubmittingId === question.id}
+                                  className={[
+                                    voteButtonBase,
+                                    voteState === -1
+                                      ? "border-[#E11D48] bg-[#FFF1F2] text-[#BE123C]"
+                                      : "border-slate-200 text-slate-600 hover:text-slate-900",
+                                  ].join(" ")}
+                                >
+                                  Không hữu ích
+                                </button>
+                              </div>
+                              {isEditing ? (
+                                <button
+                                  type="button"
+                                  onClick={() => handleUpdateQuestion(question)}
+                                  disabled={editSubmitting}
+                                  className="inline-flex h-9 items-center justify-center rounded-lg bg-[#E11D48] px-4 text-sm font-semibold text-white hover:bg-[#BE123C] transition disabled:opacity-60"
+                                >
+                                  {editSubmitting ? "Đang lưu..." : "Lưu thay đổi"}
+                                </button>
+                              ) : null}
+                            </div>
+
+                            {isOpen ? (
+                              <div className="mt-4 rounded-lg border border-slate-200 bg-slate-50 p-3">
+                                {answers.loading ? (
+                                  <div className="text-sm text-slate-500">
+                                    Đang tải câu trả lời...
+                                  </div>
+                                ) : answers.error ? (
+                                  <div className="text-sm text-red-600">
+                                    {answers.error}
+                                  </div>
+                                ) : answers.items.length ? (
+                                  <div className="space-y-3">
+                                    {answers.items.map((answer) => (
+                                      <div key={answer.id} className="text-sm text-slate-700">
+                                        <div className="flex items-center justify-between gap-2">
+                                          <span className="font-medium text-slate-900">
+                                            {answer.authorName || answer.createdUser || "Học viên"}
+                                          </span>
+                                          <span className="text-xs text-slate-500">
+                                            {answer.createdAt || answer.createdTime || "-"}
+                                          </span>
+                                        </div>
+                                        <p className="mt-1 text-sm text-slate-700">
+                                          {answer.content || ""}
+                                        </p>
+                                      </div>
+                                    ))}
+                                  </div>
+                                ) : (
+                                  <div className="text-sm text-slate-500">
+                                    Chưa có câu trả lời nào.
+                                  </div>
+                                )}
+
+                                <form
+                                  onSubmit={(event) =>
+                                    handleSubmitAnswer(event, question)
+                                  }
+                                  className="mt-4 space-y-2"
+                                >
+                                  <textarea
+                                    rows="2"
+                                    value={answerDrafts[question.id] || ""}
+                                    onChange={(event) =>
+                                      setAnswerDrafts((prev) => ({
+                                        ...prev,
+                                        [question.id]: event.target.value,
+                                      }))
+                                    }
+                                    className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#E11D48]/20 focus:border-[#F43F5E]"
+                                    placeholder="Viết câu trả lời..."
+                                  />
+                                  <div className="flex items-center justify-end">
+                                    <button
+                                      type="submit"
+                                      disabled={answerSubmittingId === question.id}
+                                      className="inline-flex h-9 items-center justify-center rounded-lg bg-slate-900 px-4 text-sm font-semibold text-white hover:bg-slate-800 transition disabled:opacity-60"
+                                    >
+                                      {answerSubmittingId === question.id
+                                        ? "Đang gửi..."
+                                        : "Gửi trả lời"}
+                                    </button>
+                                  </div>
+                                </form>
+                              </div>
+                            ) : null}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  ) : (
+                    <div className="text-sm text-slate-500">
+                      Chưa có câu hỏi nào.
+                    </div>
+                  )}
+                </div>
+              ) : null}
+            </div>
           </section>
         </main>
       </div>
