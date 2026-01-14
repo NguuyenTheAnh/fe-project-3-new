@@ -23,7 +23,6 @@ import {
   listQuestionAnswers,
   updateQuestion,
   voteQuestion,
-  acceptQuestionAnswer,
 } from "@/services/qna.service";
 
 const LESSON_TYPE_LABELS = {
@@ -129,7 +128,6 @@ export default function Learn() {
   const [editSubmitting, setEditSubmitting] = useState(false);
   const [questionVotes, setQuestionVotes] = useState({});
   const [voteSubmittingId, setVoteSubmittingId] = useState(null);
-  const [acceptingAnswerId, setAcceptingAnswerId] = useState(null);
   const [answersOpen, setAnswersOpen] = useState({});
   const [answersMap, setAnswersMap] = useState({});
   const [answerDrafts, setAnswerDrafts] = useState({});
@@ -700,30 +698,6 @@ export default function Learn() {
       setQuestionsError(err?.message || "Không thể bình chọn.");
     } finally {
       setVoteSubmittingId(null);
-    }
-  };
-
-  const handleAcceptAnswer = async (questionId, answerId) => {
-    if (!questionId || !answerId) return;
-    setAcceptingAnswerId(answerId);
-    try {
-      await acceptQuestionAnswer(questionId, answerId);
-      const items = await listQuestionAnswers(questionId);
-      setAnswersMap((prev) => ({
-        ...prev,
-        [questionId]: { items: items || [], loading: false, error: "" },
-      }));
-    } catch (err) {
-      setAnswersMap((prev) => ({
-        ...prev,
-        [questionId]: {
-          items: prev[questionId]?.items || [],
-          loading: false,
-          error: err?.message || "Không thể cập nhật câu trả lời.",
-        },
-      }));
-    } finally {
-      setAcceptingAnswerId(null);
     }
   };
 
@@ -1532,25 +1506,6 @@ export default function Learn() {
                                       <span className="inline-flex rounded-full bg-emerald-50 px-2 py-0.5 text-xs font-medium text-emerald-700">
                                         Đã được chấp nhận
                                       </span>
-                                    ) : null}
-                                    {isOwner && !answer.isAccepted ? (
-                                      <button
-                                        type="button"
-                                        onClick={() =>
-                                          handleAcceptAnswer(
-                                            question.id,
-                                            answer.id
-                                          )
-                                        }
-                                        disabled={
-                                          acceptingAnswerId === answer.id
-                                        }
-                                        className="inline-flex h-7 items-center justify-center rounded-full border border-slate-200 bg-white px-2 text-xs font-medium text-slate-700 hover:bg-slate-50 transition disabled:opacity-60"
-                                      >
-                                        {acceptingAnswerId === answer.id
-                                          ? "Đang lưu..."
-                                          : "Chấp nhận"}
-                                      </button>
                                     ) : null}
                                   </div>
                                 </div>

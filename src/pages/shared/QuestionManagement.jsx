@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+﻿import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   deleteManagementQuestion,
@@ -6,11 +6,7 @@ import {
   listManagementQuestions,
   updateManagementQuestion,
 } from "@/services/question.management.service";
-import {
-  acceptQuestionAnswer,
-  getQuestionDetail,
-  listQuestionAnswers,
-} from "@/services/qna.service";
+import { acceptQuestionAnswer, listQuestionAnswers } from "@/services/qna.service";
 import PaginationBar from "@/components/catalog/PaginationBar";
 
 const EMPTY_FORM = {
@@ -29,6 +25,19 @@ const normalizeList = (data) => {
   };
 };
 
+const formatCreator = (question) => {
+  const user = question?.createdUser;
+  if (typeof user === "string") return user;
+  return (
+    user?.fullName ||
+    user?.name ||
+    user?.email ||
+    user?.username ||
+    (user?.id ? `#${user.id}` : "") ||
+    (question?.userId ? `#${question.userId}` : "-")
+  );
+};
+
 export default function QuestionManagement({ scope = "admin" }) {
   const navigate = useNavigate();
   const [questions, setQuestions] = useState([]);
@@ -42,22 +51,28 @@ export default function QuestionManagement({ scope = "admin" }) {
   const [notice, setNotice] = useState(null);
   const [permissionError, setPermissionError] = useState(false);
 
-  const [detailOpen, setDetailOpen] = useState(false);
-  const [detailLoading, setDetailLoading] = useState(false);
-  const [detailQuestion, setDetailQuestion] = useState(null);
-  const [detailAnswers, setDetailAnswers] = useState([]);
-  const [detailError, setDetailError] = useState("");
-  const [answerActionId, setAnswerActionId] = useState(null);
-
   const [editOpen, setEditOpen] = useState(false);
   const [editForm, setEditForm] = useState(EMPTY_FORM);
   const [editSaving, setEditSaving] = useState(false);
   const [activeQuestion, setActiveQuestion] = useState(null);
 
-  const pageTitle = useMemo(
-    () => (scope === "admin" ? "Hỏi đáp" : "Hỏi đáp"),
-    [scope]
-  );
+  const [detailOpen, setDetailOpen] = useState(false);
+  const [detailQuestion, setDetailQuestion] = useState(null);
+  const [detailAnswers, setDetailAnswers] = useState([]);
+  const [detailLoading, setDetailLoading] = useState(false);
+  const [detailError, setDetailError] = useState("");
+
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [confirmConfig, setConfirmConfig] = useState({
+    title: "",
+    message: "",
+    confirmLabel: "Xác nhận",
+    variant: "default",
+    onConfirm: null,
+  });
+  const [confirmLoading, setConfirmLoading] = useState(false);
+
+  const pageTitle = useMemo(() => "Hỏi đáp", []);
 
   const loadQuestions = async (page = pageInfo.pageNumber) => {
     setLoading(true);
@@ -94,34 +109,44 @@ export default function QuestionManagement({ scope = "admin" }) {
     loadQuestions(0);
   }, []);
 
-  const openDetail = async (question) => {
-    if (!question) return;
-    setActiveQuestion(question);
-    setDetailOpen(true);
-    setDetailLoading(true);
-    setDetailError("");
-    setDetailQuestion(null);
-    setDetailAnswers([]);
-    try {
-      const [questionDetail, answers] = await Promise.all([
-        getQuestionDetail(question.id),
-        listQuestionAnswers(question.id),
-      ]);
-      setDetailQuestion(questionDetail || question);
-      setDetailAnswers(Array.isArray(answers) ? answers : []);
-    } catch (error) {
-      setDetailError(error?.message || "Không thể tải chi tiết câu hỏi.");
-      setDetailQuestion(question);
-    } finally {
-      setDetailLoading(false);
-    }
+  const openConfirm = ({ title, message, confirmLabel, variant, onConfirm }) => {
+    setConfirmConfig({
+      title,
+      message,
+      confirmLabel: confirmLabel || "Xác nhận",
+      variant: variant || "default",
+      onConfirm,
+    });
+    setConfirmOpen(true);
   };
 
-  const closeDetail = () => {
-    setDetailOpen(false);
-    setDetailQuestion(null);
-    setDetailAnswers([]);
-    setDetailError("");
+  const closeConfirm = () => {
+    if (confirmLoading) return;
+    setConfirmOpen(false);
+    setConfirmConfig({
+      title: "",
+      message: "",
+      confirmLabel: "Xác nhận",
+      variant: "default",
+      onConfirm: null,
+    });
+  };
+
+  const handleConfirm = async () => {
+    if (!confirmConfig.onConfirm) return;
+    setConfirmLoading(true);
+    try {
+      await confirmConfig.onConfirm();
+      closeConfirm();
+    } catch (error) {
+      setNotice({
+        type: "error",
+        message: error?.message || "Không thể thực hiện thao tác.",
+      });
+      closeConfirm();
+    } finally {
+      setConfirmLoading(false);
+    }
   };
 
   const openEdit = (question) => {
@@ -174,79 +199,90 @@ export default function QuestionManagement({ scope = "admin" }) {
     }
   };
 
-  const handleDeleteQuestion = async (question) => {
+  const handleDeleteQuestion = (question) => {
     if (!question?.id) return;
-    const ok = window.confirm("Bạn chắc chắn muốn xóa câu hỏi này?");
-    if (!ok) return;
-    setNotice(null);
+    openConfirm({
+      title: "Xóa câu hỏi",
+      message: "Bạn chắc chắn muốn xóa câu hỏi này?",
+      confirmLabel: "Xóa",
+      variant: "danger",
+      onConfirm: async () => {
+        await deleteManagementQuestion(question.id, scope);
+        setNotice({ type: "success", message: "Đã xóa câu hỏi." });
+        await loadQuestions(pageInfo.pageNumber);
+      },
+    });
+  };
+
+  const openDetail = async (question) => {
+    if (!question) return;
+    setDetailQuestion(question);
+    setDetailAnswers(Array.isArray(question.answers) ? question.answers : []);
+    setDetailError("");
+    setDetailLoading(true);
+    setDetailOpen(true);
     try {
-      await deleteManagementQuestion(question.id, scope);
-      setNotice({ type: "success", message: "Đã xóa câu hỏi." });
-      await loadQuestions(pageInfo.pageNumber);
+      const answers = await listQuestionAnswers(question.id);
+      setDetailAnswers(Array.isArray(answers) ? answers : []);
     } catch (error) {
-      setNotice({
-        type: "error",
-        message: error?.message || "Không thể xóa câu hỏi.",
-      });
+      setDetailError(error?.message || "Không thể tải câu trả lời.");
+    } finally {
+      setDetailLoading(false);
     }
   };
 
-  const refreshAnswers = async (questionId) => {
+  const closeDetail = () => {
+    setDetailOpen(false);
+    setDetailQuestion(null);
+    setDetailAnswers([]);
+    setDetailError("");
+  };
+
+  const refreshDetailAnswers = async (questionId) => {
     if (!questionId) return;
     const answers = await listQuestionAnswers(questionId);
     setDetailAnswers(Array.isArray(answers) ? answers : []);
   };
 
-  const handleAcceptAnswer = async (answer) => {
+  const handleApproveAnswer = (answer) => {
     if (!detailQuestion?.id || !answer?.id) return;
-    setAnswerActionId(answer.id);
-    try {
-      await acceptQuestionAnswer(detailQuestion.id, answer.id);
-      await refreshAnswers(detailQuestion.id);
-    } catch (error) {
-      setNotice({
-        type: "error",
-        message: error?.message || "Không thể duyệt câu trả lời.",
-      });
-    } finally {
-      setAnswerActionId(null);
-    }
+    openConfirm({
+      title: "Duyệt câu trả lời",
+      message: "Bạn chắc chắn muốn duyệt câu trả lời này?",
+      confirmLabel: "Duyệt",
+      onConfirm: async () => {
+        await acceptQuestionAnswer(detailQuestion.id, answer.id);
+        await refreshDetailAnswers(detailQuestion.id);
+      },
+    });
   };
 
-  const handleRejectAnswer = async (answer) => {
+  const handleRejectAnswer = (answer) => {
     if (!answer?.id) return;
-    const ok = window.confirm("Từ chối câu trả lời này?");
-    if (!ok) return;
-    setAnswerActionId(answer.id);
-    try {
-      await deleteQuestionAnswer(answer.id);
-      await refreshAnswers(detailQuestion?.id);
-    } catch (error) {
-      setNotice({
-        type: "error",
-        message: error?.message || "Không thể từ chối câu trả lời.",
-      });
-    } finally {
-      setAnswerActionId(null);
-    }
+    openConfirm({
+      title: "Từ chối câu trả lời",
+      message: "Từ chối câu trả lời này?",
+      confirmLabel: "Từ chối",
+      variant: "danger",
+      onConfirm: async () => {
+        await deleteQuestionAnswer(answer.id);
+        await refreshDetailAnswers(detailQuestion?.id);
+      },
+    });
   };
 
-  const handleDeleteAnswer = async (answer) => {
+  const handleDeleteAnswer = (answer) => {
     if (!answer?.id) return;
-    const ok = window.confirm("Bạn chắc chắn muốn xóa câu trả lời này?");
-    if (!ok) return;
-    setAnswerActionId(answer.id);
-    try {
-      await deleteQuestionAnswer(answer.id);
-      await refreshAnswers(detailQuestion?.id);
-    } catch (error) {
-      setNotice({
-        type: "error",
-        message: error?.message || "Không thể xóa câu trả lời.",
-      });
-    } finally {
-      setAnswerActionId(null);
-    }
+    openConfirm({
+      title: "Xóa câu trả lời",
+      message: "Bạn chắc chắn muốn xóa câu trả lời này?",
+      confirmLabel: "Xóa",
+      variant: "danger",
+      onConfirm: async () => {
+        await deleteQuestionAnswer(answer.id);
+        await refreshDetailAnswers(detailQuestion?.id);
+      },
+    });
   };
 
   if (permissionError) {
@@ -267,6 +303,10 @@ export default function QuestionManagement({ scope = "admin" }) {
       </div>
     );
   }
+
+  const detailCourseTitle =
+    detailQuestion?.course?.title || detailQuestion?.courseTitle || "-";
+  const detailLessonTitle = detailQuestion?.lesson?.title || "Toàn khóa học";
 
   return (
     <div className="mx-auto w-full max-w-[1200px] px-4 py-6">
@@ -296,20 +336,28 @@ export default function QuestionManagement({ scope = "admin" }) {
 
       <div className="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-white">
         <div className="overflow-x-auto">
-          <table className="min-w-full text-sm">
+          <table className="min-w-[980px] text-sm">
             <thead className="bg-slate-50 text-xs uppercase text-slate-500">
               <tr>
-                <th className="px-4 py-3 text-left font-semibold">ID</th>
-                <th className="px-4 py-3 text-left font-semibold">Khóa học</th>
-                <th className="px-4 py-3 text-left font-semibold">Bài học</th>
-                <th className="px-4 py-3 text-left font-semibold">Tiêu đề</th>
-                <th className="px-4 py-3 text-left font-semibold">
+                <th className="sticky left-0 z-20 bg-slate-50 px-4 py-3 text-left font-semibold border-r border-slate-200">
+                  ID
+                </th>
+                <th className="px-4 py-3 text-left font-semibold whitespace-nowrap">
+                  Khóa học
+                </th>
+                <th className="px-4 py-3 text-left font-semibold whitespace-nowrap">
+                  Bài học
+                </th>
+                <th className="px-4 py-3 text-left font-semibold whitespace-nowrap">
+                  Tiêu đề
+                </th>
+                <th className="px-4 py-3 text-left font-semibold whitespace-nowrap">
                   Trạng thái
                 </th>
-                <th className="px-4 py-3 text-left font-semibold">
+                <th className="px-4 py-3 text-left font-semibold whitespace-nowrap">
                   Người tạo
                 </th>
-                <th className="px-4 py-3 text-left font-semibold">
+                <th className="sticky right-0 z-20 bg-slate-50 px-4 py-3 text-left font-semibold border-l border-slate-200">
                   Thao tác
                 </th>
               </tr>
@@ -323,39 +371,45 @@ export default function QuestionManagement({ scope = "admin" }) {
                 </tr>
               ) : questions.length ? (
                 questions.map((question) => (
-                  <tr key={question.id} className="hover:bg-slate-50">
-                    <td className="px-4 py-3">{question.id}</td>
-                    <td className="px-4 py-3">
-                      {question.course?.title || "—"}
+                  <tr key={question.id} className="group hover:bg-slate-50">
+                    <td className="sticky left-0 z-10 bg-white px-4 py-3 border-r border-slate-200 whitespace-nowrap group-hover:bg-slate-50">
+                      {question.id}
                     </td>
-                    <td className="px-4 py-3">
+                    <td className="px-4 py-3 whitespace-nowrap max-w-[220px] truncate">
+                      {question.course?.title || "-"}
+                    </td>
+                    <td className="px-4 py-3 whitespace-nowrap max-w-[200px] truncate">
                       {question.lesson?.title || "Toàn khóa học"}
                     </td>
-                    <td className="px-4 py-3">{question.title || "—"}</td>
-                    <td className="px-4 py-3">{question.status || "—"}</td>
-                    <td className="px-4 py-3">
-                      {question.userId ? `#${question.userId}` : "—"}
+                    <td className="px-4 py-3 whitespace-nowrap max-w-[240px] truncate">
+                      {question.title || "-"}
                     </td>
-                    <td className="px-4 py-3">
-                      <div className="flex flex-wrap gap-2">
+                    <td className="px-4 py-3 whitespace-nowrap">
+                      {question.status || "-"}
+                    </td>
+                    <td className="px-4 py-3 whitespace-nowrap">
+                      {formatCreator(question)}
+                    </td>
+                    <td className="sticky right-0 z-10 bg-white px-4 py-3 border-l border-slate-200 whitespace-nowrap group-hover:bg-slate-50">
+                      <div className="flex items-center gap-2 whitespace-nowrap">
                         <button
                           type="button"
                           onClick={() => openDetail(question)}
-                          className="text-slate-700 hover:text-slate-900 hover:underline underline-offset-4"
+                          className="text-slate-700 hover:text-slate-900 hover:underline underline-offset-4 whitespace-nowrap"
                         >
                           Chi tiết
                         </button>
                         <button
                           type="button"
                           onClick={() => openEdit(question)}
-                          className="text-slate-700 hover:text-slate-900 hover:underline underline-offset-4"
+                          className="text-slate-700 hover:text-slate-900 hover:underline underline-offset-4 whitespace-nowrap"
                         >
                           Sửa
                         </button>
                         <button
                           type="button"
                           onClick={() => handleDeleteQuestion(question)}
-                          className="text-red-600 hover:text-red-700 hover:underline underline-offset-4"
+                          className="text-red-600 hover:text-red-700 hover:underline underline-offset-4 whitespace-nowrap"
                         >
                           Xóa
                         </button>
@@ -389,9 +443,7 @@ export default function QuestionManagement({ scope = "admin" }) {
         <>
           <div className="fixed inset-0 z-50 bg-black/40" onClick={closeEdit} />
           <div className="fixed left-1/2 top-1/2 z-50 w-[92vw] max-w-3xl -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto">
-            <h2 className="text-lg font-semibold text-slate-900">
-              Sửa câu hỏi
-            </h2>
+            <h2 className="text-lg font-semibold text-slate-900">Sửa câu hỏi</h2>
             <p className="mt-1 text-sm text-slate-500">
               Cập nhật tiêu đề và nội dung câu hỏi.
             </p>
@@ -434,7 +486,7 @@ export default function QuestionManagement({ scope = "admin" }) {
                 <div>
                   Khóa học:{" "}
                   <span className="font-medium text-slate-900">
-                    {activeQuestion?.course?.title || "—"}
+                    {activeQuestion?.course?.title || "-"}
                   </span>
                 </div>
                 <div className="mt-1">
@@ -467,10 +519,7 @@ export default function QuestionManagement({ scope = "admin" }) {
 
       {detailOpen ? (
         <>
-          <div
-            className="fixed inset-0 z-50 bg-black/40"
-            onClick={closeDetail}
-          />
+          <div className="fixed inset-0 z-50 bg-black/40" onClick={closeDetail} />
           <div className="fixed left-1/2 top-1/2 z-50 w-[94vw] max-w-5xl -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto">
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div>
@@ -478,7 +527,7 @@ export default function QuestionManagement({ scope = "admin" }) {
                   Chi tiết câu hỏi
                 </h2>
                 <p className="mt-1 text-sm text-slate-500">
-                  Xem thông tin câu hỏi và danh sách câu trả lời.
+                  Thông tin cơ bản từ danh sách câu hỏi.
                 </p>
               </div>
               <button
@@ -486,15 +535,11 @@ export default function QuestionManagement({ scope = "admin" }) {
                 onClick={closeDetail}
                 className="text-sm text-slate-600 hover:text-slate-900 hover:underline underline-offset-4"
               >
-                Đóng
+                Quay lại
               </button>
             </div>
 
-            {detailLoading ? (
-              <div className="mt-4 text-sm text-slate-500">
-                Đang tải dữ liệu...
-              </div>
-            ) : detailError ? (
+            {detailError ? (
               <div className="mt-4 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">
                 {detailError}
               </div>
@@ -509,41 +554,31 @@ export default function QuestionManagement({ scope = "admin" }) {
                   <div>
                     <span className="text-slate-500">Khóa học: </span>
                     <span className="font-medium text-slate-900">
-                      {detailQuestion?.course?.title ||
-                        activeQuestion?.course?.title ||
-                        "—"}
+                      {detailCourseTitle}
                     </span>
                   </div>
                   <div>
                     <span className="text-slate-500">Bài học: </span>
                     <span className="font-medium text-slate-900">
-                      {detailQuestion?.lesson?.title ||
-                        activeQuestion?.lesson?.title ||
-                        "Toàn khóa học"}
+                      {detailLessonTitle}
                     </span>
                   </div>
                   <div>
                     <span className="text-slate-500">Tiêu đề: </span>
                     <span className="font-medium text-slate-900">
-                      {detailQuestion?.title || activeQuestion?.title || "—"}
+                      {detailQuestion?.title || "-"}
                     </span>
                   </div>
                   <div>
                     <span className="text-slate-500">Trạng thái: </span>
                     <span className="font-medium text-slate-900">
-                      {detailQuestion?.status ||
-                        activeQuestion?.status ||
-                        "—"}
+                      {detailQuestion?.status || "-"}
                     </span>
                   </div>
                   <div>
                     <span className="text-slate-500">Người tạo: </span>
                     <span className="font-medium text-slate-900">
-                      {detailQuestion?.userId
-                        ? `#${detailQuestion.userId}`
-                        : activeQuestion?.userId
-                        ? `#${activeQuestion.userId}`
-                        : "—"}
+                      {formatCreator(detailQuestion)}
                     </span>
                   </div>
                 </div>
@@ -551,7 +586,7 @@ export default function QuestionManagement({ scope = "admin" }) {
               <div className="rounded-xl border border-slate-200 bg-white p-4 text-sm text-slate-700">
                 <div className="text-xs uppercase text-slate-500">Nội dung</div>
                 <p className="mt-3 whitespace-pre-line text-slate-800">
-                  {detailQuestion?.content || activeQuestion?.content || "—"}
+                  {detailQuestion?.content || "-"}
                 </p>
               </div>
             </div>
@@ -588,15 +623,21 @@ export default function QuestionManagement({ scope = "admin" }) {
                       </tr>
                     </thead>
                     <tbody className="text-slate-700">
-                      {detailAnswers.length ? (
+                      {detailLoading ? (
+                        <tr>
+                          <td className="px-4 py-6" colSpan={5}>
+                            Đang tải câu trả lời...
+                          </td>
+                        </tr>
+                      ) : detailAnswers.length ? (
                         detailAnswers.map((answer) => (
                           <tr key={answer.id} className="hover:bg-slate-50">
                             <td className="px-4 py-3">{answer.id}</td>
                             <td className="px-4 py-3">
-                              {answer.content || "—"}
+                              {answer.content || "-"}
                             </td>
                             <td className="px-4 py-3">
-                              {answer.userId ? `#${answer.userId}` : "—"}
+                              {answer.userId ? `#${answer.createdUser}` : "-"}
                             </td>
                             <td className="px-4 py-3">
                               {answer.isAccepted ? "Đã duyệt" : "Chờ duyệt"}
@@ -605,25 +646,22 @@ export default function QuestionManagement({ scope = "admin" }) {
                               <div className="flex flex-wrap gap-2">
                                 <button
                                   type="button"
-                                  onClick={() => handleAcceptAnswer(answer)}
-                                  disabled={answerActionId === answer.id}
-                                  className="text-slate-700 hover:text-slate-900 hover:underline underline-offset-4 disabled:opacity-60"
+                                  onClick={() => handleApproveAnswer(answer)}
+                                  className="text-slate-700 hover:text-slate-900 hover:underline underline-offset-4"
                                 >
                                   Duyệt
                                 </button>
                                 <button
                                   type="button"
                                   onClick={() => handleRejectAnswer(answer)}
-                                  disabled={answerActionId === answer.id}
-                                  className="text-slate-700 hover:text-slate-900 hover:underline underline-offset-4 disabled:opacity-60"
+                                  className="text-slate-700 hover:text-slate-900 hover:underline underline-offset-4"
                                 >
                                   Từ chối
                                 </button>
                                 <button
                                   type="button"
                                   onClick={() => handleDeleteAnswer(answer)}
-                                  disabled={answerActionId === answer.id}
-                                  className="text-red-600 hover:text-red-700 hover:underline underline-offset-4 disabled:opacity-60"
+                                  className="text-red-600 hover:text-red-700 hover:underline underline-offset-4"
                                 >
                                   Xóa
                                 </button>
@@ -633,10 +671,7 @@ export default function QuestionManagement({ scope = "admin" }) {
                         ))
                       ) : (
                         <tr>
-                          <td
-                            className="px-4 py-6 text-slate-500"
-                            colSpan={5}
-                          >
+                          <td className="px-4 py-6 text-slate-500" colSpan={5}>
                             Chưa có câu trả lời nào.
                           </td>
                         </tr>
@@ -645,6 +680,42 @@ export default function QuestionManagement({ scope = "admin" }) {
                   </table>
                 </div>
               </div>
+            </div>
+          </div>
+        </>
+      ) : null}
+
+      {confirmOpen ? (
+        <>
+          <div className="fixed inset-0 z-50 bg-black/40" onClick={closeConfirm} />
+          <div className="fixed left-1/2 top-1/2 z-50 w-[92vw] max-w-md -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white p-6 shadow-xl">
+            <h3 className="text-lg font-semibold text-slate-900">
+              {confirmConfig.title}
+            </h3>
+            <p className="mt-2 text-sm text-slate-600">
+              {confirmConfig.message}
+            </p>
+            <div className="mt-6 flex items-center justify-end gap-2">
+              <button
+                type="button"
+                onClick={closeConfirm}
+                className="h-10 rounded-lg border border-slate-200 bg-white px-4 text-sm font-medium hover:bg-slate-50 transition inline-flex items-center justify-center"
+              >
+                Hủy
+              </button>
+              <button
+                type="button"
+                onClick={handleConfirm}
+                disabled={confirmLoading}
+                className={[
+                  "h-10 rounded-lg px-4 text-sm font-semibold text-white transition inline-flex items-center justify-center disabled:opacity-60",
+                  confirmConfig.variant === "danger"
+                    ? "bg-red-600 hover:bg-red-700"
+                    : "bg-slate-900 hover:bg-slate-800",
+                ].join(" ")}
+              >
+                {confirmLoading ? "Đang xử lý..." : confirmConfig.confirmLabel}
+              </button>
             </div>
           </div>
         </>
