@@ -23,6 +23,9 @@ function InstructorSidebar() {
         <NavLink to="/instructor/courses" className={linkClasses}>
           Khóa học
         </NavLink>
+        <NavLink to="/instructor/questions" className={linkClasses}>
+          Hỏi đáp
+        </NavLink>
       </nav>
     </div>
   );

@@ -74,3 +74,50 @@ export async function createQuestionAnswer(questionId, payload) {
     handleApiError(error);
   }
 }
+
+export async function getQuestionDetail(questionId) {
+  if (!questionId) return null;
+  try {
+    const response = await axiosInstance.get(`/questions/${questionId}`);
+    return unwrapResponse(response);
+  } catch (error) {
+    handleApiError(error);
+  }
+}
+
+export async function updateQuestion(questionId, payload) {
+  if (!questionId) return null;
+  try {
+    const response = await axiosInstance.put(
+      `/questions/${questionId}`,
+      payload
+    );
+    return unwrapResponse(response);
+  } catch (error) {
+    handleApiError(error);
+  }
+}
+
+export async function voteQuestion(questionId, voteType) {
+  if (!questionId || !voteType) return null;
+  try {
+    const response = await axiosInstance.post(`/questions/${questionId}/vote`, {
+      voteType,
+    });
+    return unwrapResponse(response);
+  } catch (error) {
+    handleApiError(error);
+  }
+}
+
+export async function acceptQuestionAnswer(questionId, answerId) {
+  if (!questionId || !answerId) return null;
+  try {
+    const response = await axiosInstance.patch(
+      `/questions/${questionId}/answers/${answerId}/accept`
+    );
+    return unwrapResponse(response);
+  } catch (error) {
+    handleApiError(error);
+  }
+}

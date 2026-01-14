@@ -32,6 +32,9 @@ function AdminSidebar() {
         <NavLink to="/admin/tags" className={linkClasses}>
           Thẻ
         </NavLink>
+        <NavLink to="/admin/questions" className={linkClasses}>
+          Hỏi đáp
+        </NavLink>
       </nav>
     </div>
   );

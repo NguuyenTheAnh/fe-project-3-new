@@ -1,0 +1,129 @@
+						{
+							"name": "Management list (admin/instructor)",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ADMIN_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/admin/questions?page=0&size=10",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"admin",
+										"questions"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "0"
+										},
+										{
+											"key": "size",
+											"value": "10"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Management list (admin/instructor)",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseURL}}/admin/questions?page=0&size=10",
+											"host": [
+												"{{baseURL}}"
+											],
+											"path": [
+												"admin",
+												"questions"
+											],
+											"query": [
+												{
+													"key": "page",
+													"value": "0"
+												},
+												{
+													"key": "size",
+													"value": "10"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "",
+									"header": [
+										{
+											"key": "Vary",
+											"value": "Origin"
+										},
+										{
+											"key": "Vary",
+											"value": "Access-Control-Request-Method"
+										},
+										{
+											"key": "Vary",
+											"value": "Access-Control-Request-Headers"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "0"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Wed, 14 Jan 2026 02:34:54 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"code\": \"00\",\n    \"message\": null,\n    \"data\": {\n        \"content\": [\n            {\n                \"id\": 4,\n                \"course\": {\n                    \"id\": 7,\n                    \"categoryId\": 2,\n                    \"creatorUserId\": 4,\n                    \"title\": \"course test 10-01\",\n                    \"slug\": \"course-test-10-01\",\n                    \"shortDescription\": \"course test 10-01\",\n                    \"description\": \"course test 10-01\",\n                    \"level\": \"INTERMEDIATE\",\n                    \"language\": \"VI\",\n                    \"thumbnailFileId\": 26,\n                    \"introVideoFileId\": 29,\n                    \"status\": \"PUBLISHED\",\n                    \"publishedAt\": \"2026-01-10T10:06:30\",\n                    \"priceCents\": 2000000,\n                    \"ratingAvg\": null,\n                    \"ratingCount\": 0\n                },\n                \"lesson\": {\n                    \"id\": 8,\n                    \"title\": \"Bài 1\",\n                    \"lessonType\": \"VIDEO\",\n                    \"contentText\": null,\n                    \"videoFileId\": 24,\n                    \"durationSeconds\": 60,\n                    \"isFreePreview\": false\n                },\n                \"userId\": 8,\n                \"title\": \"Giải đáp phần đầu của bài học\",\n                \"content\": \"Giải đáp phần đầu của bài học\",\n                \"status\": \"OPEN\",\n                \"answers\": [\n                    {\n                        \"id\": 3,\n                        \"questionId\": 4,\n                        \"userId\": 12,\n                        \"content\": \"Phần này đã được giải thích trong đoạn đầu của video\",\n                        \"isAccepted\": false\n                    }\n                ]\n            },\n            {\n                \"id\": 3,\n                \"course\": {\n                    \"id\": 4,\n                    \"categoryId\": 2,\n                    \"creatorUserId\": 7,\n                    \"title\": \"Java Spring Boot Masterclass\",\n                    \"slug\": \"java-spring-boot-masterclass\",\n                    \"shortDescription\": \"Learn Spring Boot end-to-end\",\n                    \"description\": \"Full syllabus\",\n                    \"level\": \"BEGINNER\",\n                    \"language\": \"EN\",\n                    \"thumbnailFileId\": 16,\n                    \"introVideoFileId\": 17,\n                    \"status\": \"PUBLISHED\",\n                    \"publishedAt\": \"2026-01-08T14:15:14\",\n                    \"priceCents\": 150000,\n                    \"ratingAvg\": 3,\n                    \"ratingCount\": 1\n                },\n                \"lesson\": null,\n                \"userId\": 4,\n                \"title\": \"How to configure JWT?\",\n                \"content\": \"Please share steps...\",\n                \"status\": \"OPEN\",\n                \"answers\": []\n            },\n            {\n                \"id\": 2,\n                \"course\": {\n                    \"id\": 4,\n                    \"categoryId\": 2,\n                    \"creatorUserId\": 7,\n                    \"title\": \"Java Spring Boot Masterclass\",\n                    \"slug\": \"java-spring-boot-masterclass\",\n                    \"shortDescription\": \"Learn Spring Boot end-to-end\",\n                    \"description\": \"Full syllabus\",\n                    \"level\": \"BEGINNER\",\n                    \"language\": \"EN\",\n                    \"thumbnailFileId\": 16,\n                    \"introVideoFileId\": 17,\n                    \"status\": \"PUBLISHED\",\n                    \"publishedAt\": \"2026-01-08T14:15:14\",\n                    \"priceCents\": 150000,\n                    \"ratingAvg\": 3,\n                    \"ratingCount\": 1\n                },\n                \"lesson\": {\n                    \"id\": 6,\n                    \"title\": \"Lesson 1 - Getting Started\",\n                    \"lessonType\": \"VIDEO\",\n                    \"contentText\": null,\n                    \"videoFileId\": 18,\n                    \"durationSeconds\": 600,\n                    \"isFreePreview\": false\n                },\n                \"userId\": 4,\n                \"title\": \"Updated title\",\n                \"content\": \"Updated content\",\n                \"status\": \"OPEN\",\n                \"answers\": [\n                    {\n                        \"id\": 2,\n                        \"questionId\": 2,\n                        \"userId\": 4,\n                        \"content\": \"Here is my answer\",\n                        \"isAccepted\": true\n                    }\n                ]\n            },\n            {\n                \"id\": 1,\n                \"course\": {\n                    \"id\": 3,\n                    \"categoryId\": 2,\n                    \"creatorUserId\": 4,\n                    \"title\": \"Java Spring Boot Masterclass (Updated)\",\n                    \"slug\": \"java-spring-boot-masterclass\",\n                    \"shortDescription\": \"Updated short desc\",\n                    \"description\": \"Updated full desc\",\n                    \"level\": \"INTERMEDIATE\",\n                    \"language\": \"VI\",\n                    \"thumbnailFileId\": 6,\n                    \"introVideoFileId\": 10,\n                    \"status\": \"PUBLISHED\",\n                    \"publishedAt\": \"2026-01-10T10:00:05\",\n                    \"priceCents\": 0,\n                    \"ratingAvg\": 3,\n                    \"ratingCount\": 1\n                },\n                \"lesson\": {\n                    \"id\": 2,\n                    \"title\": \"Lesson 1 - Updated\",\n                    \"lessonType\": \"ARTICLE\",\n                    \"contentText\": \"<p>Updated article content</p>\",\n                    \"videoFileId\": 11,\n                    \"durationSeconds\": 300,\n                    \"isFreePreview\": true\n                },\n                \"userId\": 6,\n                \"title\": \"Updated title\",\n                \"content\": \"Updated content\",\n                \"status\": \"OPEN\",\n                \"answers\": [\n                    {\n                        \"id\": 1,\n                        \"questionId\": 1,\n                        \"userId\": 6,\n                        \"content\": \"Here is my answer\",\n                        \"isAccepted\": true\n                    }\n                ]\n            }\n        ],\n        \"pageable\": {\n            \"pageNumber\": 0,\n            \"pageSize\": 10,\n            \"sort\": [],\n            \"offset\": 0,\n            \"paged\": true,\n            \"unpaged\": false\n        },\n        \"last\": true,\n        \"totalElements\": 4,\n        \"totalPages\": 1,\n        \"size\": 10,\n        \"number\": 0,\n        \"sort\": [],\n        \"first\": true,\n        \"numberOfElements\": 4,\n        \"empty\": false\n    }\n}"
+								}
+							]
+						}

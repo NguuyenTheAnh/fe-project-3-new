@@ -10,12 +10,14 @@ import AdminHome from "@/pages/admin/AdminHome";
 import AdminCategories from "@/pages/admin/AdminCategories";
 import AdminCourses from "@/pages/admin/AdminCourses";
 import AdminCurriculum from "@/pages/admin/AdminCurriculum";
+import AdminQuestions from "@/pages/admin/AdminQuestions";
 import AdminTags from "@/pages/admin/AdminTags";
 import LoginPage from "@/pages/auth/login";
 import RegisterPage from "@/pages/auth/register";
 import InstructorCourses from "@/pages/instructor/InstructorCourses";
 import InstructorCurriculum from "@/pages/instructor/InstructorCurriculum";
 import InstructorHome from "@/pages/instructor/InstructorHome";
+import InstructorQuestions from "@/pages/instructor/InstructorQuestions";
 import CourseDetail from "@/pages/public/CourseDetail";
 import Home from "@/pages/public/Home";
 import Search from "@/pages/public/Search";
@@ -111,6 +113,7 @@ export const router = createBrowserRouter([
             path: "courses/:courseId/curriculum",
             element: <InstructorCurriculum />,
           },
+          { path: "questions", element: <InstructorQuestions /> },
         ],
       },
       {
@@ -128,6 +131,7 @@ export const router = createBrowserRouter([
           { path: "courses/:courseId/curriculum", element: <AdminCurriculum /> },
           { path: "categories", element: <AdminCategories /> },
           { path: "tags", element: <AdminTags /> },
+          { path: "questions", element: <AdminQuestions /> },
         ],
       },
     ],

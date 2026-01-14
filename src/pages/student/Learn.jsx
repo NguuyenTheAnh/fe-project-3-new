@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 import { getCourseDetail } from "@/services/course.service";
 import { getLessonDetail } from "@/services/lesson.service";
 import { getFileAccessUrlPrivate } from "@/services/file.service";
@@ -20,6 +21,9 @@ import {
   createQuestionAnswer,
   listCourseQuestions,
   listQuestionAnswers,
+  updateQuestion,
+  voteQuestion,
+  acceptQuestionAnswer,
 } from "@/services/qna.service";
 
 const LESSON_TYPE_LABELS = {
@@ -66,6 +70,7 @@ const findLessonInSections = (sections, lessonId) => {
 
 export default function Learn() {
   const { courseId } = useParams();
+  const { authUser } = useAuth();
   const [searchParams, setSearchParams] = useSearchParams();
   const [course, setCourse] = useState(null);
   const [courseLoading, setCourseLoading] = useState(false);
@@ -116,6 +121,15 @@ export default function Learn() {
     content: "",
   });
   const [questionSubmitting, setQuestionSubmitting] = useState(false);
+  const [editingQuestionId, setEditingQuestionId] = useState(null);
+  const [editQuestionForm, setEditQuestionForm] = useState({
+    title: "",
+    content: "",
+  });
+  const [editSubmitting, setEditSubmitting] = useState(false);
+  const [questionVotes, setQuestionVotes] = useState({});
+  const [voteSubmittingId, setVoteSubmittingId] = useState(null);
+  const [acceptingAnswerId, setAcceptingAnswerId] = useState(null);
   const [answersOpen, setAnswersOpen] = useState({});
   const [answersMap, setAnswersMap] = useState({});
   const [answerDrafts, setAnswerDrafts] = useState({});
@@ -126,6 +140,11 @@ export default function Learn() {
     const parsed = Number(raw);
     return Number.isFinite(parsed) ? parsed : null;
   }, [searchParams]);
+
+  const currentUserId = useMemo(
+    () => authUser?.userId ?? authUser?.sub ?? null,
+    [authUser]
+  );
 
   const activeLessonMeta = useMemo(
     () => findLessonInSections(sections, activeLessonId),
@@ -554,9 +573,9 @@ export default function Learn() {
     persistProgress({ lastPositionSeconds: current, completed: true });
   };
 
-  const handleToggleLessonCompleted = async (event, lessonId) => {
+  const handleToggleLessonCompleted = async (event, lessonId, isCompleted) => {
     event.stopPropagation();
-    const checked = event.target.checked;
+    const checked = !isCompleted;
     const existing = progressMap[lessonId] || {};
     await persistProgress(
       {
@@ -615,6 +634,96 @@ export default function Learn() {
       setQuestionsError(err?.message || "Không thể gửi câu hỏi.");
     } finally {
       setQuestionSubmitting(false);
+    }
+  };
+
+  const handleStartEditQuestion = (question) => {
+    if (!question?.id) return;
+    setEditingQuestionId(question.id);
+    setEditQuestionForm({
+      title: question.title || "",
+      content: question.content || "",
+    });
+  };
+
+  const handleCancelEditQuestion = () => {
+    setEditingQuestionId(null);
+    setEditQuestionForm({ title: "", content: "" });
+  };
+
+  const handleSaveQuestion = async (question) => {
+    if (!courseId || !question?.id) return;
+    if (!editQuestionForm.title.trim() || !editQuestionForm.content.trim()) {
+      setQuestionsError("Vui lòng nhập tiêu đề và nội dung câu hỏi.");
+      return;
+    }
+    setEditSubmitting(true);
+    setQuestionsError("");
+    try {
+      await updateQuestion(question.id, {
+        title: editQuestionForm.title.trim(),
+        content: editQuestionForm.content.trim(),
+        lessonId: question.lessonId ?? null,
+      });
+      handleCancelEditQuestion();
+      const data = await listCourseQuestions({
+        courseId,
+        lessonId: questionScope === "lesson" ? activeLessonId : undefined,
+        page: questionPage,
+        size: questionMeta.pageSize,
+      });
+      setQuestions(data.items || []);
+      setQuestionMeta({
+        pageNumber: data.pageNumber ?? questionPage,
+        pageSize: data.pageSize ?? questionMeta.pageSize,
+        totalElements: data.totalElements ?? 0,
+        totalPages: data.totalPages ?? 1,
+      });
+    } catch (err) {
+      setQuestionsError(err?.message || "Không thể cập nhật câu hỏi.");
+    } finally {
+      setEditSubmitting(false);
+    }
+  };
+
+  const handleVoteQuestion = async (questionId, voteType) => {
+    if (!questionId || !voteType) return;
+    setVoteSubmittingId(questionId);
+    setQuestionsError("");
+    try {
+      await voteQuestion(questionId, voteType);
+      setQuestionVotes((prev) => ({
+        ...prev,
+        [questionId]: voteType,
+      }));
+    } catch (err) {
+      setQuestionsError(err?.message || "Không thể bình chọn.");
+    } finally {
+      setVoteSubmittingId(null);
+    }
+  };
+
+  const handleAcceptAnswer = async (questionId, answerId) => {
+    if (!questionId || !answerId) return;
+    setAcceptingAnswerId(answerId);
+    try {
+      await acceptQuestionAnswer(questionId, answerId);
+      const items = await listQuestionAnswers(questionId);
+      setAnswersMap((prev) => ({
+        ...prev,
+        [questionId]: { items: items || [], loading: false, error: "" },
+      }));
+    } catch (err) {
+      setAnswersMap((prev) => ({
+        ...prev,
+        [questionId]: {
+          items: prev[questionId]?.items || [],
+          loading: false,
+          error: err?.message || "Không thể cập nhật câu trả lời.",
+        },
+      }));
+    } finally {
+      setAcceptingAnswerId(null);
     }
   };
 
@@ -1133,7 +1242,8 @@ export default function Learn() {
                                       onChange={(event) =>
                                         handleToggleLessonCompleted(
                                           event,
-                                          lesson.id
+                                          lesson.id,
+                                          isCompleted
                                         )
                                       }
                                       onClick={(event) =>
@@ -1260,7 +1370,9 @@ export default function Learn() {
             </form>
 
             {questionsLoading ? (
-              <div className="mt-6 text-sm text-slate-500">Đang tải câu hỏi...</div>
+              <div className="mt-6 text-sm text-slate-500">
+                Đang tải câu hỏi...
+              </div>
             ) : questions.length ? (
               <div className="mt-6 space-y-4">
                 {questions.map((question) => {
@@ -1273,19 +1385,72 @@ export default function Learn() {
                   const lessonTitle = question.lessonId
                     ? lessonTitleMap.get(question.lessonId)
                     : null;
+                  const isOwner =
+                    currentUserId &&
+                    Number(question.userId) === Number(currentUserId);
+                  const isEditing = editingQuestionId === question.id;
+                  const voteState = questionVotes[question.id];
+                  const voteButtonBase =
+                    "inline-flex h-8 items-center justify-center rounded-full border px-3 text-xs font-medium transition";
                   return (
                     <div
                       key={question.id}
                       className="rounded-xl border border-slate-200 bg-white p-4"
                     >
                       <div className="flex items-start justify-between gap-3">
-                        <div>
+                        <div className="min-w-0">
                           <h3 className="text-sm font-semibold text-slate-900">
                             {question.title || "Câu hỏi"}
                           </h3>
-                          <p className="mt-2 text-sm text-slate-700">
-                            {question.content}
-                          </p>
+                          {isEditing ? (
+                            <div className="mt-2 space-y-2">
+                              <input
+                                type="text"
+                                value={editQuestionForm.title}
+                                onChange={(event) =>
+                                  setEditQuestionForm((prev) => ({
+                                    ...prev,
+                                    title: event.target.value,
+                                  }))
+                                }
+                                className="h-9 w-full rounded-lg border border-slate-200 bg-white px-3 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#E11D48]/20 focus:border-[#F43F5E]"
+                                placeholder="Nhập tiêu đề"
+                              />
+                              <textarea
+                                rows="3"
+                                value={editQuestionForm.content}
+                                onChange={(event) =>
+                                  setEditQuestionForm((prev) => ({
+                                    ...prev,
+                                    content: event.target.value,
+                                  }))
+                                }
+                                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#E11D48]/20 focus:border-[#F43F5E]"
+                                placeholder="Mô tả chi tiết câu hỏi..."
+                              />
+                              <div className="flex items-center justify-end gap-2">
+                                <button
+                                  type="button"
+                                  onClick={handleCancelEditQuestion}
+                                  className="inline-flex h-9 items-center justify-center rounded-lg border border-slate-200 bg-white px-3 text-sm font-medium text-slate-700 hover:bg-slate-50 transition"
+                                >
+                                  Hủy
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => handleSaveQuestion(question)}
+                                  disabled={editSubmitting}
+                                  className="inline-flex h-9 items-center justify-center rounded-lg bg-[#E11D48] px-3 text-sm font-semibold text-white hover:bg-[#BE123C] transition disabled:opacity-60"
+                                >
+                                  {editSubmitting ? "Đang lưu..." : "Lưu"}
+                                </button>
+                              </div>
+                            </div>
+                          ) : (
+                            <p className="mt-2 text-sm text-slate-700">
+                              {question.content}
+                            </p>
+                          )}
                           <div className="mt-2 text-xs text-slate-500">
                             {lessonTitle
                               ? `Bài học: ${lessonTitle}`
@@ -1297,7 +1462,7 @@ export default function Learn() {
                         </span>
                       </div>
 
-                      <div className="mt-3 flex items-center gap-3">
+                      <div className="mt-3 flex flex-wrap items-center gap-2">
                         <button
                           type="button"
                           onClick={() => handleToggleAnswers(question.id)}
@@ -1305,6 +1470,43 @@ export default function Learn() {
                         >
                           {isOpen ? "Ẩn trả lời" : "Xem trả lời"}
                         </button>
+                        <button
+                          type="button"
+                          onClick={() => handleVoteQuestion(question.id, "UP")}
+                          disabled={voteSubmittingId === question.id}
+                          className={[
+                            voteButtonBase,
+                            voteState === "UP"
+                              ? "bg-[#FFF1F2] text-[#BE123C] border-[#FFE4E6]"
+                              : "border-slate-200 text-slate-700 hover:bg-slate-50",
+                          ].join(" ")}
+                        >
+                          Hữu ích
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            handleVoteQuestion(question.id, "DOWN")
+                          }
+                          disabled={voteSubmittingId === question.id}
+                          className={[
+                            voteButtonBase,
+                            voteState === "DOWN"
+                              ? "bg-[#FFF1F2] text-[#BE123C] border-[#FFE4E6]"
+                              : "border-slate-200 text-slate-700 hover:bg-slate-50",
+                          ].join(" ")}
+                        >
+                          Không hữu ích
+                        </button>
+                        {isOwner && !isEditing ? (
+                          <button
+                            type="button"
+                            onClick={() => handleStartEditQuestion(question)}
+                            className="text-sm text-slate-600 hover:text-slate-900 hover:underline underline-offset-4"
+                          >
+                            Chỉnh sửa
+                          </button>
+                        ) : null}
                       </div>
 
                       {isOpen ? (
@@ -1325,11 +1527,32 @@ export default function Learn() {
                                   className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700"
                                 >
                                   <p>{answer.content}</p>
-                                  {answer.isAccepted ? (
-                                    <span className="mt-1 inline-flex rounded-full bg-emerald-50 px-2 py-0.5 text-xs font-medium text-emerald-700">
-                                      Đã được chấp nhận
-                                    </span>
-                                  ) : null}
+                                  <div className="mt-2 flex flex-wrap items-center gap-2">
+                                    {answer.isAccepted ? (
+                                      <span className="inline-flex rounded-full bg-emerald-50 px-2 py-0.5 text-xs font-medium text-emerald-700">
+                                        Đã được chấp nhận
+                                      </span>
+                                    ) : null}
+                                    {isOwner && !answer.isAccepted ? (
+                                      <button
+                                        type="button"
+                                        onClick={() =>
+                                          handleAcceptAnswer(
+                                            question.id,
+                                            answer.id
+                                          )
+                                        }
+                                        disabled={
+                                          acceptingAnswerId === answer.id
+                                        }
+                                        className="inline-flex h-7 items-center justify-center rounded-full border border-slate-200 bg-white px-2 text-xs font-medium text-slate-700 hover:bg-slate-50 transition disabled:opacity-60"
+                                      >
+                                        {acceptingAnswerId === answer.id
+                                          ? "Đang lưu..."
+                                          : "Chấp nhận"}
+                                      </button>
+                                    ) : null}
+                                  </div>
                                 </div>
                               ))}
                             </div>
