@@ -1,0 +1,70 @@
+# Admin list reviews (filter by courseId/status optional)
+curl -X GET "{{baseURL}}/admin/reviews?courseId={courseId}&status=APPROVED&page=0&size=10" \
+  -H "$AUTH_HEADER"
+
+
+response:
+{
+    "code": "00",
+    "message": null,
+    "data": {
+        "content": [
+            {
+                "id": 3,
+                "courseId": 7,
+                "userId": 8,
+                "rating": 4,
+                "title": "Rất tuyệt",
+                "content": "Mình học được rất nhiều từ khóa học này",
+                "status": "PENDING",
+                "moderatedByUserId": null,
+                "moderatedAt": null,
+                "courseTitle": "course test 10-01",
+                "studentName": "Student One"
+            },
+            {
+                "id": 2,
+                "courseId": 4,
+                "userId": 8,
+                "rating": 3,
+                "title": "Great course",
+                "content": "Very helpful",
+                "status": "APPROVED",
+                "moderatedByUserId": 4,
+                "moderatedAt": "2026-01-08T15:35:40",
+                "courseTitle": "Java Spring Boot Masterclass",
+                "studentName": "Student One"
+            },
+            {
+                "id": 1,
+                "courseId": 3,
+                "userId": 6,
+                "rating": 3,
+                "title": "Great course",
+                "content": "Very helpful",
+                "status": "APPROVED",
+                "moderatedByUserId": 4,
+                "moderatedAt": "2026-01-04T21:41:36",
+                "courseTitle": "Java Spring Boot Masterclass (Updated)",
+                "studentName": "Student One"
+            }
+        ],
+        "pageable": {
+            "pageNumber": 0,
+            "pageSize": 10,
+            "sort": [],
+            "offset": 0,
+            "paged": true,
+            "unpaged": false
+        },
+        "last": true,
+        "totalElements": 3,
+        "totalPages": 1,
+        "first": true,
+        "size": 10,
+        "number": 0,
+        "sort": [],
+        "numberOfElements": 3,
+        "empty": false
+    }
+}

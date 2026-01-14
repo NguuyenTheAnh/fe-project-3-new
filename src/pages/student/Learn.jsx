@@ -24,6 +24,17 @@ import {
   updateQuestion,
   voteQuestion,
 } from "@/services/qna.service";
+import {
+  deleteReview,
+  getMyReview,
+  listApprovedReviews,
+  upsertReview,
+} from "@/services/review.service";
+import {
+  createReport,
+  listMyReports,
+  updateReportReason,
+} from "@/services/report.service";
 
 const LESSON_TYPE_LABELS = {
   VIDEO: "Video",
@@ -45,6 +56,28 @@ const LEVEL_LABELS = {
 const LANGUAGE_LABELS = {
   VI: "Tiếng Việt",
   EN: "Tiếng Anh",
+};
+
+const REVIEW_STATUS_LABELS = {
+  PENDING: "Đang chờ duyệt",
+  APPROVED: "Đã duyệt",
+  REJECTED: "Từ chối",
+};
+
+const RATING_OPTIONS = [1, 2, 3, 4, 5];
+
+const REPORT_TARGET_LABELS = {
+  REVIEW: "Đánh giá",
+  QUESTION: "Câu hỏi",
+  ANSWER: "Trả lời",
+  COURSE: "Khóa học",
+  LESSON: "Bài học",
+};
+
+const REPORT_STATUS_LABELS = {
+  OPEN: "Đang mở",
+  IN_REVIEW: "Đang xử lý",
+  RESOLVED: "Đã xử lý",
 };
 
 
@@ -148,6 +181,48 @@ export default function Learn() {
   const [answersMap, setAnswersMap] = useState({});
   const [answerDrafts, setAnswerDrafts] = useState({});
   const [answerSubmittingId, setAnswerSubmittingId] = useState(null);
+  const [myReview, setMyReview] = useState(null);
+  const [reviewForm, setReviewForm] = useState({
+    rating: 0,
+    title: "",
+    content: "",
+  });
+  const [reviewLoading, setReviewLoading] = useState(false);
+  const [reviewSubmitting, setReviewSubmitting] = useState(false);
+  const [reviewDeleting, setReviewDeleting] = useState(false);
+  const [reviewError, setReviewError] = useState("");
+  const [reviewSuccess, setReviewSuccess] = useState("");
+  const [reviews, setReviews] = useState([]);
+  const [reviewsLoading, setReviewsLoading] = useState(false);
+  const [reviewsError, setReviewsError] = useState("");
+  const [reviewsPage, setReviewsPage] = useState(0);
+  const [reviewsMeta, setReviewsMeta] = useState({
+    pageNumber: 0,
+    pageSize: 5,
+    totalElements: 0,
+    totalPages: 1,
+  });
+  const [reports, setReports] = useState([]);
+  const [reportsLoading, setReportsLoading] = useState(false);
+  const [reportsError, setReportsError] = useState("");
+  const [reportsSuccess, setReportsSuccess] = useState("");
+  const [reportsPage, setReportsPage] = useState(0);
+  const [reportsMeta, setReportsMeta] = useState({
+    pageNumber: 0,
+    pageSize: 5,
+    totalElements: 0,
+    totalPages: 1,
+  });
+  const [reportForm, setReportForm] = useState({
+    targetType: "REVIEW",
+    targetId: "",
+    reason: "",
+  });
+  const [reportSubmitting, setReportSubmitting] = useState(false);
+  const [reportModalOpen, setReportModalOpen] = useState(false);
+  const [activeReport, setActiveReport] = useState(null);
+  const [reportEditReason, setReportEditReason] = useState("");
+  const [reportEditing, setReportEditing] = useState(false);
 
   const queryLessonId = useMemo(() => {
     const raw = searchParams.get("lessonId");
@@ -234,6 +309,17 @@ export default function Learn() {
     });
     return map;
   }, [sections]);
+  const reviewStatusLabel = myReview?.status
+    ? REVIEW_STATUS_LABELS[myReview.status] || myReview.status
+    : "";
+  const reviewStatusClass =
+    myReview?.status === "APPROVED"
+      ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+      : myReview?.status === "REJECTED"
+      ? "bg-red-50 text-red-700 border-red-200"
+      : myReview?.status
+      ? "bg-amber-50 text-amber-700 border-amber-200"
+      : "";
 
   useEffect(() => {
     let active = true;
@@ -539,6 +625,104 @@ export default function Learn() {
       active = false;
     };
   }, [courseId, activeLessonId, questionScope, questionPage, questionMeta.pageSize]);
+
+  useEffect(() => {
+    setReviewsPage(0);
+  }, [courseId]);
+
+  useEffect(() => {
+    if (!courseId || activeTab !== "reviews") return;
+    let active = true;
+    const loadMyReview = async () => {
+      setReviewLoading(true);
+      setReviewError("");
+      setReviewSuccess("");
+      try {
+        const data = await getMyReview(courseId);
+        if (!active) return;
+        setMyReview(data);
+        setReviewForm({
+          rating: data?.rating ?? 0,
+          title: data?.title ?? "",
+          content: data?.content ?? "",
+        });
+      } catch (err) {
+        if (!active) return;
+        setReviewError(err?.message || "Không thể tải đánh giá của bạn.");
+      } finally {
+        if (active) setReviewLoading(false);
+      }
+    };
+    loadMyReview();
+    return () => {
+      active = false;
+    };
+  }, [courseId, activeTab]);
+
+  useEffect(() => {
+    if (!courseId || activeTab !== "reviews") return;
+    let active = true;
+    const loadReviews = async () => {
+      setReviewsLoading(true);
+      setReviewsError("");
+      try {
+        const data = await listApprovedReviews(courseId, {
+          page: reviewsPage,
+          size: reviewsMeta.pageSize,
+        });
+        if (!active) return;
+        setReviews(data.items || []);
+        setReviewsMeta({
+          pageNumber: data.pageNumber ?? reviewsPage,
+          pageSize: data.pageSize ?? reviewsMeta.pageSize,
+          totalElements: data.totalElements ?? 0,
+          totalPages: data.totalPages ?? 1,
+        });
+      } catch (err) {
+        if (!active) return;
+        setReviewsError(err?.message || "Không thể tải đánh giá.");
+      } finally {
+        if (active) setReviewsLoading(false);
+      }
+    };
+    loadReviews();
+    return () => {
+      active = false;
+    };
+  }, [courseId, activeTab, reviewsPage, reviewsMeta.pageSize]);
+
+  useEffect(() => {
+    if (activeTab !== "reports") return;
+    let active = true;
+    const loadReports = async () => {
+      setReportsLoading(true);
+      setReportsError("");
+      setReportsSuccess("");
+      try {
+        const data = await listMyReports({
+          page: reportsPage,
+          size: reportsMeta.pageSize,
+        });
+        if (!active) return;
+        setReports(data.items || []);
+        setReportsMeta({
+          pageNumber: data.pageNumber ?? reportsPage,
+          pageSize: data.pageSize ?? reportsMeta.pageSize,
+          totalElements: data.totalElements ?? 0,
+          totalPages: data.totalPages ?? 1,
+        });
+      } catch (err) {
+        if (!active) return;
+        setReportsError(err?.message || "Không thể tải phản hồi.");
+      } finally {
+        if (active) setReportsLoading(false);
+      }
+    };
+    loadReports();
+    return () => {
+      active = false;
+    };
+  }, [activeTab, reportsPage, reportsMeta.pageSize]);
 
   const persistProgress = async (
     payload,
@@ -856,6 +1040,184 @@ export default function Learn() {
       }));
     } finally {
       setAnswerSubmittingId(null);
+    }
+  };
+
+  const handleSelectReviewRating = (value) => {
+    setReviewForm((prev) => ({
+      ...prev,
+      rating: value,
+    }));
+  };
+
+  const handleSubmitReview = async (event) => {
+    event.preventDefault();
+    if (!courseId) return;
+    const ratingValue = Number(reviewForm.rating);
+    if (!ratingValue) {
+      setReviewError("Vui lòng chọn số sao đánh giá.");
+      return;
+    }
+    if (!reviewForm.title.trim() || !reviewForm.content.trim()) {
+      setReviewError("Vui lòng nhập tiêu đề và nội dung đánh giá.");
+      return;
+    }
+    setReviewSubmitting(true);
+    setReviewError("");
+    setReviewSuccess("");
+    try {
+      const data = await upsertReview(courseId, {
+        rating: ratingValue,
+        title: reviewForm.title.trim(),
+        content: reviewForm.content.trim(),
+      });
+      setMyReview(data);
+      setReviewForm({
+        rating: data?.rating ?? ratingValue,
+        title: data?.title ?? reviewForm.title.trim(),
+        content: data?.content ?? reviewForm.content.trim(),
+      });
+      setReviewSuccess(
+        data?.status === "PENDING"
+          ? "Đã gửi đánh giá. Đang chờ duyệt."
+          : "Đã lưu đánh giá."
+      );
+      const list = await listApprovedReviews(courseId, {
+        page: reviewsPage,
+        size: reviewsMeta.pageSize,
+      });
+      setReviews(list.items || []);
+      setReviewsMeta({
+        pageNumber: list.pageNumber ?? reviewsPage,
+        pageSize: list.pageSize ?? reviewsMeta.pageSize,
+        totalElements: list.totalElements ?? 0,
+        totalPages: list.totalPages ?? 1,
+      });
+    } catch (err) {
+      setReviewError(err?.message || "Không thể gửi đánh giá.");
+    } finally {
+      setReviewSubmitting(false);
+    }
+  };
+
+  const handleDeleteReview = async () => {
+    if (!courseId || !myReview?.id) return;
+    const confirmed = window.confirm("Bạn chắc chắn muốn xóa đánh giá này?");
+    if (!confirmed) return;
+    setReviewDeleting(true);
+    setReviewError("");
+    setReviewSuccess("");
+    try {
+      await deleteReview(courseId, myReview.id);
+      setMyReview(null);
+      setReviewForm({ rating: 0, title: "", content: "" });
+      setReviewSuccess("Đã xóa đánh giá.");
+      const list = await listApprovedReviews(courseId, {
+        page: reviewsPage,
+        size: reviewsMeta.pageSize,
+      });
+      setReviews(list.items || []);
+      setReviewsMeta({
+        pageNumber: list.pageNumber ?? reviewsPage,
+        pageSize: list.pageSize ?? reviewsMeta.pageSize,
+        totalElements: list.totalElements ?? 0,
+        totalPages: list.totalPages ?? 1,
+      });
+    } catch (err) {
+      setReviewError(err?.message || "Không thể xóa đánh giá.");
+    } finally {
+      setReviewDeleting(false);
+    }
+  };
+
+  const handleSubmitReport = async (event) => {
+    event.preventDefault();
+    const targetIdValue = Number(reportForm.targetId);
+    if (!reportForm.targetType) {
+      setReportsError("Vui lòng chọn loại phản hồi.");
+      return;
+    }
+    if (!Number.isFinite(targetIdValue) || targetIdValue <= 0) {
+      setReportsError("Vui lòng nhập ID hợp lệ.");
+      return;
+    }
+    if (!reportForm.reason.trim()) {
+      setReportsError("Vui lòng nhập lý do phản hồi.");
+      return;
+    }
+    setReportSubmitting(true);
+    setReportsError("");
+    setReportsSuccess("");
+    try {
+      await createReport({
+        targetType: reportForm.targetType,
+        targetId: targetIdValue,
+        reason: reportForm.reason.trim(),
+      });
+      setReportForm({
+        targetType: reportForm.targetType,
+        targetId: "",
+        reason: "",
+      });
+      setReportsPage(0);
+      setReportsSuccess("Đã gửi phản hồi.");
+      const data = await listMyReports({
+        page: 0,
+        size: reportsMeta.pageSize,
+      });
+      setReports(data.items || []);
+      setReportsMeta({
+        pageNumber: data.pageNumber ?? 0,
+        pageSize: data.pageSize ?? reportsMeta.pageSize,
+        totalElements: data.totalElements ?? 0,
+        totalPages: data.totalPages ?? 1,
+      });
+    } catch (err) {
+      setReportsError(err?.message || "Không thể gửi phản hồi.");
+    } finally {
+      setReportSubmitting(false);
+    }
+  };
+
+  const openEditReport = (report) => {
+    if (!report?.id) return;
+    setActiveReport(report);
+    setReportEditReason(report.reason || "");
+    setReportModalOpen(true);
+  };
+
+  const closeReportModal = () => {
+    setActiveReport(null);
+    setReportEditReason("");
+    setReportModalOpen(false);
+  };
+
+  const handleUpdateReport = async () => {
+    if (!activeReport?.id) return;
+    if (!reportEditReason.trim()) {
+      setReportsError("Vui lòng nhập lý do phản hồi.");
+      return;
+    }
+    setReportEditing(true);
+    setReportsError("");
+    setReportsSuccess("");
+    try {
+      const data = await updateReportReason(activeReport.id, {
+        reason: reportEditReason.trim(),
+      });
+      setReports((prev) =>
+        prev.map((item) =>
+          item.id === activeReport.id
+            ? { ...item, reason: data?.reason ?? reportEditReason.trim() }
+            : item
+        )
+      );
+      setReportsSuccess("Đã cập nhật phản hồi.");
+      closeReportModal();
+    } catch (err) {
+      setReportsError(err?.message || "Không thể cập nhật phản hồi.");
+    } finally {
+      setReportEditing(false);
     }
   };
 
@@ -1377,6 +1739,8 @@ export default function Learn() {
                   { id: "overview", label: "Tổng quan" },
                   { id: "documents", label: "Tài liệu khóa học" },
                   { id: "qa", label: "Hỏi đáp" },
+                  { id: "reviews", label: "Đánh giá" },
+                  { id: "reports", label: "Phản hồi" },
                 ].map((tab) => (
                   <button
                     key={tab.id}
@@ -1850,6 +2214,253 @@ export default function Learn() {
                       Chưa có câu hỏi nào.
                     </div>
                   )}
+                </div>
+              ) : null}
+
+              {activeTab === "reviews" ? (
+                <div className="space-y-6">
+                  <div className="flex flex-wrap items-center justify-between gap-3">
+                    <div>
+                      <h2 className="text-lg font-semibold text-slate-900">
+                        Đánh giá
+                      </h2>
+                      <p className="mt-1 text-sm text-slate-600">
+                        Chia sẻ trải nghiệm học của bạn về khóa học.
+                      </p>
+                    </div>
+                    {reviewStatusLabel ? (
+                      <span
+                        className={[
+                          "inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-medium",
+                          reviewStatusClass,
+                        ].join(" ")}
+                      >
+                        {reviewStatusLabel}
+                      </span>
+                    ) : null}
+                  </div>
+
+                  <div className="rounded-xl border border-slate-200 bg-white p-4">
+                    <div className="flex items-center justify-between gap-2">
+                      <h3 className="text-sm font-semibold text-slate-900">
+                        Đánh giá của bạn
+                      </h3>
+                      {myReview?.id ? (
+                        <span className="text-xs text-slate-500">
+                          #{myReview.id}
+                        </span>
+                      ) : null}
+                    </div>
+
+                    {reviewLoading ? (
+                      <div className="mt-3 text-sm text-slate-500">
+                        Đang tải đánh giá...
+                      </div>
+                    ) : (
+                      <form onSubmit={handleSubmitReview} className="mt-3 space-y-3">
+                        <div>
+                          <label className="text-sm font-medium text-slate-700">
+                            Số sao
+                          </label>
+                          <div className="mt-2 flex items-center gap-2">
+                            <div className="flex items-center gap-1">
+                              {RATING_OPTIONS.map((value) => {
+                                const isActive = value <= reviewForm.rating;
+                                return (
+                                  <button
+                                    key={value}
+                                    type="button"
+                                    onClick={() => handleSelectReviewRating(value)}
+                                    className="inline-flex h-8 w-8 items-center justify-center rounded-full hover:bg-slate-100 transition"
+                                  >
+                                    <span
+                                      className={[
+                                        "text-lg",
+                                        isActive ? "text-[#E11D48]" : "text-slate-300",
+                                      ].join(" ")}
+                                    >
+                                      {"\u2605"}
+                                    </span>
+                                  </button>
+                                );
+                              })}
+                            </div>
+                            <span className="text-xs text-slate-500">
+                              {reviewForm.rating
+                                ? `${reviewForm.rating}/5`
+                                : "Chọn số sao"}
+                            </span>
+                          </div>
+                        </div>
+                        <div>
+                          <label className="text-sm font-medium text-slate-700">
+                            Tiêu đề
+                          </label>
+                          <input
+                            type="text"
+                            value={reviewForm.title}
+                            onChange={(event) =>
+                              setReviewForm((prev) => ({
+                                ...prev,
+                                title: event.target.value,
+                              }))
+                            }
+                            className="mt-1 h-10 w-full rounded-lg border border-slate-200 bg-white px-3 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#E11D48]/20 focus:border-[#F43F5E]"
+                            placeholder="Nhập tiêu đề"
+                          />
+                        </div>
+                        <div>
+                          <label className="text-sm font-medium text-slate-700">
+                            Nội dung đánh giá
+                          </label>
+                          <textarea
+                            rows="3"
+                            value={reviewForm.content}
+                            onChange={(event) =>
+                              setReviewForm((prev) => ({
+                                ...prev,
+                                content: event.target.value,
+                              }))
+                            }
+                            className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#E11D48]/20 focus:border-[#F43F5E]"
+                            placeholder="Chia sẻ cảm nhận của bạn..."
+                          />
+                        </div>
+                        {reviewError ? (
+                          <div className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+                            {reviewError}
+                          </div>
+                        ) : null}
+                        {reviewSuccess ? (
+                          <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-700">
+                            {reviewSuccess}
+                          </div>
+                        ) : null}
+                        <div className="flex flex-wrap items-center gap-3">
+                          <button
+                            type="submit"
+                            disabled={reviewSubmitting}
+                            className="inline-flex h-10 items-center justify-center rounded-lg bg-[#E11D48] px-4 text-sm font-semibold text-white hover:bg-[#BE123C] transition disabled:opacity-60"
+                          >
+                            {reviewSubmitting
+                              ? "Đang lưu..."
+                              : myReview
+                              ? "Cập nhật đánh giá"
+                              : "Gửi đánh giá"}
+                          </button>
+                          {myReview ? (
+                            <button
+                              type="button"
+                              onClick={handleDeleteReview}
+                              disabled={reviewDeleting}
+                              className="inline-flex h-10 items-center justify-center rounded-lg border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition disabled:opacity-60"
+                            >
+                              {reviewDeleting ? "Đang xóa..." : "Xóa đánh giá"}
+                            </button>
+                          ) : null}
+                        </div>
+                      </form>
+                    )}
+                  </div>
+
+                  <div className="rounded-xl border border-slate-200 bg-white p-4">
+                    <div className="flex items-center justify-between gap-2">
+                      <h3 className="text-sm font-semibold text-slate-900">
+                        Đánh giá từ học viên
+                      </h3>
+                      <span className="text-xs text-slate-500">
+                        {reviewsMeta.totalElements} đánh giá
+                      </span>
+                    </div>
+
+                    {reviewsLoading ? (
+                      <div className="mt-3 text-sm text-slate-500">
+                        Đang tải đánh giá...
+                      </div>
+                    ) : reviewsError ? (
+                      <div className="mt-3 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+                        {reviewsError}
+                      </div>
+                    ) : reviews.length ? (
+                      <div className="mt-3 divide-y divide-slate-200">
+                        {reviews.map((review) => {
+                          const ratingValue = Number(review.rating) || 0;
+                          const reviewerName =
+                            review.studentName ||
+                            review.createdUser ||
+                            review.authorName ||
+                            (review.userId ? `Học viên #${review.userId}` : "Học viên");
+                          return (
+                            <div key={review.id} className="py-4">
+                              <div className="flex flex-wrap items-start justify-between gap-2">
+                                <div>
+                                  <div className="text-sm font-semibold text-slate-900">
+                                    {review.title || "Đánh giá"}
+                                  </div>
+                                  <div className="mt-1 text-xs text-slate-500">
+                                    {reviewerName}
+                                    {review.createdAt || review.createdTime
+                                      ? ` • ${review.createdAt || review.createdTime}`
+                                      : ""}
+                                  </div>
+                                </div>
+                                <div className="flex items-center gap-1">
+                                  {RATING_OPTIONS.map((value) => (
+                                    <span
+                                      key={value}
+                                      className={[
+                                        "text-sm",
+                                        value <= ratingValue
+                                          ? "text-[#E11D48]"
+                                          : "text-slate-300",
+                                      ].join(" ")}
+                                    >
+                                      {"\u2605"}
+                                    </span>
+                                  ))}
+                                </div>
+                              </div>
+                              <p className="mt-2 text-sm text-slate-700">
+                                {review.content || ""}
+                              </p>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    ) : (
+                      <div className="mt-3 text-sm text-slate-500">
+                        Chưa có đánh giá nào.
+                      </div>
+                    )}
+
+                    <div className="mt-4 flex flex-wrap items-center justify-between gap-3 text-sm">
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setReviewsPage((prev) => Math.max(prev - 1, 0))
+                        }
+                        disabled={reviewsPage <= 0}
+                        className="inline-flex h-9 items-center justify-center rounded-lg border border-slate-200 bg-white px-3 text-sm font-medium text-slate-700 hover:bg-slate-50 transition disabled:opacity-60"
+                      >
+                        Trang trước
+                      </button>
+                      <span className="text-slate-500">
+                        Trang {reviewsMeta.pageNumber + 1} / {reviewsMeta.totalPages}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setReviewsPage((prev) =>
+                            Math.min(prev + 1, reviewsMeta.totalPages - 1)
+                          )
+                        }
+                        disabled={reviewsMeta.totalPages <= reviewsMeta.pageNumber + 1}
+                        className="inline-flex h-9 items-center justify-center rounded-lg border border-slate-200 bg-white px-3 text-sm font-medium text-slate-700 hover:bg-slate-50 transition disabled:opacity-60"
+                      >
+                        Trang sau
+                      </button>
+                    </div>
+                  </div>
                 </div>
               ) : null}
             </div>
