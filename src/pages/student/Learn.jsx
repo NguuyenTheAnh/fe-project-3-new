@@ -831,7 +831,8 @@ export default function Learn() {
     }
   };
 
-  const handleSubmitAnswer = async (questionId) => {
+  const handleSubmitAnswer = async (event, questionId) => {
+    event.preventDefault();
     if (!questionId) return;
     const content = (answerDrafts[questionId] || "").trim();
     if (!content) return;
@@ -1711,7 +1712,7 @@ export default function Learn() {
                                 <div className="flex items-center gap-2">
                                   <button
                                     type="button"
-                                    onClick={() => toggleAnswers(question.id)}
+                                    onClick={() => handleToggleAnswers(question.id)}
                                     className="text-xs text-slate-600 hover:text-slate-900 hover:underline underline-offset-4"
                                   >
                                     {isOpen ? "Ẩn trả lời" : "Xem trả lời"}
@@ -1719,7 +1720,11 @@ export default function Learn() {
                                   {isOwner ? (
                                     <button
                                       type="button"
-                                      onClick={() => handleEditQuestion(question)}
+                                      onClick={() =>
+                                        isEditing
+                                          ? handleCancelEditQuestion()
+                                          : handleStartEditQuestion(question)
+                                      }
                                       className="text-xs text-slate-600 hover:text-slate-900 hover:underline underline-offset-4"
                                     >
                                       {isEditing ? "Hủy" : "Sửa"}
@@ -1733,7 +1738,7 @@ export default function Learn() {
                               <div className="flex items-center gap-2">
                                 <button
                                   type="button"
-                                  onClick={() => handleVote(question, 1)}
+                                  onClick={() => handleVoteQuestion(question.id, 1)}
                                   disabled={voteSubmittingId === question.id}
                                   className={[
                                     voteButtonBase,
@@ -1746,7 +1751,7 @@ export default function Learn() {
                                 </button>
                                 <button
                                   type="button"
-                                  onClick={() => handleVote(question, -1)}
+                                  onClick={() => handleVoteQuestion(question.id, -1)}
                                   disabled={voteSubmittingId === question.id}
                                   className={[
                                     voteButtonBase,
@@ -1761,7 +1766,7 @@ export default function Learn() {
                               {isEditing ? (
                                 <button
                                   type="button"
-                                  onClick={() => handleUpdateQuestion(question)}
+                                  onClick={() => handleSaveQuestion(question)}
                                   disabled={editSubmitting}
                                   className="inline-flex h-9 items-center justify-center rounded-lg bg-[#E11D48] px-4 text-sm font-semibold text-white hover:bg-[#BE123C] transition disabled:opacity-60"
                                 >
@@ -1806,7 +1811,7 @@ export default function Learn() {
 
                                 <form
                                   onSubmit={(event) =>
-                                    handleSubmitAnswer(event, question)
+                                    handleSubmitAnswer(event, question.id)
                                   }
                                   className="mt-4 space-y-2"
                                 >
@@ -1826,7 +1831,7 @@ export default function Learn() {
                                     <button
                                       type="submit"
                                       disabled={answerSubmittingId === question.id}
-                                      className="inline-flex h-9 items-center justify-center rounded-lg bg-slate-900 px-4 text-sm font-semibold text-white hover:bg-slate-800 transition disabled:opacity-60"
+                                      className="inline-flex h-9 items-center justify-center rounded-lg bg-[#E11D48] px-4 text-sm font-semibold text-white hover:bg-[#BE123C] transition disabled:opacity-60"
                                     >
                                       {answerSubmittingId === question.id
                                         ? "Đang gửi..."
