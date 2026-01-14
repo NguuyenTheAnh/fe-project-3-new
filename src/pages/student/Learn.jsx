@@ -2463,8 +2463,356 @@ export default function Learn() {
                   </div>
                 </div>
               ) : null}
+
+{activeTab === "reports" ? (
+  <div className="space-y-6">
+    <div className="flex flex-wrap items-center justify-between gap-3">
+      <div>
+        <h2 className="text-lg font-semibold text-slate-900">
+          Phản hồi của bạn
+        </h2>
+        <p className="mt-1 text-sm text-slate-600">
+          Quản lý các phản hồi bạn đã gửi về khóa học, bài học, đánh giá hoặc câu hỏi.
+        </p>
+      </div>
+    </div>
+
+    <div className="rounded-xl border border-slate-200 bg-white p-4">
+      <div className="flex items-center justify-between gap-2 mb-4">
+        <h3 className="text-sm font-semibold text-slate-900">
+          Gửi phản hồi mới
+        </h3>
+      </div>
+
+      <form onSubmit={handleSubmitReport} className="space-y-3">
+        <div>
+          <label className="text-sm font-medium text-slate-700">
+            Loại nội dung
+          </label>
+          <select
+            value={reportForm.targetType}
+            onChange={(event) =>
+              setReportForm((prev) => ({
+                ...prev,
+                targetType: event.target.value,
+              }))
+            }
+            className="mt-1 h-10 w-full rounded-lg border border-slate-200 bg-white px-3 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#E11D48]/20 focus:border-[#F43F5E]"
+          >
+            {Object.entries(REPORT_TARGET_LABELS).map(([key, label]) => (
+              <option key={key} value={key}>
+                {label}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <label className="text-sm font-medium text-slate-700">
+            ID nội dung
+          </label>
+          <input
+            type="number"
+            value={reportForm.targetId}
+            onChange={(event) =>
+              setReportForm((prev) => ({
+                ...prev,
+                targetId: event.target.value,
+              }))
+            }
+            className="mt-1 h-10 w-full rounded-lg border border-slate-200 bg-white px-3 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#E11D48]/20 focus:border-[#F43F5E]"
+            placeholder="Nhập ID của nội dung muốn báo cáo"
+          />
+        </div>
+
+        <div>
+          <label className="text-sm font-medium text-slate-700">
+            Lý do phản hồi
+          </label>
+          <textarea
+            rows="3"
+            value={reportForm.reason}
+            onChange={(event) =>
+              setReportForm((prev) => ({
+                ...prev,
+                reason: event.target.value,
+              }))
+            }
+            className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#E11D48]/20 focus:border-[#F43F5E]"
+            placeholder="Mô tả chi tiết lý do phản hồi..."
+          />
+        </div>
+
+        {reportsError ? (
+          <div className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+            {reportsError}
+          </div>
+        ) : null}
+
+        {reportsSuccess ? (
+          <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-700">
+            {reportsSuccess}
+          </div>
+        ) : null}
+
+        <div className="flex items-center justify-end">
+          <button
+            type="submit"
+            disabled={reportSubmitting}
+            className="inline-flex h-10 items-center justify-center rounded-lg bg-[#E11D48] px-4 text-sm font-semibold text-white hover:bg-[#BE123C] transition disabled:opacity-60"
+          >
+            {reportSubmitting ? "Đang gửi..." : "Gửi phản hồi"}
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <div className="rounded-xl border border-slate-200 bg-white p-4">
+      <div className="flex items-center justify-between gap-2">
+        <h3 className="text-sm font-semibold text-slate-900">
+          Danh sách phản hồi
+        </h3>
+        <span className="text-xs text-slate-500">
+          {reportsMeta.totalElements} phản hồi
+        </span>
+      </div>
+
+      {reportsLoading ? (
+        <div className="mt-3 text-sm text-slate-500">
+          Đang tải danh sách phản hồi...
+        </div>
+      ) : reportsError ? (
+        <div className="mt-3 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+          {reportsError}
+        </div>
+      ) : reports.length ? (
+        <div className="mt-3 divide-y divide-slate-200">
+          {reports.map((report) => {
+            const statusLabel = REPORT_STATUS_LABELS[report.status] || report.status;
+            const statusClass =
+              report.status === "RESOLVED"
+                ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                : report.status === "IN_REVIEW"
+                ? "bg-amber-50 text-amber-700 border-amber-200"
+                : "bg-blue-50 text-blue-700 border-blue-200";
+            const targetLabel = REPORT_TARGET_LABELS[report.targetType] || report.targetType;
+            const canEdit = report.status === "OPEN";
+
+            return (
+              <div key={report.id} className="py-4 first:pt-3">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span
+                        className={[
+                          "inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-medium",
+                          statusClass,
+                        ].join(" ")}
+                      >
+                        {statusLabel}
+                      </span>
+                      <span className="text-xs text-slate-500">
+                        {targetLabel} #{report.targetId}
+                      </span>
+                    </div>
+                    <p className="text-sm text-slate-700 leading-relaxed">
+                      {report.reason || "Chưa có lý do."}
+                    </p>
+                    <div className="mt-2 text-xs text-slate-500">
+                      ID: #{report.id}
+                    </div>
+                  </div>
+                  {canEdit ? (
+                    <button
+                      type="button"
+                      onClick={() => openEditReport(report)}
+                      className="text-xs text-slate-600 hover:text-slate-900 hover:underline underline-offset-4"
+                    >
+                      Chỉnh sửa
+                    </button>
+                  ) : null}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      ) : (
+        <div className="mt-3 text-sm text-slate-500">
+          Bạn chưa có phản hồi nào.
+        </div>
+      )}
+
+      <div className="mt-4 flex flex-wrap items-center justify-between gap-3 text-sm">
+        <button
+          type="button"
+          onClick={() =>
+            setReportsPage((prev) => Math.max(prev - 1, 0))
+          }
+          disabled={reportsPage <= 0}
+          className="inline-flex h-9 items-center justify-center rounded-lg border border-slate-200 bg-white px-3 text-sm font-medium text-slate-700 hover:bg-slate-50 transition disabled:opacity-60"
+        >
+          Trang trước
+        </button>
+        <span className="text-slate-500">
+          Trang {reportsMeta.pageNumber + 1} / {reportsMeta.totalPages}
+        </span>
+        <button
+          type="button"
+          onClick={() =>
+            setReportsPage((prev) =>
+              Math.min(prev + 1, reportsMeta.totalPages - 1)
+            )
+          }
+          disabled={reportsMeta.totalPages <= reportsMeta.pageNumber + 1}
+          className="inline-flex h-9 items-center justify-center rounded-lg border border-slate-200 bg-white px-3 text-sm font-medium text-slate-700 hover:bg-slate-50 transition disabled:opacity-60"
+        >
+          Trang sau
+        </button>
+      </div>
+    </div>
+  </div>
+) : null}
+
+{reportModalOpen && activeReport ? (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 p-4">
+    <div className="w-full max-w-md rounded-xl border border-slate-200 bg-white shadow-2xl">
+      <div className="border-b border-slate-200 px-6 py-4">
+        <h3 className="text-lg font-semibold text-slate-900">
+          Chỉnh sửa phản hồi
+        </h3>
+      </div>
+      <div className="px-6 py-4">
+        <div className="space-y-3">
+          <div>
+            <div className="text-xs text-slate-500 mb-2">
+              {REPORT_TARGET_LABELS[activeReport.targetType]} #
+              {activeReport.targetId}
+            </div>
+            <label className="text-sm font-medium text-slate-700">
+              Lý do phản hồi
+            </label>
+            <textarea
+              rows="4"
+              value={reportEditReason}
+              onChange={(event) => setReportEditReason(event.target.value)}
+              className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#E11D48]/20 focus:border-[#F43F5E]"
+              placeholder="Mô tả chi tiết lý do..."
+            />
+          </div>
+          {reportsError ? (
+            <div className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+              {reportsError}
+            </div>
+          ) : null}
+        </div>
+      </div>
+      <div className="flex items-center justify-end gap-3 border-t border-slate-200 px-6 py-4">
+        <button
+          type="button"
+          onClick={closeReportModal}
+          disabled={reportEditing}
+          className="inline-flex h-10 items-center justify-center rounded-lg border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition disabled:opacity-60"
+        >
+          Hủy
+        </button>
+        <button
+          type="button"
+          onClick={handleUpdateReport}
+          disabled={reportEditing}
+          className="inline-flex h-10 items-center justify-center rounded-lg bg-[#E11D48] px-4 text-sm font-semibold text-white hover:bg-[#BE123C] transition disabled:opacity-60"
+        >
+          {reportEditing ? "Đang lưu..." : "Lưu thay đổi"}
+        </button>
+      </div>
+    </div>
+  </div>
+) : null}
+
             </div>
           </section>
+          {reportModalOpen && activeReport ? (
+  <div 
+    className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 p-4"
+    onClick={(e) => {
+      if (e.target === e.currentTarget) closeReportModal();
+    }}
+  >
+    <div className="w-full max-w-md rounded-xl border border-slate-200 bg-white shadow-2xl">
+      <div className="border-b border-slate-200 px-6 py-4">
+        <h3 className="text-lg font-semibold text-slate-900">
+          Chỉnh sửa phản hồi
+        </h3>
+      </div>
+      <div className="px-6 py-4">
+        <div className="space-y-3">
+          <div className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2">
+            <div className="text-xs text-slate-500">
+              {REPORT_TARGET_LABELS[activeReport.targetType] || activeReport.targetType} #
+              {activeReport.targetId}
+            </div>
+            <div className="mt-1 flex items-center gap-2">
+              <span
+                className={[
+                  "inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-medium",
+                  activeReport.status === "RESOLVED"
+                    ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                    : activeReport.status === "IN_REVIEW"
+                    ? "bg-amber-50 text-amber-700 border-amber-200"
+                    : "bg-blue-50 text-blue-700 border-blue-200",
+                ].join(" ")}
+              >
+                {REPORT_STATUS_LABELS[activeReport.status] || activeReport.status}
+              </span>
+              <span className="text-xs text-slate-400">
+                ID: #{activeReport.id}
+              </span>
+            </div>
+          </div>
+          <div>
+            <label className="text-sm font-medium text-slate-700">
+              Lý do phản hồi
+            </label>
+            <textarea
+              rows="4"
+              value={reportEditReason}
+              onChange={(event) => setReportEditReason(event.target.value)}
+              className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#E11D48]/20 focus:border-[#F43F5E]"
+              placeholder="Mô tả chi tiết lý do..."
+            />
+          </div>
+          {reportsError ? (
+            <div className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+              {reportsError}
+            </div>
+          ) : null}
+          {reportsSuccess ? (
+            <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-700">
+              {reportsSuccess}
+            </div>
+          ) : null}
+        </div>
+      </div>
+      <div className="flex items-center justify-end gap-3 border-t border-slate-200 px-6 py-4">
+        <button
+          type="button"
+          onClick={closeReportModal}
+          disabled={reportEditing}
+          className="inline-flex h-10 items-center justify-center rounded-lg border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition disabled:opacity-60"
+        >
+          Hủy
+        </button>
+        <button
+          type="button"
+          onClick={handleUpdateReport}
+          disabled={reportEditing}
+          className="inline-flex h-10 items-center justify-center rounded-lg bg-[#E11D48] px-4 text-sm font-semibold text-white hover:bg-[#BE123C] transition disabled:opacity-60"
+        >
+          {reportEditing ? "Đang lưu..." : "Lưu thay đổi"}
+        </button>
+      </div>
+    </div>
+  </div>
+) : null}
         </main>
       </div>
     </div>
