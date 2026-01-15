@@ -45,6 +45,7 @@ export default function Header() {
     : "U";
   const isStudent = isAuthenticated && hasRole("ROLE_STUDENT");
   const isAdmin = isAuthenticated && hasRole("ROLE_ADMIN");
+  const isInstructor = isAuthenticated && hasRole("ROLE_INSTRUCTOR");
 
   const handleCartClick = () => {
     if (!isAuthenticated) {
@@ -71,7 +72,7 @@ export default function Header() {
           </div>
 
           <div className="flex items-center justify-end gap-2">
-            {!isAdmin ? (
+            {!isAdmin && !isInstructor ? (
               <button
                 type="button"
                 onClick={handleCartClick}
@@ -131,7 +132,7 @@ export default function Header() {
                   <DropdownMenuItem
                     onClick={() => navigate(primaryDestination)}
                   >
-                    Hồ sơ
+                    {isAdmin || isInstructor ? "Quản lý" : "Hồ sơ"}
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={handleLogout}>
                     Đăng xuất

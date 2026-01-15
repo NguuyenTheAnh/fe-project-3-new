@@ -122,13 +122,22 @@ export default function StudentProfile() {
 
   const statusLabel = STATUS_LABELS[profile?.status] || profile?.status || "-";
   const statusStyle = STATUS_STYLES[profile?.status] || "";
-  const roles = profile?.roles || [];
-  const roleLabels = roles.map((role) => {
-    if (role === "STUDENT") return "Học viên";
-    if (role === "INSTRUCTOR" || role === "ROLE_INSTRUCTOR") return "Giáo viên";
-    if (role === "ADMIN" || role === "ROLE_ADMIN") return "Quản trị viên";
-    return role;
-  });
+
+  const formatDateTime = (dateString) => {
+    if (!dateString) return "-";
+    try {
+      const date = new Date(dateString);
+      return new Intl.DateTimeFormat("vi-VN", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+      }).format(date);
+    } catch {
+      return dateString;
+    }
+  };
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
@@ -168,6 +177,10 @@ export default function StudentProfile() {
         {!isEditing ? (
           <div className="divide-y divide-slate-200">
             <div className="flex items-center justify-between px-6 py-4">
+              <span className="text-sm font-medium text-slate-700">ID</span>
+              <span className="text-sm text-slate-900">{profile?.id || "-"}</span>
+            </div>
+            <div className="flex items-center justify-between px-6 py-4">
               <span className="text-sm font-medium text-slate-700">Email</span>
               <span className="text-sm text-slate-900">{profile?.email || "-"}</span>
             </div>
@@ -186,12 +199,6 @@ export default function StudentProfile() {
               </span>
             </div>
             <div className="flex items-center justify-between px-6 py-4">
-              <span className="text-sm font-medium text-slate-700">Vai trò</span>
-              <span className="text-sm text-slate-900">
-                {roleLabels.join(", ") || "-"}
-              </span>
-            </div>
-            <div className="flex items-center justify-between px-6 py-4">
               <span className="text-sm font-medium text-slate-700">Trạng thái</span>
               <span
                 className={`inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-medium ${statusStyle}`}
@@ -204,7 +211,7 @@ export default function StudentProfile() {
                 Đăng nhập lần cuối
               </span>
               <span className="text-sm text-slate-900">
-                {profile?.lastLoginAt || "-"}
+                {formatDateTime(profile?.lastLoginAt)}
               </span>
             </div>
           </div>

@@ -1,0 +1,164 @@
+=========================================================
+API: GET USER PROFILE (Current User)
+Endpoint: GET /api/v1/users/me/profile
+=========================================================
+
+## MÔ TẢ
+API để lấy thông tin hồ sơ (profile) của người dùng hiện tại đang đăng nhập.
+Không yêu cầu truyền ID vì tự động lấy từ JWT token.
+
+## PHÂN QUYỀN
+- Tất cả user đã đăng nhập (STUDENT, INSTRUCTOR, ADMIN)
+- Không cần @PreAuthorize, chỉ cần authenticated
+
+## REQUEST
+
+### Headers
+Authorization: Bearer <JWT_TOKEN>
+Accept: application/json
+
+### Method
+GET
+
+### URL
+http://localhost:8080/api/v1/users/me/profile
+
+### cURL Example
+```bash
+curl 'http://localhost:8080/api/v1/users/me/profile' \
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
+```
+
+## RESPONSE
+
+### Success Response (200 OK)
+```json
+{
+  "code": 0,
+  "message": "success",
+  "data": {
+    "id": 3,
+    "email": "student@lms.local",
+    "fullName": "Student User",
+    "phone": "+84123456789",
+    "dateOfBirth": "2000-01-15",
+    "lastLoginAt": "2026-01-15T09:30:00",
+    "status": "ACTIVE",
+    "roles": [
+      {
+        "id": 3,
+        "name": "STUDENT",
+        "description": "Student role"
+      }
+    ],
+    "createdDate": "2026-01-10T10:00:00",
+    "updatedDate": "2026-01-15T08:00:00"
+  }
+}
+```
+
+### Error Response - Unauthorized (401)
+```json
+{
+  "code": 1401,
+  "message": "Unauthorized - Invalid or expired token",
+  "data": null
+}
+```
+
+### Error Response - User Not Found (404)
+```json
+{
+  "code": 1404,
+  "message": "User not found",
+  "data": null
+}
+```
+
+## RESPONSE FIELDS
+
+| Field         | Type     | Description                           |
+|---------------|----------|---------------------------------------|
+| id            | Long     | User ID                               |
+| email         | String   | Email đăng nhập                       |
+| fullName      | String   | Họ và tên                             |
+| phone         | String   | Số điện thoại (nullable)              |
+| dateOfBirth   | String   | Ngày sinh (format: YYYY-MM-DD)        |
+| lastLoginAt   | String   | Lần đăng nhập gần nhất (ISO 8601)    |
+| status        | String   | Trạng thái: ACTIVE/BLOCKED/PENDING    |
+| roles         | Array    | Danh sách roles của user              |
+| createdDate   | String   | Ngày tạo tài khoản (ISO 8601)         |
+| updatedDate   | String   | Ngày cập nhật gần nhất (ISO 8601)    |
+
+**Lưu ý:** Không trả về `avatar` (avatarFileId) trong response.
+
+## IMPLEMENTATION
+
+### Controller Layer
+- **File:** UserController.java
+- **Method:** getProfile()
+- **Endpoint:** GET /users/me/profile
+- **Authentication:** Required (JWT)
+- **Authorization:** All authenticated users
+
+### Service Layer
+- **Service:** UserService.findById(userId)
+- **Logic:** 
+  1. Extract userId from JWT token (SecurityContext)
+  2. Call userService.findById(userId) to get UserDto
+  3. Map UserDto to UserResponse using userViewMapper
+  4. Return success response
+
+### Flow
+1. Client gửi request với JWT token trong Authorization header
+2. JwtAuthenticationFilter validate token và set SecurityContext
+3. Controller extract userId từ Authentication principal
+4. Service lấy user từ database theo userId
+5. Mapper convert UserDto -> UserResponse (không include avatar)
+6. Return ResponseDto với data là UserResponse
+
+## USE CASES
+
+### 1. Student lấy profile
+```bash
+curl -H "Authorization: Bearer <STUDENT_TOKEN>" \
+     http://localhost:8080/api/v1/users/me/profile
+```
+→ Trả về thông tin student
+
+### 2. Instructor lấy profile
+```bash
+curl -H "Authorization: Bearer <INSTRUCTOR_TOKEN>" \
+     http://localhost:8080/api/v1/users/me/profile
+```
+→ Trả về thông tin instructor
+
+### 3. Admin lấy profile
+```bash
+curl -H "Authorization: Bearer <ADMIN_TOKEN>" \
+     http://localhost:8080/api/v1/users/me/profile
+```
+→ Trả về thông tin admin
+
+### 4. Không có token
+```bash
+curl http://localhost:8080/api/v1/users/me/profile
+```
+→ 401 Unauthorized
+
+## SECURITY
+- JWT token bắt buộc
+- User chỉ có thể xem profile của chính mình
+- UserId lấy từ JWT token (không thể fake)
+- Soft delete: Chỉ trả về user chưa bị xóa (is_deleted = 0)
+
+## NOTES
+- API này khác với GET /users/{id} (chỉ admin mới dùng được)
+- Endpoint /me/profile tự động lấy userId từ token
+- Frontend không cần truyền userId vào request
+- Nếu user không tồn tại hoặc đã bị xóa → 404 Not Found
+
+=========================================================
+END OF DESCRIPTION
+=========================================================
