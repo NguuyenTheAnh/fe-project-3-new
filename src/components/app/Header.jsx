@@ -72,7 +72,7 @@ export default function Header() {
           </div>
 
           <div className="flex items-center justify-end gap-2">
-            {!isAdmin && !isInstructor ? (
+            {isAuthenticated && !isAdmin && !isInstructor ? (
               <button
                 type="button"
                 onClick={handleCartClick}
