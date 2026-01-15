@@ -15,6 +15,7 @@ import AdminQuestionDetail from "@/pages/admin/AdminQuestionDetail";
 import AdminReviews from "@/pages/admin/AdminReviews";
 import AdminReports from "@/pages/admin/AdminReports";
 import AdminTags from "@/pages/admin/AdminTags";
+import AdminUsers from "@/pages/admin/AdminUsers";
 import LoginPage from "@/pages/auth/login";
 import RegisterPage from "@/pages/auth/register";
 import InstructorCourses from "@/pages/instructor/InstructorCourses";
@@ -29,6 +30,7 @@ import Cart from "@/pages/student/Cart";
 import Learn from "@/pages/student/Learn";
 import MyLearning from "@/pages/student/MyLearning";
 import PaymentReturn from "@/pages/student/PaymentReturn";
+import StudentProfile from "@/pages/student/StudentProfile";
 
 function NotFound() {
   return (
@@ -66,7 +68,7 @@ export const router = createBrowserRouter([
             </RequireRole>
           </RequireAuth>
         ),
-        children: [{ path: "learning", element: <MyLearning /> }],
+        children: [{ path: "learning", element: <MyLearning /> }, { path: "profile", element: <StudentProfile /> }],
       },
       {
         path: "learn/:courseId",
@@ -132,6 +134,7 @@ export const router = createBrowserRouter([
         ),
         children: [
           { index: true, element: <AdminHome /> },
+          { path: "users", element: <AdminUsers /> },
           { path: "courses", element: <AdminCourses /> },
           { path: "courses/:courseId/curriculum", element: <AdminCurriculum /> },
           { path: "categories", element: <AdminCategories /> },

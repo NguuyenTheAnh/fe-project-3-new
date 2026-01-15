@@ -1,0 +1,804 @@
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "create user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ADMIN_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"test0901-1@example.com\",\r\n    \"password\": \"P@ssw0rd\",\r\n    \"fullName\": \"Test 09/01 lan 1\",\r\n    \"roles\": [\r\n        \"STUDENT\"\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/users",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "create user",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"test0601-1@example.com\",\r\n    \"password\": \"P@ssw0rd\",\r\n    \"fullName\": \"Test 06/01 lan 1\",\r\n    \"roles\": [\r\n        \"STUDENT\"\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/users",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"users"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 06 Jan 2026 16:55:44 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": \"00\",\n    \"message\": null,\n    \"data\": {\n        \"id\": 10,\n        \"email\": \"test0601-1@example.com\",\n        \"fullName\": \"Test 06/01 lan 1\",\n        \"avatarFileId\": null,\n        \"phone\": null,\n        \"dateOfBirth\": null,\n        \"lastLoginAt\": null,\n        \"status\": \"ACTIVE\",\n        \"roles\": [\n            \"STUDENT\"\n        ],\n        \"avatarFile\": null\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "list user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ADMIN_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/users?role=STUDENT",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"users"
+							],
+							"query": [
+								{
+									"key": "role",
+									"value": "STUDENT"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "list user",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/users",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"users"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 06 Jan 2026 16:55:59 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": \"00\",\n    \"message\": null,\n    \"data\": {\n        \"content\": [\n            {\n                \"id\": 4,\n                \"email\": \"admin@lms.local\",\n                \"fullName\": \"My New Name\",\n                \"avatarFileId\": null,\n                \"phone\": \"0123456789\",\n                \"dateOfBirth\": null,\n                \"lastLoginAt\": \"2026-01-06T23:54:44\",\n                \"status\": \"ACTIVE\",\n                \"roles\": [\n                    \"ADMIN\"\n                ],\n                \"avatarFile\": null\n            },\n            {\n                \"id\": 6,\n                \"email\": \"student1@example.com\",\n                \"fullName\": \"Student One\",\n                \"avatarFileId\": null,\n                \"phone\": null,\n                \"dateOfBirth\": null,\n                \"lastLoginAt\": \"2026-01-05T15:05:54\",\n                \"status\": \"ACTIVE\",\n                \"roles\": [\n                    \"STUDENT\"\n                ],\n                \"avatarFile\": null\n            },\n            {\n                \"id\": 7,\n                \"email\": \"instructor1@lms.local\",\n                \"fullName\": \"Instructor One\",\n                \"avatarFileId\": null,\n                \"phone\": null,\n                \"dateOfBirth\": null,\n                \"lastLoginAt\": \"2026-01-06T23:28:56\",\n                \"status\": \"ACTIVE\",\n                \"roles\": [\n                    \"ROLE_INSTRUCTOR\"\n                ],\n                \"avatarFile\": null\n            },\n            {\n                \"id\": 8,\n                \"email\": \"student1@lms.local\",\n                \"fullName\": \"Student One\",\n                \"avatarFileId\": null,\n                \"phone\": null,\n                \"dateOfBirth\": null,\n                \"lastLoginAt\": \"2026-01-06T23:29:31\",\n                \"status\": \"ACTIVE\",\n                \"roles\": [\n                    \"STUDENT\"\n                ],\n                \"avatarFile\": null\n            },\n            {\n                \"id\": 9,\n                \"email\": \"test@example.com\",\n                \"fullName\": \"Test\",\n                \"avatarFileId\": null,\n                \"phone\": null,\n                \"dateOfBirth\": null,\n                \"lastLoginAt\": null,\n                \"status\": \"ACTIVE\",\n                \"roles\": [\n                    \"STUDENT\"\n                ],\n                \"avatarFile\": null\n            },\n            {\n                \"id\": 10,\n                \"email\": \"test0601-1@example.com\",\n                \"fullName\": \"Test 06/01 lan 1\",\n                \"avatarFileId\": null,\n                \"phone\": null,\n                \"dateOfBirth\": null,\n                \"lastLoginAt\": null,\n                \"status\": \"ACTIVE\",\n                \"roles\": [\n                    \"STUDENT\"\n                ],\n                \"avatarFile\": null\n            }\n        ],\n        \"pageable\": {\n            \"pageNumber\": 0,\n            \"pageSize\": 20,\n            \"sort\": [],\n            \"offset\": 0,\n            \"paged\": true,\n            \"unpaged\": false\n        },\n        \"last\": true,\n        \"totalElements\": 6,\n        \"totalPages\": 1,\n        \"size\": 20,\n        \"number\": 0,\n        \"sort\": [],\n        \"first\": true,\n        \"numberOfElements\": 6,\n        \"empty\": false\n    }\n}"
+						},
+						{
+							"name": "Instructor",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/users?role=INSTRUCTOR",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"users"
+									],
+									"query": [
+										{
+											"key": "role",
+											"value": "INSTRUCTOR"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 15 Jan 2026 01:56:24 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": \"00\",\n    \"message\": null,\n    \"data\": {\n        \"content\": [\n            {\n                \"id\": 7,\n                \"email\": \"instructor1@lms.local\",\n                \"fullName\": \"My New Name\",\n                \"avatarFileId\": 3,\n                \"phone\": \"0123456789\",\n                \"dateOfBirth\": null,\n                \"lastLoginAt\": \"2026-01-15T08:55:43\",\n                \"status\": \"ACTIVE\",\n                \"roles\": [\n                    \"INSTRUCTOR\"\n                ],\n                \"avatarFile\": {\n                    \"id\": 3,\n                    \"storageProvider\": \"MINIO\",\n                    \"bucket\": \"lms-files\",\n                    \"objectKey\": \"images/6b71b400bab84d90b1f188ea057d1e3c.jpg\",\n                    \"originalName\": \"Nitro_Wallpaper_01_3840x2400.jpg\",\n                    \"contentType\": \"image/jpeg\",\n                    \"sizeBytes\": 4114576,\n                    \"checksumSha256\": \"a7583fdee261ce58a2ec91b64d6bd715a810645e8550efdd8c3a5a1c12815268\",\n                    \"isPublic\": false,\n                    \"accessUrl\": null,\n                    \"status\": \"ATTACHED\",\n                    \"purpose\": \"DOCUMENT\",\n                    \"courseId\": null,\n                    \"lessonId\": null\n                }\n            }\n        ],\n        \"pageable\": {\n            \"pageNumber\": 0,\n            \"pageSize\": 20,\n            \"sort\": [],\n            \"offset\": 0,\n            \"paged\": true,\n            \"unpaged\": false\n        },\n        \"last\": true,\n        \"totalElements\": 1,\n        \"totalPages\": 1,\n        \"size\": 20,\n        \"number\": 0,\n        \"sort\": [],\n        \"first\": true,\n        \"numberOfElements\": 1,\n        \"empty\": false\n    }\n}"
+						},
+						{
+							"name": "student",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/users?role=STUDENT",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"users"
+									],
+									"query": [
+										{
+											"key": "role",
+											"value": "STUDENT"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 15 Jan 2026 01:56:49 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": \"00\",\n    \"message\": null,\n    \"data\": {\n        \"content\": [\n            {\n                \"id\": 6,\n                \"email\": \"student1@example.com\",\n                \"fullName\": \"Student One\",\n                \"avatarFileId\": null,\n                \"phone\": null,\n                \"dateOfBirth\": null,\n                \"lastLoginAt\": \"2026-01-05T15:05:54\",\n                \"status\": \"ACTIVE\",\n                \"roles\": [\n                    \"STUDENT\"\n                ],\n                \"avatarFile\": null\n            },\n            {\n                \"id\": 8,\n                \"email\": \"student1@lms.local\",\n                \"fullName\": \"Student One\",\n                \"avatarFileId\": null,\n                \"phone\": null,\n                \"dateOfBirth\": null,\n                \"lastLoginAt\": \"2026-01-15T08:39:36\",\n                \"status\": \"ACTIVE\",\n                \"roles\": [\n                    \"STUDENT\"\n                ],\n                \"avatarFile\": null\n            },\n            {\n                \"id\": 10,\n                \"email\": \"test0601-1@example.com\",\n                \"fullName\": \"Test 06/01 lan 1\",\n                \"avatarFileId\": null,\n                \"phone\": null,\n                \"dateOfBirth\": null,\n                \"lastLoginAt\": null,\n                \"status\": \"ACTIVE\",\n                \"roles\": [\n                    \"STUDENT\"\n                ],\n                \"avatarFile\": null\n            },\n            {\n                \"id\": 11,\n                \"email\": \"test@example.com\",\n                \"fullName\": \"Test\",\n                \"avatarFileId\": null,\n                \"phone\": null,\n                \"dateOfBirth\": null,\n                \"lastLoginAt\": \"2026-01-08T15:44:09\",\n                \"status\": \"ACTIVE\",\n                \"roles\": [\n                    \"STUDENT\"\n                ],\n                \"avatarFile\": null\n            },\n            {\n                \"id\": 12,\n                \"email\": \"test0901-1@example.com\",\n                \"fullName\": \"Test 09/01 lan 1\",\n                \"avatarFileId\": null,\n                \"phone\": null,\n                \"dateOfBirth\": null,\n                \"lastLoginAt\": \"2026-01-14T09:00:18\",\n                \"status\": \"ACTIVE\",\n                \"roles\": [\n                    \"STUDENT\"\n                ],\n                \"avatarFile\": null\n            }\n        ],\n        \"pageable\": {\n            \"pageNumber\": 0,\n            \"pageSize\": 20,\n            \"sort\": [],\n            \"offset\": 0,\n            \"paged\": true,\n            \"unpaged\": false\n        },\n        \"last\": true,\n        \"totalElements\": 5,\n        \"totalPages\": 1,\n        \"size\": 20,\n        \"number\": 0,\n        \"sort\": [],\n        \"first\": true,\n        \"numberOfElements\": 5,\n        \"empty\": false\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "user by id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ADMIN_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/users/:userId",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"users",
+								":userId"
+							],
+							"variable": [
+								{
+									"key": "userId",
+									"value": "9"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "user by id",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/users/:userId",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"users",
+										":userId"
+									],
+									"variable": [
+										{
+											"key": "userId",
+											"value": "9"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 06 Jan 2026 16:56:59 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": \"00\",\n    \"message\": null,\n    \"data\": {\n        \"id\": 9,\n        \"email\": \"test@example.com\",\n        \"fullName\": \"Test\",\n        \"avatarFileId\": null,\n        \"phone\": null,\n        \"dateOfBirth\": null,\n        \"lastLoginAt\": null,\n        \"status\": \"ACTIVE\",\n        \"roles\": [\n            \"STUDENT\"\n        ],\n        \"avatarFile\": null\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ADMIN_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/users/:id",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"users",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "9"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "delete",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/users/:id",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"users",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "9"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 06 Jan 2026 16:57:38 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": \"00\",\n    \"message\": null,\n    \"data\": \"deleted\"\n}"
+						}
+					]
+				},
+				{
+					"name": "update profile",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJsbXMtc2VydmljZSIsInN1YiI6IjciLCJpYXQiOjE3Njg0NDE5OTMsImV4cCI6MTc2ODQ1Mjc5MywiZW1haWwiOiJpbnN0cnVjdG9yMUBsbXMubG9jYWwiLCJyb2xlcyI6WyJST0xFX0lOU1RSVUNUT1IiXX0.m9sYaA8ucYPz6-LvXezgc3NcTVFx4NaIriCuXL45ZmA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"fullName\": \"My New Name\",\r\n    \"phone\": \"0123456789\",\r\n    \"avatarFileId\":3,\r\n    \"roles\": [\r\n            \"INSTRUCTOR\"\r\n        ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/users/me/profile",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"users",
+								"me",
+								"profile"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "update profile",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"fullName\": \"My New Name\",\r\n    \"phone\": \"0123456789\",\r\n    \"avatarFileId\":3\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/users/me/profile",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"users",
+										"me",
+										"profile"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 06 Jan 2026 16:58:49 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": \"00\",\n    \"message\": null,\n    \"data\": {\n        \"id\": 4,\n        \"email\": \"admin@lms.local\",\n        \"fullName\": \"My New Name\",\n        \"avatarFileId\": 3,\n        \"phone\": \"0123456789\",\n        \"dateOfBirth\": null,\n        \"lastLoginAt\": \"2026-01-06T23:54:44\",\n        \"status\": \"ACTIVE\",\n        \"roles\": [\n            \"ADMIN\"\n        ],\n        \"avatarFile\": {\n            \"id\": 3,\n            \"storageProvider\": \"MINIO\",\n            \"bucket\": \"lms-files\",\n            \"objectKey\": \"images/6b71b400bab84d90b1f188ea057d1e3c.jpg\",\n            \"originalName\": \"Nitro_Wallpaper_01_3840x2400.jpg\",\n            \"contentType\": \"image/jpeg\",\n            \"sizeBytes\": 4114576,\n            \"checksumSha256\": \"a7583fdee261ce58a2ec91b64d6bd715a810645e8550efdd8c3a5a1c12815268\",\n            \"isPublic\": false,\n            \"accessUrl\": null,\n            \"status\": \"ATTACHED\",\n            \"purpose\": \"DOCUMENT\",\n            \"courseId\": null,\n            \"lessonId\": null\n        }\n    }\n}"
+						}
+					]
+				}
+			]
+		},

@@ -20,6 +20,9 @@ export default function StudentLayout() {
           <NavLink to="/me/learning" className={linkClasses}>
             Khóa học của tôi
           </NavLink>
+          <NavLink to="/me/profile" className={linkClasses}>
+            Hồ sơ
+          </NavLink>
         </nav>
         <Outlet />
       </div>
