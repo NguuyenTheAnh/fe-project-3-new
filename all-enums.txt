@@ -1,0 +1,318 @@
+=========================================================
+ALL ENUMS - LMS Backend Project
+Package: com.theanh.lms.enums
+Total: 20 enums
+=========================================================
+
+1. CartStatus
+   - ACTIVE
+   - CHECKED_OUT
+
+2. CourseLanguage
+   - EN
+   - VI
+   - FR
+   - DE
+   - ES
+   - OTHER
+
+3. CourseLevel
+   - BEGINNER
+   - INTERMEDIATE
+   - ADVANCED
+   - ALL_LEVELS
+
+4. CourseStatus
+   - DRAFT
+   - REVIEW
+   - PUBLISHED
+   - ARCHIVED
+
+5. InstructorRole
+   - OWNER
+   - CO_INSTRUCTOR
+   - ASSISTANT
+
+6. LessonType
+   - VIDEO
+   - ARTICLE
+   - QUIZ
+
+7. OrderStatus
+   - PENDING
+   - PAID
+   - FAILED
+   - CANCELLED
+   - REFUNDED
+
+8. PaymentProvider
+   - VNPAY
+
+9. PaymentStatus
+   - INIT
+   - SUCCESS
+   - FAILED
+
+10. QuestionStatus (Q&A)
+    - OPEN
+    - RESOLVED
+    - CLOSED
+
+11. QuestionType (Quiz)
+    - SINGLE
+    - MULTI
+    - TRUE_FALSE
+    - TEXT
+
+12. ReportStatus (Content Moderation)
+    - OPEN
+    - IN_REVIEW
+    - RESOLVED
+    - REJECTED
+
+13. ReportTargetType (Content Moderation)
+    - REVIEW
+    - QUESTION
+    - ANSWER
+    - COURSE
+    - LESSON
+
+14. ReviewStatus (Course Review)
+    - PENDING
+    - APPROVED
+    - REJECTED
+
+15. RoleName
+    - STUDENT
+    - INSTRUCTOR
+    - ADMIN
+    * Special method: asAuthority() returns "ROLE_" + name()
+
+16. StorageProvider
+    - LOCAL
+    - MINIO
+    - S3
+
+17. UploadedFileStatus
+    - PENDING
+    - READY
+    - ATTACHED
+    - DELETED
+
+18. UploadPurpose
+    - THUMBNAIL
+    - INTRO_VIDEO
+    - LESSON_VIDEO
+    - DOCUMENT
+    - GENERIC
+
+19. UserStatus
+    - ACTIVE
+    - BLOCKED
+    - PENDING
+
+20. VoteType (Q&A Voting)
+    - UP
+    - DOWN
+
+=========================================================
+COMPLETE JAVA CODE
+=========================================================
+
+// 1. CartStatus.java
+package com.theanh.lms.enums;
+
+public enum CartStatus {
+    ACTIVE,
+    CHECKED_OUT
+}
+
+// 2. CourseLanguage.java
+package com.theanh.lms.enums;
+
+public enum CourseLanguage {
+    EN,
+    VI,
+    FR,
+    DE,
+    ES,
+    OTHER
+}
+
+// 3. CourseLevel.java
+package com.theanh.lms.enums;
+
+public enum CourseLevel {
+    BEGINNER,
+    INTERMEDIATE,
+    ADVANCED,
+    ALL_LEVELS
+}
+
+// 4. CourseStatus.java
+package com.theanh.lms.enums;
+
+public enum CourseStatus {
+    DRAFT,
+    REVIEW,
+    PUBLISHED,
+    ARCHIVED
+}
+
+// 5. InstructorRole.java
+package com.theanh.lms.enums;
+
+public enum InstructorRole {
+    OWNER,
+    CO_INSTRUCTOR,
+    ASSISTANT
+}
+
+// 6. LessonType.java
+package com.theanh.lms.enums;
+
+public enum LessonType {
+    VIDEO,
+    ARTICLE,
+    QUIZ
+}
+
+// 7. OrderStatus.java
+package com.theanh.lms.enums;
+
+public enum OrderStatus {
+    PENDING,
+    PAID,
+    FAILED,
+    CANCELLED,
+    REFUNDED
+}
+
+// 8. PaymentProvider.java
+package com.theanh.lms.enums;
+
+public enum PaymentProvider {
+    VNPAY
+}
+
+// 9. PaymentStatus.java
+package com.theanh.lms.enums;
+
+public enum PaymentStatus {
+    INIT,
+    SUCCESS,
+    FAILED
+}
+
+// 10. QuestionStatus.java (Q&A)
+package com.theanh.lms.enums;
+
+public enum QuestionStatus {
+    OPEN,
+    RESOLVED,
+    CLOSED
+}
+
+// 11. QuestionType.java (Quiz)
+package com.theanh.lms.enums;
+
+public enum QuestionType {
+    SINGLE,
+    MULTI,
+    TRUE_FALSE,
+    TEXT
+}
+
+// 12. ReportStatus.java
+package com.theanh.lms.enums;
+
+public enum ReportStatus {
+    OPEN,
+    IN_REVIEW,
+    RESOLVED,
+    REJECTED
+}
+
+// 13. ReportTargetType.java
+package com.theanh.lms.enums;
+
+public enum ReportTargetType {
+    REVIEW,
+    QUESTION,
+    ANSWER,
+    COURSE,
+    LESSON
+}
+
+// 14. ReviewStatus.java
+package com.theanh.lms.enums;
+
+public enum ReviewStatus {
+    PENDING,
+    APPROVED,
+    REJECTED
+}
+
+// 15. RoleName.java
+package com.theanh.lms.enums;
+
+public enum RoleName {
+    STUDENT,
+    INSTRUCTOR,
+    ADMIN;
+
+    public String asAuthority() {
+        return "ROLE_" + name();
+    }
+}
+
+// 16. StorageProvider.java
+package com.theanh.lms.enums;
+
+public enum StorageProvider {
+    LOCAL,
+    MINIO,
+    S3
+}
+
+// 17. UploadedFileStatus.java
+package com.theanh.lms.enums;
+
+public enum UploadedFileStatus {
+    PENDING,
+    READY,
+    ATTACHED,
+    DELETED
+}
+
+// 18. UploadPurpose.java
+package com.theanh.lms.enums;
+
+public enum UploadPurpose {
+    THUMBNAIL,
+    INTRO_VIDEO,
+    LESSON_VIDEO,
+    DOCUMENT,
+    GENERIC
+}
+
+// 19. UserStatus.java
+package com.theanh.lms.enums;
+
+public enum UserStatus {
+    ACTIVE,
+    BLOCKED,
+    PENDING
+}
+
+// 20. VoteType.java
+package com.theanh.lms.enums;
+
+public enum VoteType {
+    UP,
+    DOWN
+}
+
+=========================================================
+END OF ENUMS
+=========================================================

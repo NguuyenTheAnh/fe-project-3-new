@@ -25,21 +25,28 @@ const LEVEL_LABELS = {
   BEGINNER: "Cơ bản",
   INTERMEDIATE: "Trung cấp",
   ADVANCED: "Nâng cao",
+  ALL_LEVELS: "Mọi cấp độ",
 };
 
 const LANGUAGE_LABELS = {
   VI: "Tiếng Việt",
   EN: "Tiếng Anh",
+  FR: "Tiếng Pháp",
+  DE: "Tiếng Đức",
+  ES: "Tiếng Tây Ban Nha",
+  OTHER: "Khác",
 };
 
 const STATUS_LABELS = {
   DRAFT: "Bản nháp",
+  REVIEW: "Đang xem xét",
   PUBLISHED: "Đã xuất bản",
   ARCHIVED: "Đã lưu trữ",
 };
 
 const STATUS_STYLES = {
   DRAFT: "border-slate-200 bg-slate-50 text-slate-700",
+  REVIEW: "border-blue-200 bg-blue-50 text-blue-700",
   PUBLISHED: "border-emerald-200 bg-emerald-50 text-emerald-700",
   ARCHIVED: "border-amber-200 bg-amber-50 text-amber-700",
 };

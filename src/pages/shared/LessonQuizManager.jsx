@@ -109,8 +109,10 @@ export default function LessonQuizManager({ open, onClose, lesson }) {
         shuffleQuestions: Boolean(data?.shuffleQuestions),
       });
     } catch (err) {
-      if (err?.status === 404) {
+      if (err?.status === 404 || err?.message?.includes("not_found") || err?.message?.includes("not found")) {
+        // Chưa có quiz nào - đây là trường hợp bình thường, không phải lỗi
         setQuiz(null);
+        setError(""); // Xóa error để không hiển thị thông báo lỗi
         setQuizForm({
           ...QUIZ_FORM_DEFAULT,
           title: lesson?.title ? `Quiz - ${lesson.title}` : "",
@@ -370,7 +372,12 @@ export default function LessonQuizManager({ open, onClose, lesson }) {
             <div className="mt-4 text-sm text-slate-500">
               Đang tải quiz...
             </div>
-          ) : (
+          ) : !quiz?.id && !error ? (
+            <div className="mt-4 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-700">
+               Chưa có quiz nào cho bài học này. Hãy tạo quiz mới bên dưới.
+            </div>
+          ) : null}
+          {!loading && (
             <form className="mt-4 space-y-4" onSubmit={handleQuizSubmit}>
               <div>
                 <label className="text-sm font-medium text-slate-700">

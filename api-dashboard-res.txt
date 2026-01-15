@@ -1,0 +1,185 @@
+curl 'http://localhost:8080/api/v1/dashboard/admin?days=30&limit=10' \
+  -H 'Accept: application/json, text/plain, */*' \
+  -H 'Accept-Language: en-US,en;q=0.9' \
+  -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJsbXMtc2VydmljZSIsInN1YiI6IjQiLCJpYXQiOjE3Njg0NjIzNzIsImV4cCI6MTc2ODQ3MzE3MiwiZW1haWwiOiJhZG1pbkBsbXMubG9jYWwiLCJyb2xlcyI6WyJST0xFX0FETUlOIl19.esUDKMZJUI2JtXCh_AgMO0CVppbrdqSSD6g1FAX0SsI' \
+  -H 'Connection: keep-alive' \
+  -H 'Origin: http://localhost:5173' \
+  -H 'Referer: http://localhost:5173/' \
+  -H 'Sec-Fetch-Dest: empty' \
+  -H 'Sec-Fetch-Mode: cors' \
+  -H 'Sec-Fetch-Site: same-site' \
+  -H 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 Edg/143.0.0.0' \
+  -H 'sec-ch-ua: "Microsoft Edge";v="143", "Chromium";v="143", "Not A(Brand";v="24"' \
+  -H 'sec-ch-ua-mobile: ?0' \
+  -H 'sec-ch-ua-platform: "Windows"'
+
+
+
+  {
+    "code": "00",
+    "message": null,
+    "data": {
+        "kpi": {
+            "totalUsers": 7,
+            "totalInstructors": 1,
+            "totalCourses": 4,
+            "publishedCourses": 4,
+            "enrollmentsLast30Days": 8,
+            "revenueToday": 0,
+            "revenueLast7Days": 2300000,
+            "revenueLast30Days": 2450000
+        },
+        "revenueTrend": [
+            {
+                "date": "2026-01-13",
+                "revenue": 0,
+                "orderCount": 1
+            },
+            {
+                "date": "2026-01-12",
+                "revenue": 2150000,
+                "orderCount": 2
+            },
+            {
+                "date": "2026-01-08",
+                "revenue": 150000,
+                "orderCount": 1
+            },
+            {
+                "date": "2026-01-06",
+                "revenue": 150000,
+                "orderCount": 1
+            }
+        ],
+        "enrollmentTrend": [
+            {
+                "date": "2026-01-13",
+                "enrollmentCount": 1
+            },
+            {
+                "date": "2026-01-12",
+                "enrollmentCount": 4
+            },
+            {
+                "date": "2026-01-08",
+                "enrollmentCount": 1
+            },
+            {
+                "date": "2026-01-06",
+                "enrollmentCount": 1
+            },
+            {
+                "date": "2026-01-04",
+                "enrollmentCount": 1
+            }
+        ],
+        "courseFunnel": [
+            {
+                "status": "PUBLISHED",
+                "courseCount": 4
+            }
+        ],
+        "refundQueue": [],
+        "contentReportQueue": [
+            {
+                "reportId": 3,
+                "contentType": "REVIEW",
+                "contentId": 1,
+                "reporterUserId": 8,
+                "reporterFullName": "Student One",
+                "reason": "Updated reason with more details",
+                "status": "OPEN",
+                "reportedAt": "2026-01-08T15:41:43"
+            },
+            {
+                "reportId": 2,
+                "contentType": "REVIEW",
+                "contentId": 1,
+                "reporterUserId": 4,
+                "reporterFullName": "My New Name",
+                "reason": "Spam or inappropriate",
+                "status": "OPEN",
+                "reportedAt": "2026-01-04T23:40:41"
+            },
+            {
+                "reportId": 1,
+                "contentType": "REVIEW",
+                "contentId": 1,
+                "reporterUserId": 6,
+                "reporterFullName": "Student One",
+                "reason": "Spam or inappropriate",
+                "status": "IN_REVIEW",
+                "reportedAt": "2026-01-04T23:28:35"
+            }
+        ],
+        "topCoursesByRevenue": [
+            {
+                "courseId": 7,
+                "courseTitle": "course test 10-01",
+                "enrollmentCount": 2,
+                "revenue": 4000000,
+                "ratingAvg": 4.0,
+                "ratingCount": 1
+            },
+            {
+                "courseId": 4,
+                "courseTitle": "Java Spring Boot Masterclass",
+                "enrollmentCount": 3,
+                "revenue": 1350000,
+                "ratingAvg": 3.0,
+                "ratingCount": 1
+            },
+            {
+                "courseId": 3,
+                "courseTitle": "Java Spring Boot Masterclass (Updated)",
+                "enrollmentCount": 2,
+                "revenue": 0,
+                "ratingAvg": 3.0,
+                "ratingCount": 1
+            },
+            {
+                "courseId": 6,
+                "courseTitle": "ReactJs Masterclass (Updated)",
+                "enrollmentCount": 1,
+                "revenue": 0,
+                "ratingAvg": null,
+                "ratingCount": 0
+            }
+        ],
+        "topCoursesByEnrollment": [
+            {
+                "courseId": 4,
+                "courseTitle": "Java Spring Boot Masterclass",
+                "enrollmentCount": 3,
+                "revenue": 1350000,
+                "ratingAvg": 3.0,
+                "ratingCount": 1
+            },
+            {
+                "courseId": 3,
+                "courseTitle": "Java Spring Boot Masterclass (Updated)",
+                "enrollmentCount": 2,
+                "revenue": 0,
+                "ratingAvg": 3.0,
+                "ratingCount": 1
+            },
+            {
+                "courseId": 7,
+                "courseTitle": "course test 10-01",
+                "enrollmentCount": 2,
+                "revenue": 4000000,
+                "ratingAvg": 4.0,
+                "ratingCount": 1
+            },
+            {
+                "courseId": 6,
+                "courseTitle": "ReactJs Masterclass (Updated)",
+                "enrollmentCount": 1,
+                "revenue": 0,
+                "ratingAvg": null,
+                "ratingCount": 0
+            }
+        ],
+        "lowRatingCourses": []
+    }
+}

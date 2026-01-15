@@ -711,7 +711,7 @@ export default function QuestionManagement({ scope = "admin" }) {
                   "h-10 rounded-lg px-4 text-sm font-semibold text-white transition inline-flex items-center justify-center disabled:opacity-60",
                   confirmConfig.variant === "danger"
                     ? "bg-red-600 hover:bg-red-700"
-                    : "bg-slate-900 hover:bg-slate-800",
+                    : "bg-red-600 hover:bg-red-700",
                 ].join(" ")}
               >
                 {confirmLoading ? "Đang xử lý..." : confirmConfig.confirmLabel}

@@ -35,6 +35,7 @@ const LEVEL_LABELS = {
   BEGINNER: "Cơ bản",
   INTERMEDIATE: "Trung cấp",
   ADVANCED: "Nâng cao",
+  ALL_LEVELS: "Mọi cấp độ",
 };
 
 const LANGUAGE_LABELS = {

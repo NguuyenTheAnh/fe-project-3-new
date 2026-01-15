@@ -1,0 +1,61 @@
+---
+
+## A) Admin Dashboard (System Overview)
+
+### 1) KPI cards (top)
+
+* **Total Users** (user)
+* **Total Instructors** (user_roles join role=INSTRUCTOR)
+* **Total Courses** (course)
+* **Published Courses** (course.status='PUBLISHED')
+* **Enrollments (30d)** (enrollment.enrolled_at)
+* **Revenue (today/7d/30d)** (order.status='PAID', order.paid_at, total_amount_cents)
+
+### 2) Charts (trend)
+
+* **Revenue by day** (order.paid_at group by date)
+* **New enrollments by day** (enrollment.enrolled_at group by date)
+* **Course publish funnel** (course.status: DRAFT/REVIEW/PUBLISHED/ARCHIVED)
+
+### 3) Operational panels (list cần xử lý)
+
+* **Refund queue** (refund_request.status='PENDING')
+* **Content reports queue** (content_report.status in OPEN/IN_REVIEW)
+* **Reviews pending moderation** (course_review.status='PENDING')
+* **Payments failed** (payment_transaction.status='FAILED' hoặc order.status='FAILED')
+
+### 4) Top tables (drill-down)
+
+* **Top courses by revenue** (order_item join order(PAID) join course)
+* **Top courses by enrollments** (enrollment group by course_id)
+* **Low rating courses** (course.rating_avg thấp + rating_count đủ lớn)
+
+---
+
+## B) Instructor Dashboard (My Teaching)
+
+> Scope filter: các course mà instructor sở hữu/tham gia: `course.creator_user_id = me` hoặc join `course_instructor.user_id = me`.
+
+### 1) KPI cards (top)
+
+* **My published courses** (course.status='PUBLISHED')
+* **Total students** (count distinct enrollment.user_id theo course của mình)
+* **New enrollments (7d/30d)** (enrollment.enrolled_at)
+* **Revenue (7d/30d)** (order_item join order(PAID) theo course của mình)
+* **Avg rating** (course.rating_avg weighted hoặc hiển thị từng course)
+
+### 2) Engagement & To-do (quan trọng nhất cho instructor)
+
+* **Unanswered questions**
+  question thuộc course của mình mà **chưa có answer** (left join answer where null)
+* **Open questions** (question.status='OPEN')
+* **New reviews pending/just posted** (course_review theo course của mình; status nếu bạn cho instructor xem)
+* **Refund requests affecting my courses** (refund_request join order_item.course_id)
+
+### 3) Learning analytics (dữ liệu bạn có ở mức “lite”)
+
+* **Completion rate theo course**
+  progress.completed / total lessons per enrollment (join course_lesson)
+* **Drop-off lessons**
+  lesson có nhiều progress.last_accessed_at nhưng completed thấp
+* **Top lessons by views** (nếu video/doc bạn map qua uploaded_file + document_view; còn video watch time bạn mới có last_position_seconds)

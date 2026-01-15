@@ -51,6 +51,7 @@ const LEVEL_LABELS = {
   BEGINNER: "Cơ bản",
   INTERMEDIATE: "Trung cấp",
   ADVANCED: "Nâng cao",
+  ALL_LEVELS: "Mọi cấp độ",
 };
 
 const LANGUAGE_LABELS = {
@@ -78,6 +79,8 @@ const REPORT_STATUS_LABELS = {
   OPEN: "Đang mở",
   IN_REVIEW: "Đang xử lý",
   RESOLVED: "Đã xử lý",
+  REJECTED: "Từ chối",
+  CLOSED: "Đã đóng",
 };
 
 

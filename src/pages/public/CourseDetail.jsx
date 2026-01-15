@@ -13,8 +13,7 @@ import { getFileAccessUrl } from "@/services/file.service";
 const LEVEL_MAP = {
   BEGINNER: "Cơ bản",
   INTERMEDIATE: "Trung cấp",
-  ADVANCED: "Nâng cao",
-};
+  ADVANCED: "Nâng cao",  ALL_LEVELS: "Mọi cấp độ",};
 
 const LANGUAGE_MAP = {
   VI: "Tiếng Việt",

@@ -8,14 +8,14 @@ import {
 
 const STATUS_LABELS = {
   ACTIVE: "Hoạt động",
-  INACTIVE: "Không hoạt động",
-  BANNED: "Bị cấm",
+  PENDING: "Đang chờ",
+  BLOCKED: "Bị chặn",
 };
 
 const STATUS_STYLES = {
   ACTIVE: "border-emerald-200 bg-emerald-50 text-emerald-700",
-  INACTIVE: "border-slate-200 bg-slate-50 text-slate-700",
-  BANNED: "border-red-200 bg-red-50 text-red-700",
+  PENDING: "border-amber-200 bg-amber-50 text-amber-700",
+  BLOCKED: "border-red-200 bg-red-50 text-red-700",
 };
 
 const ROLE_LABELS = {

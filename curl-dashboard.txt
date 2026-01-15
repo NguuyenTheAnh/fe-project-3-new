@@ -1,0 +1,246 @@
+# =========================================
+# DASHBOARD API - Admin & Instructor
+# =========================================
+# Base URL: http://localhost:8080/api/v1
+# Auth: Bearer token in Authorization header
+
+baseURL="http://localhost:8080/api/v1"
+AUTH_HEADER="Authorization: Bearer <ACCESS_TOKEN>"
+
+# ==================== ADMIN DASHBOARD ====================
+
+# Get admin dashboard (default: 30 days, 10 items per section)
+curl -X GET "$baseURL/dashboard/admin" \
+  -H "$AUTH_HEADER"
+
+# Get admin dashboard with custom parameters
+# days: số ngày để tính trend (mặc định 30)
+# limit: số lượng items tối đa cho mỗi section (mặc định 10)
+curl -X GET "$baseURL/dashboard/admin?days=7&limit=5" \
+  -H "$AUTH_HEADER"
+
+# Get admin dashboard for last 90 days
+curl -X GET "$baseURL/dashboard/admin?days=90&limit=20" \
+  -H "$AUTH_HEADER"
+
+# Response structure:
+# {
+#   "code": "00",
+#   "message": "Success",
+#   "data": {
+#     "kpi": {
+#       "totalUsers": 1500,
+#       "totalInstructors": 120,
+#       "totalCourses": 450,
+#       "publishedCourses": 380,
+#       "enrollmentsLast30Days": 2340,
+#       "revenueToday": 50000000,
+#       "revenueLast7Days": 350000000,
+#       "revenueLast30Days": 1500000000
+#     },
+#     "revenueTrend": [
+#       {"date": "2026-01-15", "revenue": 50000000, "orderCount": 25},
+#       {"date": "2026-01-14", "revenue": 45000000, "orderCount": 22}
+#     ],
+#     "enrollmentTrend": [
+#       {"date": "2026-01-15", "enrollmentCount": 85},
+#       {"date": "2026-01-14", "enrollmentCount": 92}
+#     ],
+#     "courseFunnel": [
+#       {"status": "PUBLISHED", "courseCount": 380},
+#       {"status": "DRAFT", "courseCount": 50},
+#       {"status": "REVIEW", "courseCount": 15},
+#       {"status": "ARCHIVED", "courseCount": 5}
+#     ],
+#     "refundQueue": [
+#       {
+#         "refundRequestId": 123,
+#         "orderId": 456,
+#         "userId": 789,
+#         "userFullName": "Nguyen Van A",
+#         "reason": "Course không như mong đợi",
+#         "requestedAmountCents": 50000000,
+#         "status": "PENDING",
+#         "requestedAt": "2026-01-14T10:30:00"
+#       }
+#     ],
+#     "contentReportQueue": [
+#       {
+#         "reportId": 12,
+#         "contentType": "COURSE_REVIEW",
+#         "contentId": 345,
+#         "reporterUserId": 678,
+#         "reporterFullName": "Tran Thi B",
+#         "reason": "Spam content",
+#         "status": "OPEN",
+#         "reportedAt": "2026-01-14T15:20:00"
+#       }
+#     ],
+#     "topCoursesByRevenue": [
+#       {
+#         "courseId": 10,
+#         "courseTitle": "Java Spring Boot Masterclass",
+#         "enrollmentCount": 450,
+#         "revenue": 225000000,
+#         "ratingAvg": 4.8,
+#         "ratingCount": 320
+#       }
+#     ],
+#     "topCoursesByEnrollment": [
+#       {
+#         "courseId": 15,
+#         "courseTitle": "Python for Beginners",
+#         "enrollmentCount": 850,
+#         "revenue": 170000000,
+#         "ratingAvg": 4.5,
+#         "ratingCount": 580
+#       }
+#     ],
+#     "lowRatingCourses": [
+#       {
+#         "courseId": 25,
+#         "courseTitle": "Advanced Machine Learning",
+#         "enrollmentCount": 120,
+#         "revenue": 60000000,
+#         "ratingAvg": 3.2,
+#         "ratingCount": 85
+#       }
+#     ]
+#   }
+# }
+
+# ==================== INSTRUCTOR DASHBOARD ====================
+
+# Get current instructor's dashboard (requires INSTRUCTOR role)
+curl -X GET "$baseURL/dashboard/instructor" \
+  -H "$AUTH_HEADER"
+
+# Get current instructor's dashboard with custom limit
+curl -X GET "$baseURL/dashboard/instructor?limit=5" \
+  -H "$AUTH_HEADER"
+
+# Get specific instructor's dashboard (ADMIN only)
+curl -X GET "$baseURL/dashboard/instructor/123" \
+  -H "$AUTH_HEADER"
+
+# Get specific instructor's dashboard with custom limit (ADMIN only)
+curl -X GET "$baseURL/dashboard/instructor/123?limit=15" \
+  -H "$AUTH_HEADER"
+
+# Response structure:
+# {
+#   "code": "00",
+#   "message": "Success",
+#   "data": {
+#     "kpi": {
+#       "myPublishedCourses": 8,
+#       "totalStudents": 1250,
+#       "newEnrollmentsLast7Days": 45,
+#       "newEnrollmentsLast30Days": 180,
+#       "revenueLast7Days": 45000000,
+#       "revenueLast30Days": 180000000,
+#       "avgRating": 4.65
+#     },
+#     "unansweredQuestions": [
+#       {
+#         "questionId": 234,
+#         "courseId": 10,
+#         "courseTitle": "Java Spring Boot Masterclass",
+#         "lessonId": 56,
+#         "lessonTitle": "Working with JPA",
+#         "questionTitle": "How to handle bidirectional relationships?",
+#         "questionContent": "I'm having trouble with bidirectional...",
+#         "askerUserId": 789,
+#         "askerFullName": "Nguyen Van A",
+#         "askedAt": "2026-01-15T08:30:00"
+#       }
+#     ],
+#     "myCourses": [
+#       {
+#         "courseId": 10,
+#         "courseTitle": "Java Spring Boot Masterclass",
+#         "enrollmentCount": 450,
+#         "revenue": 225000000,
+#         "ratingAvg": 4.8,
+#         "ratingCount": 320
+#       },
+#       {
+#         "courseId": 12,
+#         "courseTitle": "Microservices Architecture",
+#         "enrollmentCount": 280,
+#         "revenue": 140000000,
+#         "ratingAvg": 4.6,
+#         "ratingCount": 180
+#       }
+#     ],
+#     "courseCompletions": [
+#       {
+#         "courseId": 10,
+#         "courseTitle": "Java Spring Boot Masterclass",
+#         "totalLessons": 120,
+#         "totalEnrollments": 450,
+#         "totalCompletedLessons": 35400,
+#         "completionRate": 65.56
+#       },
+#       {
+#         "courseId": 12,
+#         "courseTitle": "Microservices Architecture",
+#         "totalLessons": 80,
+#         "totalEnrollments": 280,
+#         "totalCompletedLessons": 16800,
+#         "completionRate": 75.00
+#       }
+#     ]
+#   }
+# }
+
+# ==================== USE CASES ====================
+
+# Admin use cases:
+# 1. Monitor system overview (KPIs)
+#    GET /dashboard/admin
+#
+# 2. Analyze revenue trends for last 90 days
+#    GET /dashboard/admin?days=90&limit=90
+#
+# 3. View pending refunds (top 20)
+#    GET /dashboard/admin?limit=20
+#
+# 4. Check content reports queue
+#    GET /dashboard/admin
+#
+# 5. Identify low-performing courses
+#    GET /dashboard/admin?limit=50
+
+# Instructor use cases:
+# 1. Check my teaching overview
+#    GET /dashboard/instructor
+#
+# 2. Review unanswered questions (top 20)
+#    GET /dashboard/instructor?limit=20
+#
+# 3. Monitor course completion rates
+#    GET /dashboard/instructor
+#
+# 4. Track student engagement
+#    GET /dashboard/instructor
+
+# Admin viewing specific instructor:
+# 1. Review instructor performance
+#    GET /dashboard/instructor/123
+#
+# 2. Compare instructors
+#    GET /dashboard/instructor/123
+#    GET /dashboard/instructor/456
+
+# ==================== NOTES ====================
+# 1. Admin dashboard requires ROLE_ADMIN
+# 2. Instructor dashboard requires ROLE_INSTRUCTOR or ROLE_ADMIN
+# 3. All revenue values are in VND cents (divide by 100 for VND)
+# 4. Completion rate is percentage (0-100)
+# 5. Trends are sorted DESC by date (newest first)
+# 6. All queries respect soft delete (is_deleted = 0 or NULL)
+# 7. Default limit is 10 items per section
+# 8. Default days for trends is 30 days
+# 9. Low rating courses require minimum 5 ratings by default
+# 10. Instructor dashboard filters courses where user is creator or co-instructor

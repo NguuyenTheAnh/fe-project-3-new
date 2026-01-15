@@ -18,11 +18,13 @@ const STATUS_LABELS = {
   OPEN: "Đang mở",
   IN_REVIEW: "Đang xử lý",
   RESOLVED: "Đã xử lý",
+  REJECTED: "Từ chối",
 };
 
 const STATUS_STYLES = {
   OPEN: "border-amber-200 bg-amber-50 text-amber-700",
   IN_REVIEW: "border-blue-200 bg-blue-50 text-blue-700",
+  REJECTED: "border-red-200 bg-red-50 text-red-700",
   RESOLVED: "border-emerald-200 bg-emerald-50 text-emerald-700",
 };
 
@@ -239,6 +241,7 @@ export default function AdminReports() {
           <option value="OPEN">Đang mở</option>
           <option value="IN_REVIEW">Đang xử lý</option>
           <option value="RESOLVED">Đã xử lý</option>
+          <option value="REJECTED">Từ chối</option>
         </select>
         <select
           value={targetTypeFilter}
