@@ -38,6 +38,9 @@ function AdminSidebar() {
         <NavLink to="/admin/reviews" className={linkClasses}>
           Đánh giá
         </NavLink>
+        <NavLink to="/admin/reports" className={linkClasses}>
+          Phản hồi
+        </NavLink>
       </nav>
     </div>
   );

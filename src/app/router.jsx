@@ -13,6 +13,7 @@ import AdminCurriculum from "@/pages/admin/AdminCurriculum";
 import AdminQuestions from "@/pages/admin/AdminQuestions";
 import AdminQuestionDetail from "@/pages/admin/AdminQuestionDetail";
 import AdminReviews from "@/pages/admin/AdminReviews";
+import AdminReports from "@/pages/admin/AdminReports";
 import AdminTags from "@/pages/admin/AdminTags";
 import LoginPage from "@/pages/auth/login";
 import RegisterPage from "@/pages/auth/register";
@@ -138,6 +139,7 @@ export const router = createBrowserRouter([
           { path: "questions", element: <AdminQuestions /> },
           { path: "questions/:questionId", element: <AdminQuestionDetail /> },
           { path: "reviews", element: <AdminReviews /> },
+          { path: "reports", element: <AdminReports /> },
         ],
       },
     ],
