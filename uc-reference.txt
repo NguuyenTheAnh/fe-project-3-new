@@ -1,0 +1,68 @@
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.5}
+\begin{tabular}{|c|c|>{\centering\arraybackslash}p{3.5cm}|>{\centering\arraybackslash}p{5cm}|>{\raggedright\arraybackslash}p{2cm}|}
+\hline
+\textbf{STT} & \textbf{Mã use case} & \textbf{Tên use case} & \textbf{Mô tả use case} & \textbf{Tác nhân} \\
+\hline
+1 & UC01 & Đăng nhập & Xác thực truy cập hệ thống & Quản lý, Nhân viên \\
+\hline
+2 & UC02 & Đăng ký & Tạo tài khoản mới & Quản lý, Nhân viên \\
+\hline
+3 & UC03 & Đăng xuất & Thoát khỏi hệ thống & Quản lý, Nhân viên \\
+\hline
+4 & UC04 & Cập nhật thông tin cá nhân & Sửa thông tin cá nhân & Quản lý, Nhân viên \\
+\hline
+5 & UC05 & Xem thông tin doanh số & Xem báo cáo doanh số & Quản lý, Nhân viên \\
+\hline
+6 & UC06 & Xem các giao dịch thành công & Xem danh sách các giao dịch thành công & Quản lý, Nhân viên \\
+\hline
+7 & UC07 & Xem danh sách đơn hàng & Xem tất cả đơn hàng & Quản lý, Nhân viên \\
+\hline
+8 & UC08 & Xử lý đơn hàng & Nhận xử lý một đơn hàng & Quản lý, Nhân viên \\
+\hline
+9 & UC09 & Xem chi tiết đơn hàng & Xem nội dung chi tiết của một đơn hàng & Quản lý, Nhân viên \\
+\hline
+10 & UC10 & Tạo bàn ăn & Tạo bàn ăn mới & Quản lý, Nhân viên \\
+\hline
+11 & UC11 & Xem danh sách bàn ăn & Xem tất cả bàn ăn & Quản lý, Nhân viên \\
+\hline
+12 & UC12 & Sửa thông tin bàn ăn & Sửa thông tin bàn ăn & Quản lý, Nhân viên \\
+\hline
+13 & UC13 & Xóa bàn ăn & Xóa bàn ăn khỏi hệ thống & Quản lý, Nhân viên \\
+\hline
+14 & UC14 & Tạo món ăn & Tạo món ăn mới & Quản lý, Nhân viên \\
+\hline
+\end{tabular}
+\end{table}
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.5}
+\begin{tabular}{|c|c|c|>{\centering\arraybackslash}p{5cm}|>{\raggedright\arraybackslash}p{2cm}|}
+\hline
+15 & UC15 & Xem danh sách món & Xem tất cả món ăn & Quản lý, Nhân viên \\
+\hline
+16 & UC16 & Sửa thông tin món ăn & Sửa thông tin món ăn & Quản lý, Nhân viên \\
+\hline
+17 & UC17 & Xóa món ăn & Xóa món ăn khỏi hệ thống & Quản lý, Nhân viên \\
+\hline
+18 & UC18 & Xem danh sách nhân viên & Xem tất cả nhân viên & Quản lý \\
+\hline
+19 & UC19 & Xóa nhân viên & Xóa nhân viên khỏi hệ thống & Quản lý \\
+\hline
+20 & UC20 & Thêm món vào giỏ hàng & Thêm món vào giỏ hàng & Khách hàng \\
+\hline
+21 & UC21 & Xem thông tin giỏ hàng & Xem chi tiết giỏ hàng & Khách hàng \\
+\hline
+22 & UC22 & Cập nhật thông tin giỏ hàng & Sửa thông tin giỏ hàng & Khách hàng \\
+\hline
+23 & UC23 & Xóa món trong giỏ hàng & Xóa món khỏi giỏ hàng & Khách hàng \\
+\hline
+24 & UC24 & Quét QR Code & Đăng nhập bằng quét QR code và nhập họ tên & Khách hàng \\
+\hline
+25 & UC25 & Thanh toán & Thanh toán đơn hàng & Khách hàng \\
+\hline
+\end{tabular}
+\caption{Các use case trong hệ thống}
+\label{tab:use case}
+\end{table}

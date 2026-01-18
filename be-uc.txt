@@ -1,0 +1,251 @@
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.5}
+\begin{tabular}{|c|c|>{\centering\arraybackslash}p{3.5cm}|>{\centering\arraybackslash}p{5cm}|>{\raggedright\arraybackslash}p{2.5cm}|}
+\hline
+\textbf{STT} & \textbf{Mã use case} & \textbf{Tên use case} & \textbf{Mô tả use case} & \textbf{Tác nhân} \\
+\hline
+\multicolumn{5}{|c|}{\textbf{NHÓM CHỨC NĂNG XÁC THỰC}} \\
+\hline
+1 & UC01 & Đăng ký tài khoản & Tạo tài khoản mới trong hệ thống & Người dùng \\
+\hline
+2 & UC02 & Đăng nhập & Xác thực truy cập hệ thống & Người dùng \\
+\hline
+3 & UC03 & Làm mới token & Làm mới access token bằng refresh token & Người dùng \\
+\hline
+4 & UC04 & Đăng xuất & Thoát khỏi hệ thống & Người dùng \\
+\hline
+5 & UC05 & Xem thông tin cá nhân & Xem thông tin profile của bản thân & Người dùng \\
+\hline
+6 & UC06 & Cập nhật thông tin cá nhân & Cập nhật profile của bản thân & Người dùng \\
+\hline
+\multicolumn{5}{|c|}{\textbf{NHÓM CHỨC NĂNG QUẢN LÝ KHÓA HỌC (GIẢNG VIÊN)}} \\
+\hline
+7 & UC07 & Tạo khóa học mới & Tạo một khóa học mới & Giảng viên, Admin \\
+\hline
+8 & UC08 & Xem danh sách khóa học của tôi & Xem tất cả khóa học mình tạo & Giảng viên, Admin \\
+\hline
+9 & UC09 & Cập nhật thông tin khóa học & Sửa thông tin khóa học & Giảng viên, Admin \\
+\hline
+10 & UC10 & Cập nhật trạng thái khóa học & Thay đổi trạng thái khóa học (draft, published, archived) & Giảng viên, Admin \\
+\hline
+11 & UC11 & Xuất bản khóa học & Xuất bản khóa học để công khai & Giảng viên, Admin \\
+\hline
+12 & UC12 & Thêm section vào khóa học & Thêm chương/phần mới vào khóa học & Giảng viên, Admin \\
+\hline
+13 & UC13 & Cập nhật section & Sửa thông tin section & Giảng viên, Admin \\
+\hline
+14 & UC14 & Xóa section & Xóa section khỏi khóa học & Giảng viên, Admin \\
+\hline
+15 & UC15 & Thêm bài học vào section & Thêm bài học vào section & Giảng viên, Admin \\
+\hline
+16 & UC16 & Xóa bài học khỏi section & Xóa bài học khỏi section & Giảng viên, Admin \\
+\hline
+17 & UC17 & Sắp xếp bài học trong section & Thay đổi thứ tự bài học & Giảng viên, Admin \\
+\hline
+18 & UC18 & Cập nhật tag cho khóa học & Gán hoặc xóa tag của khóa học & Giảng viên, Admin \\
+\hline
+19 & UC19 & Cập nhật giảng viên khóa học & Thêm/xóa giảng viên phụ & Giảng viên, Admin \\
+\hline
+20 & UC20 & Xem chi tiết bài học & Xem chi tiết một bài học trong khóa học của mình & Giảng viên, Admin \\
+\hline
+\multicolumn{5}{|c|}{\textbf{NHÓM CHỨC NĂNG QUẢN LÝ BÀI HỌC}} \\
+\hline
+21 & UC21 & Tạo bài học mới & Tạo bài học (video, text, document, quiz) & Giảng viên, Admin \\
+\hline
+22 & UC22 & Cập nhật bài học & Sửa thông tin bài học & Giảng viên, Admin \\
+\hline
+23 & UC23 & Xóa bài học & Xóa bài học khỏi hệ thống & Giảng viên, Admin \\
+\hline
+24 & UC24 & Thêm tài liệu vào bài học & Thêm file tài liệu đính kèm & Giảng viên, Admin \\
+\hline
+25 & UC25 & Xóa tài liệu khỏi bài học & Xóa file tài liệu đính kèm & Giảng viên, Admin \\
+\hline
+\multicolumn{5}{|c|}{\textbf{NHÓM CHỨC NĂNG QUẢN LÝ QUIZ}} \\
+\hline
+26 & UC26 & Tạo quiz cho bài học & Tạo bài kiểm tra cho bài học & Giảng viên, Admin \\
+\hline
+27 & UC27 & Cập nhật thông tin quiz & Sửa thông tin quiz (thời gian, điểm đạt, số lần thi) & Giảng viên, Admin \\
+\hline
+28 & UC28 & Thêm câu hỏi vào quiz & Thêm câu hỏi mới vào quiz & Giảng viên, Admin \\
+\hline
+29 & UC29 & Cập nhật câu hỏi & Sửa nội dung câu hỏi & Giảng viên, Admin \\
+\hline
+30 & UC30 & Xóa câu hỏi & Xóa câu hỏi khỏi quiz & Giảng viên, Admin \\
+\hline
+31 & UC31 & Thêm đáp án cho câu hỏi & Thêm đáp án cho câu hỏi & Giảng viên, Admin \\
+\hline
+32 & UC32 & Cập nhật đáp án & Sửa đáp án và đánh dấu đáp án đúng & Giảng viên, Admin \\
+\hline
+33 & UC33 & Xóa đáp án & Xóa đáp án khỏi câu hỏi & Giảng viên, Admin \\
+\hline
+\multicolumn{5}{|c|}{\textbf{NHÓM CHỨC NĂNG TÌM KIẾM VÀ XEM KHÓA HỌC (CÔNG KHAI)}} \\
+\hline
+34 & UC34 & Tìm kiếm khóa học & Tìm kiếm khóa học theo từ khóa, category, tag, level, ngôn ngữ & Người dùng \\
+\hline
+35 & UC35 & Xem danh sách khóa học & Xem danh sách khóa học công khai & Người dùng \\
+\hline
+36 & UC36 & Xem chi tiết khóa học & Xem thông tin chi tiết một khóa học & Người dùng \\
+\hline
+37 & UC37 & Xem bài học preview & Xem bài học được cho phép preview miễn phí & Người dùng \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.5}
+\begin{tabular}{|c|c|>{\centering\arraybackslash}p{3.5cm}|>{\centering\arraybackslash}p{5cm}|>{\raggedright\arraybackslash}p{2.5cm}|}
+\hline
+\textbf{STT} & \textbf{Mã use case} & \textbf{Tên use case} & \textbf{Mô tả use case} & \textbf{Tác nhân} \\
+\hline
+\multicolumn{5}{|c|}{\textbf{NHÓM CHỨC NĂNG HỌC TẬP (HỌC VIÊN)}} \\
+\hline
+38 & UC38 & Đăng ký khóa học miễn phí & Đăng ký tham gia khóa học miễn phí & Học viên \\
+\hline
+39 & UC39 & Xem khóa học đã đăng ký & Xem danh sách khóa học đã đăng ký & Học viên \\
+\hline
+40 & UC40 & Kiểm tra trạng thái đăng ký & Kiểm tra đã đăng ký khóa học chưa & Học viên \\
+\hline
+41 & UC41 & Xem bài học & Xem nội dung bài học trong khóa đã đăng ký & Học viên \\
+\hline
+42 & UC42 & Cập nhật tiến độ học & Cập nhật vị trí học và đánh dấu hoàn thành bài học & Học viên \\
+\hline
+43 & UC43 & Xem tiến độ bài học & Xem tiến độ học của một bài học & Học viên \\
+\hline
+44 & UC44 & Xem tiến độ khóa học & Xem tổng quan tiến độ hoàn thành khóa học & Học viên \\
+\hline
+45 & UC45 & Xem danh sách bài học đã hoàn thành & Xem các bài học đã hoàn thành trong khóa học & Học viên \\
+\hline
+46 & UC46 & Bắt đầu làm quiz & Bắt đầu một lần làm bài quiz & Học viên \\
+\hline
+47 & UC47 & Nộp bài quiz & Nộp câu trả lời và nhận điểm & Học viên \\
+\hline
+48 & UC48 & Xem kết quả quiz & Xem chi tiết kết quả một lần làm bài & Học viên \\
+\hline
+49 & UC49 & Xem lịch sử làm quiz & Xem tất cả lần làm bài quiz & Học viên \\
+\hline
+\multicolumn{5}{|c|}{\textbf{NHÓM CHỨC NĂNG ĐÁNH GIÁ KHÓA HỌC}} \\
+\hline
+50 & UC50 & Viết đánh giá khóa học & Đánh giá và viết review cho khóa học & Học viên \\
+\hline
+51 & UC51 & Xem danh sách đánh giá & Xem tất cả đánh giá của một khóa học & Người dùng \\
+\hline
+52 & UC52 & Xem đánh giá của tôi & Xem đánh giá mình đã viết & Học viên \\
+\hline
+53 & UC53 & Xóa đánh giá của tôi & Xóa đánh giá mình đã viết & Học viên \\
+\hline
+54 & UC54 & Kiểm duyệt đánh giá & Duyệt hoặc từ chối đánh giá & Admin \\
+\hline
+55 & UC55 & Xem danh sách đánh giá (Admin) & Xem tất cả đánh giá cần kiểm duyệt & Admin \\
+\hline
+\multicolumn{5}{|c|}{\textbf{NHÓM CHỨC NĂNG GIỎ HÀNG}} \\
+\hline
+56 & UC56 & Xem giỏ hàng & Xem các khóa học trong giỏ hàng & Học viên \\
+\hline
+57 & UC57 & Thêm khóa học vào giỏ & Thêm một khóa học vào giỏ hàng & Học viên \\
+\hline
+58 & UC58 & Xóa khóa học khỏi giỏ & Xóa một khóa học khỏi giỏ hàng & Học viên \\
+\hline
+59 & UC59 & Xóa toàn bộ giỏ hàng & Xóa tất cả khóa học trong giỏ & Học viên \\
+\hline
+\multicolumn{5}{|c|}{\textbf{NHÓM CHỨC NĂNG ĐƠN HÀNG VÀ THANH TOÁN}} \\
+\hline
+60 & UC60 & Tạo đơn hàng từ giỏ hàng & Tạo đơn hàng từ các khóa học trong giỏ & Học viên \\
+\hline
+61 & UC61 & Tạo đơn hàng mua lẻ & Tạo đơn hàng cho một khóa học & Học viên \\
+\hline
+62 & UC62 & Xem danh sách đơn hàng & Xem tất cả đơn hàng của mình & Học viên \\
+\hline
+63 & UC63 & Xem chi tiết đơn hàng & Xem chi tiết một đơn hàng & Học viên \\
+\hline
+64 & UC64 & Thanh toán qua VNPay & Tạo link thanh toán VNPay & Học viên \\
+\hline
+65 & UC65 & Xử lý kết quả thanh toán & Xử lý callback từ VNPay & Hệ thống \\
+\hline
+66 & UC66 & Xem danh sách đơn hàng (Admin) & Xem tất cả đơn hàng trong hệ thống & Admin \\
+\hline
+\multicolumn{5}{|c|}{\textbf{NHÓM CHỨC NĂNG QUẢN LÝ FILE}} \\
+\hline
+67 & UC67 & Upload file trực tiếp & Upload file qua multipart form & Người dùng \\
+\hline
+68 & UC68 & Tạo presigned URL upload & Tạo URL để upload file lên storage & Người dùng \\
+\hline
+69 & UC69 & Hoàn tất upload file & Đánh dấu file đã upload xong & Người dùng \\
+\hline
+70 & UC70 & Hủy upload file & Hủy quá trình upload file & Người dùng \\
+\hline
+71 & UC71 & Xem metadata file & Xem thông tin file đã upload & Người dùng \\
+\hline
+72 & UC72 & Xem metadata file công khai & Xem thông tin file công khai & Người dùng \\
+\hline
+73 & UC73 & Xem/tải file & Truy cập file qua presigned URL & Người dùng \\
+\hline
+\multicolumn{5}{|c|}{\textbf{NHÓM CHỨC NĂNG QUẢN LÝ DANH MỤC}} \\
+\hline
+74 & UC74 & Tạo category mới & Tạo danh mục khóa học & Admin \\
+\hline
+75 & UC75 & Xem danh sách category & Xem tất cả category & Người dùng \\
+\hline
+76 & UC76 & Cập nhật category & Sửa thông tin category & Admin \\
+\hline
+77 & UC77 & Xóa category & Xóa category khỏi hệ thống & Admin \\
+\hline
+78 & UC78 & Tạo tag mới & Tạo tag cho khóa học & Admin \\
+\hline
+79 & UC79 & Xem danh sách tag & Xem tất cả tag & Người dùng \\
+\hline
+80 & UC80 & Cập nhật tag & Sửa thông tin tag & Admin \\
+\hline
+81 & UC81 & Xóa tag & Xóa tag khỏi hệ thống & Admin \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.5}
+\begin{tabular}{|c|c|>{\centering\arraybackslash}p{3.5cm}|>{\centering\arraybackslash}p{5cm}|>{\raggedright\arraybackslash}p{2.5cm}|}
+\hline
+\textbf{STT} & \textbf{Mã use case} & \textbf{Tên use case} & \textbf{Mô tả use case} & \textbf{Tác nhân} \\
+\hline
+\multicolumn{5}{|c|}{\textbf{NHÓM CHỨC NĂNG QUẢN LÝ NGƯỜI DÙNG}} \\
+\hline
+82 & UC82 & Tạo người dùng mới & Tạo tài khoản người dùng & Admin \\
+\hline
+83 & UC83 & Xem danh sách người dùng & Xem tất cả người dùng trong hệ thống & Admin \\
+\hline
+84 & UC84 & Tìm kiếm người dùng & Tìm kiếm người dùng theo từ khóa và role & Admin \\
+\hline
+85 & UC85 & Xem chi tiết người dùng & Xem thông tin chi tiết một người dùng & Admin \\
+\hline
+86 & UC86 & Cập nhật người dùng & Sửa thông tin người dùng & Admin \\
+\hline
+87 & UC87 & Xóa người dùng & Xóa người dùng khỏi hệ thống & Admin \\
+\hline
+\multicolumn{5}{|c|}{\textbf{NHÓM CHỨC NĂNG BÁO CÁO VÀ KIỂM DUYỆT}} \\
+\hline
+88 & UC88 & Báo cáo nội dung vi phạm & Báo cáo khóa học/bài học/review vi phạm & Người dùng \\
+\hline
+89 & UC89 & Xem báo cáo của tôi & Xem các báo cáo mình đã tạo & Người dùng \\
+\hline
+90 & UC90 & Cập nhật báo cáo của tôi & Sửa lý do báo cáo & Người dùng \\
+\hline
+91 & UC91 & Xem danh sách báo cáo (Admin) & Xem tất cả báo cáo trong hệ thống & Admin \\
+\hline
+92 & UC92 & Cập nhật trạng thái báo cáo & Xử lý báo cáo (pending, resolved, rejected) & Admin \\
+\hline
+93 & UC93 & Thêm hành động kiểm duyệt & Thêm hành động xử lý cho báo cáo & Admin \\
+\hline
+\multicolumn{5}{|c|}{\textbf{NHÓM CHỨC NĂNG DASHBOARD VÀ BÁO CÁO}} \\
+\hline
+94 & UC94 & Xem dashboard Admin & Xem thống kê tổng quan hệ thống (doanh thu, khóa học, người dùng) & Admin \\
+\hline
+95 & UC95 & Xem dashboard Giảng viên & Xem thống kê khóa học và doanh thu của giảng viên & Giảng viên, Admin \\
+\hline
+96 & UC96 & Xem dashboard Giảng viên theo ID & Xem dashboard của một giảng viên cụ thể & Admin \\
+\hline
+\end{tabular}
+\caption{Các use case trong hệ thống LMS}
+\label{tab:use case}
+\end{table}

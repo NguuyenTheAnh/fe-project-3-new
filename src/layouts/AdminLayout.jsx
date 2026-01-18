@@ -94,7 +94,7 @@ function AdminSidebar() {
           Đánh giá
         </NavLink>
         <NavLink to="/admin/reports" className={linkClasses}>
-          Phản hồi
+          Báo cáo vi phạm
         </NavLink>
       </nav>
     </div>
