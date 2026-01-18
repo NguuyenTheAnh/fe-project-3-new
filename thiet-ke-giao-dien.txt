@@ -1,0 +1,155 @@
+\subsection{Thiết kế giao diện}
+\label{ssec:ui_design}
+Thiết kế giao diện của hệ thống Learning Management System (LMS) tập trung vào sự chuyên nghiệp, trực quan và dễ sử dụng, đảm bảo trải nghiệm người dùng tối ưu trên mọi thiết bị, từ desktop đến mobile. Hệ thống áp dụng phong cách thiết kế hiện đại với các thành phần UI có tính tái sử dụng cao.
+
+\begin{itemize}
+    \item \textbf{Framework và Công nghệ UI:}
+        \begin{itemize}
+            \item \textbf{Tailwind CSS 4:} Framework CSS utility-first cho phép xây dựng giao diện linh hoạt và tùy biến cao. Sử dụng CSS Variables để quản lý theme động và hỗ trợ dark mode.
+            \item \textbf{Shadcn/ui:} Thư viện component dựa trên Radix UI với phong cách "New York", cung cấp các thành phần UI accessible, customizable và được xây dựng với Tailwind CSS.
+            \item \textbf{Radix UI Primitives:} Các component primitives không có style mặc định, đảm bảo accessibility (WCAG 2.1) và keyboard navigation hoàn chỉnh.
+            \item \textbf{Lucide React:} Thư viện icon hiện đại, nhất quán với hơn 1000+ icons SVG tối ưu.
+            \item \textbf{Class Variance Authority (CVA):} Quản lý variants của component một cách type-safe và dễ bảo trì.
+        \end{itemize}
+    
+    \item \textbf{Bố cục và Responsive Design:}
+        \begin{itemize}
+            \item Áp dụng responsive design với các breakpoints của Tailwind CSS: sm (640px), md (768px), lg (1024px), xl (1280px), 2xl (1536px).
+            \item Layout linh hoạt với CSS Grid và Flexbox, tối ưu cho cả mobile và desktop.
+            \item Mobile-first approach: thiết kế ưu tiên cho thiết bị di động trước, sau đó mở rộng cho desktop.
+            \item Sidebar collapsible cho navigation trên màn hình nhỏ.
+            \item Container có max-width 1280px để đảm bảo tính dễ đọc trên màn hình lớn.
+        \end{itemize}
+    
+    \item \textbf{Màu sắc (Color Palette):}
+        \begin{itemize}
+            \item \textbf{Màu chủ đạo (Primary):} \texttt{\#E11D48} (Rose 600) - màu đỏ hồng chuyên nghiệp, được sử dụng cho các nút hành động chính (CTA), links, và các thành phần tương tác quan trọng.
+            \item \textbf{Primary Hover:} \texttt{\#BE123C} (Rose 700) - màu tối hơn khi hover để tạo feedback rõ ràng.
+            \item \textbf{Màu nền (Background):} \texttt{\#FFFFFF} (White) - nền sạch, tạo cảm giác rộng rãi và dễ đọc.
+            \item \textbf{Màu văn bản (Foreground):} \texttt{\#0F172A} (Slate 900) - màu tối cho văn bản chính, đảm bảo contrast ratio tốt.
+            \item \textbf{Màu phụ (Secondary):} \texttt{\#F8FAFC} (Slate 50) - màu xám nhạt cho nền phụ, card background.
+            \item \textbf{Màu Muted:} \texttt{\#475569} (Slate 600) - màu cho văn bản phụ, mô tả, placeholder.
+            \item \textbf{Border:} \texttt{\#E2E8F0} (Slate 200) - màu viền nhẹ nhàng, không gây xao nhãng.
+            \item \textbf{Destructive/Error:} \texttt{\#E11D48} - màu đỏ cảnh báo cho các hành động nguy hiểm hoặc thông báo lỗi.
+            \item \textbf{Link:} \texttt{\#2563EB} (Blue 600) - màu xanh dương cho các đường link.
+            \item \textbf{Dark Mode:} Hệ thống hỗ trợ dark mode với bảng màu OKLCH, tối ưu cho môi trường ánh sáng yếu.
+        \end{itemize}
+    
+    \item \textbf{Typography (Hệ thống chữ):}
+        \begin{itemize}
+            \item \textbf{Font Family:} Sử dụng system font stack để đảm bảo hiển thị tốt nhất trên mọi nền tảng: \texttt{-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif}.
+            \item \textbf{Cấu trúc phân cấp:} Sử dụng các lớp text của Tailwind CSS (text-xs, text-sm, text-base, text-lg, text-xl, text-2xl...) để tạo hierarchy rõ ràng.
+            \item \textbf{Font Weights:} 
+                \begin{itemize}
+                    \item Regular (400): Văn bản thông thường
+                    \item Medium (500): Nhấn mạnh nhẹ
+                    \item Semibold (600): Tiêu đề phụ, labels
+                    \item Bold (700): Tiêu đề chính
+                \end{itemize}
+            \item \textbf{Line Height:} Tối ưu cho tính dễ đọc với leading-normal (1.5) cho văn bản body, leading-tight cho tiêu đề.
+            \item \textbf{Letter Spacing:} Sử dụng tracking-tight cho tiêu đề lớn, tracking-normal cho văn bản body.
+        \end{itemize}
+    
+    \item \textbf{Border Radius (Bo góc):}
+        \begin{itemize}
+            \item \textbf{Base Radius:} \texttt{0.625rem} (10px) - góc bo mặc định.
+            \item \textbf{Small (sm):} \texttt{0.375rem} (6px) - cho các thành phần nhỏ như badge, tag.
+            \item \textbf{Medium (md):} \texttt{0.5rem} (8px) - cho input, select.
+            \item \textbf{Large (lg):} \texttt{0.625rem} (10px) - cho button, card.
+            \item \textbf{XL:} \texttt{0.875rem} (14px) - cho dialog, modal.
+            \item \textbf{2XL:} \texttt{1.125rem} (18px) - cho large card, container.
+            \item Tạo cảm giác mềm mại, hiện đại và thân thiện cho giao diện.
+        \end{itemize}
+    
+    \item \textbf{Spacing & Layout:}
+        \begin{itemize}
+            \item Sử dụng hệ thống spacing 4-point grid (4px, 8px, 12px, 16px, 24px, 32px...) để đảm bảo nhất quán.
+            \item Padding và margin được áp dụng theo quy tắc spacing của Tailwind CSS.
+            \item Khoảng cách giữa các sections: 24px - 48px tùy theo ngữ cảnh.
+            \item Khoảng cách trong component: 8px - 16px.
+        \end{itemize}
+    
+    \item \textbf{Thành phần UI (Components):}
+        \begin{itemize}
+            \item \textbf{Button:} 
+                \begin{itemize}
+                    \item Variants: default (primary), destructive, outline, secondary, ghost, link.
+                    \item Sizes: sm (32px), default (36px), lg (40px), icon (36x36px).
+                    \item Hiệu ứng: hover shadow, active scale (0.99), focus ring với màu primary/30.
+                    \item Border radius: \texttt{0.5rem} (8px).
+                \end{itemize}
+            \item \textbf{Card:} Container với background trắng, border mỏng, shadow nhẹ, radius \texttt{0.625rem}.
+            \item \textbf{Input/Select:} Height 36px, border \texttt{\#E2E8F0}, focus ring primary, radius \texttt{0.5rem}.
+            \item \textbf{Navigation Menu:} Dropdown menu với Radix UI, smooth animation, hover effects.
+            \item \textbf{Accordion:} Collapsible sections với animation mượt mà.
+            \item \textbf{Tabs:} Navigation tabs với underline indicator cho active state.
+            \item \textbf{Dialog/Sheet:} Modal và side panel với backdrop blur, smooth slide animation.
+            \item \textbf{Tooltip:} Hiển thị thông tin bổ sung với delay 200ms, dark background.
+            \item \textbf{Avatar:} Circular avatar với fallback, size variants (sm, md, lg).
+            \item \textbf{Badge:} Label nhỏ với colors variants (default, secondary, destructive, outline).
+            \item \textbf{Separator:} Divider ngang/dọc với màu border muted.
+            \item \textbf{Skeleton:} Loading placeholder với pulse animation.
+        \end{itemize}
+    
+    \item \textbf{Hiệu ứng và Animation:}
+        \begin{itemize}
+            \item \textbf{Transitions:} Smooth transition với duration 150ms-300ms cho hover, focus states.
+            \item \textbf{Animations:} Sử dụng tw-animate-css cho các animation phức tạp (fade-in, slide-in, scale).
+            \item \textbf{Hover Effects:} 
+                \begin{itemize}
+                    \item Button: đổi màu background, tăng shadow
+                    \item Card: tăng shadow nhẹ
+                    \item Link: underline
+                \end{itemize}
+            \item \textbf{Active State:} Scale down \texttt{transform: scale(0.99)} cho button press.
+            \item \textbf{Focus State:} Ring với màu primary/30, offset 2px để accessibility.
+            \item \textbf{Loading State:} Skeleton loading và spinner với rotation animation.
+        \end{itemize}
+    
+    \item \textbf{Accessibility (Khả năng tiếp cận):}
+        \begin{itemize}
+            \item Tuân thủ WCAG 2.1 Level AA.
+            \item Contrast ratio tối thiểu 4.5:1 cho văn bản thông thường, 3:1 cho văn bản lớn.
+            \item Keyboard navigation đầy đủ cho tất cả thành phần tương tác.
+            \item Focus indicators rõ ràng với focus ring.
+            \item ARIA labels và roles cho screen readers.
+            \item Semantic HTML để cải thiện SEO và accessibility.
+        \end{itemize}
+    
+    \item \textbf{Icons và Graphics:}
+        \begin{itemize}
+            \item Sử dụng Lucide React icons với size nhất quán (16px, 20px, 24px).
+            \item Icons có màu kế thừa từ text color hoặc được set màu cụ thể theo context.
+            \item SVG icons để đảm bảo sharp rendering trên mọi màn hình.
+            \item Icon button có proper hover và active states.
+        \end{itemize}
+    
+    \item \textbf{Form Design:}
+        \begin{itemize}
+            \item Labels rõ ràng, aligned trên input.
+            \item Error messages màu đỏ, hiển thị dưới input với icon cảnh báo.
+            \item Success state với màu xanh lá, border và icon checkmark.
+            \item Placeholder text màu muted, italic nhẹ.
+            \item Required fields được đánh dấu bằng dấu * màu đỏ.
+            \item Form validation real-time với debounce 300ms.
+        \end{itemize}
+    
+    \item \textbf{Dark Mode Support:}
+        \begin{itemize}
+            \item Toggle dark mode với class-based switching.
+            \item Màu được định nghĩa bằng CSS variables, tự động thay đổi khi switch mode.
+            \item Dark mode palette sử dụng OKLCH color space để đảm bảo consistency.
+            \item Tất cả components tự động adapt với dark mode.
+        \end{itemize}
+    
+    \item \textbf{Performance Optimization:}
+        \begin{itemize}
+            \item CSS được optimize và minify trong production build.
+            \item Unused CSS classes được tree-shaken bởi Tailwind CSS.
+            \item Critical CSS được inline để giảm FCP (First Contentful Paint).
+            \item Lazy loading cho images và heavy components.
+            \item Sử dụng CSS containment để cải thiện rendering performance.
+        \end{itemize}
+\end{itemize}
+
+Thiết kế giao diện của hệ thống LMS đảm bảo sự cân bằng giữa tính thẩm mỹ và chức năng, tạo trải nghiệm người dùng mượt mà và chuyên nghiệp cho cả học viên, giảng viên và quản trị viên.

@@ -1,0 +1,15 @@
+\subsection{Thiết kế giao diện}
+\label{ssec:ui_design}
+Thiết kế giao diện của hệ thống tập trung vào sự đơn giản, trực quan và tối ưu hóa cho trải nghiệm trên thiết bị di động (Mobile-First), nhằm đảm bảo mọi đối tượng người dùng, đặc biệt là khách hàng, có thể thao tác một cách dễ dàng và nhanh chóng.
+
+\begin{itemize}
+    \item \textbf{Bố cục và Responsive:} Hệ thống áp dụng bố cục dạng lưới (grid-based layout) và các điểm ngắt (breakpoints) tiêu chuẩn của Material-UI để đảm bảo giao diện hiển thị tốt trên mọi kích thước màn hình, từ điện thoại di động (chiều rộng dưới 600px) đến máy tính để bàn màn hình lớn.
+    \item \textbf{Màu sắc:} Bảng màu được xây dựng dựa trên nhận diện thương hiệu, tạo cảm giác năng động và ngon miệng.
+        \begin{itemize}
+            \item \textbf{Màu chủ đạo (Primary Red):} \texttt{\#D3212D}, được sử dụng cho các thành phần chính như thanh điều hướng, tiêu đề, và các nút kêu gọi hành động (Call-to-Action) quan trọng.
+            \item \textbf{Màu nền (Background):} Sử dụng màu trắng ngà \texttt{\#FFF8F0} cho nền chính và màu trắng \texttt{\#FFFFFF} cho các khu vực nội dung để tạo sự tương phản và cảm giác sạch sẽ.
+            \item \textbf{Màu nhấn (Accent Colors):} Các màu chỉ thị trạng thái như xanh lá cây \texttt{\#4CAF50} cho thành công, đỏ \texttt{\#F44336} cho lỗi được sử dụng nhất quán để cung cấp phản hồi trực quan cho người dùng.
+        \end{itemize}
+    \item \textbf{Typography:} Hệ thống sử dụng phông chữ mặc định của Material-UI (Roboto) với các trọng số (weights) và kích thước được tùy chỉnh để đảm bảo tính dễ đọc và phân cấp thông tin rõ ràng.
+    \item \textbf{Thành phần (Components):} Các thành phần giao diện như nút bấm, thẻ (card), trường nhập liệu được thiết kế nhất quán với độ bo góc (border-radius) từ 8px đến 16px và hiệu ứng đổ bóng (box-shadow) tinh tế, tạo chiều sâu cho giao diện.
+\end{itemize}
